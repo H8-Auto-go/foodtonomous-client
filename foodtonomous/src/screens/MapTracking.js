@@ -7,7 +7,7 @@ import {
   IconRegistry,
   Layout,
   Text,
-  TopNavigation, 
+  TopNavigation,
   // TopNavigationAction
   Card,
   Drawer

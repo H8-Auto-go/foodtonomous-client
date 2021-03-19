@@ -25,12 +25,20 @@ import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import Dashboard from '../foodtonomous/screens/Dashboard'
-import MapTracking from './screens/MapTracking'
-import FavoriteFood from './screens/FavoriteFood'
-import LoginPage from './screens/LoginPage'
-import OrderHistory from './screens/OrderHistory'
-import AutomationSetting from './screens/AutomationSetting'
+import {
+  Dashboard,
+  MapTracking,
+  AutomationSetting,
+  FavoriteFood,
+  LoginPage,
+  OrderHistory
+} from './src/screens'
+// import Dashboard from './src/screens/Dashboard'
+// import MapTracking from './src/screens/MapTracking'
+// import FavoriteFood from './src/screens/FavoriteFood'
+// import LoginPage from './src/screens/LoginPage'
+// import OrderHistory from './src/screens/OrderHistory'
+// import AutomationSetting from './src/screens/AutomationSetting'
 /**
  * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
  * https://akveo.github.io/eva-icons

@@ -16,7 +16,7 @@ import * as eva from '@eva-design/eva';
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import axios from 'axios';
-import {NavbarTop} from '../components/NavbarTop';
+import {NavbarTop} from './NavbarTop';
 
 const Header = (props) => (
   <View {...props}>
