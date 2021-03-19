@@ -1,27 +1,13 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import {Card, Text} from '@ui-kitten/components';
 import { StyleSheet, View } from 'react-native';
 import {NavbarTop} from '../components/NavbarTop';
-import axios from 'axios';
 
-function FavoriteFood() {
-  const [user, setUser] = useState({});
-
-  useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'https://randomuser.me/api/',
-    })
-      .then(({data}) => {
-        console.log(data.results[0].name, '+++++++++++++++++++++++++++++++++++++++++++++++');
-        setUser(data.results[0].name);
-      })
-      .catch(console.log);
-  }, []);
+function OrderHistory() {
   return (
     <View style={styles.container}>
       <NavbarTop />
-      <Text style={{textAlign: 'center'}}>{"\n"}Favorite Food{"\n"}</Text>
+      <Text style={{textAlign: 'center'}}>{"\n"}Order History {"\n"}</Text>
       <Card>
         <View style={styles.flexCont}>
           <View>
@@ -31,6 +17,9 @@ function FavoriteFood() {
           <View>
             <Text>
               deskripsi makanan dan nama restorannya
+            </Text>
+            <Text>
+              tanggal order
             </Text>
           </View>
         </View>
@@ -45,18 +34,8 @@ function FavoriteFood() {
             <Text>
               deskripsi makanan dan nama restorannya
             </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
             <Text>
-              deskripsi makanan dan nama restorannya
+              tanggal order
             </Text>
           </View>
         </View>
@@ -70,6 +49,25 @@ function FavoriteFood() {
           <View>
             <Text>
               deskripsi makanan dan nama restorannya
+            </Text>
+            <Text>
+              tanggal order
+            </Text>
+          </View>
+        </View>
+      </Card>
+      <Card>
+        <View style={styles.flexCont}>
+          <View>
+            <Text> IMG here </Text>
+          </View>
+          <Text> | </Text>
+          <View>
+            <Text>
+              deskripsi makanan dan nama restorannya
+            </Text>
+            <Text>
+              tanggal order
             </Text>
           </View>
         </View>
@@ -90,5 +88,4 @@ const styles = StyleSheet.create({
   }
 });
 
-
-export default FavoriteFood
+export default OrderHistory

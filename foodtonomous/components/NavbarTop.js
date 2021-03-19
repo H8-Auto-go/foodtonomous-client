@@ -52,7 +52,24 @@ export const NavbarTop = () => {
           accessoryLeft={InfoIcon}
           title="map"
         />
-        <MenuItem accessoryLeft={LogoutIcon} title='Logout'/>
+        <MenuItem
+          onPress={() => navigation.navigate('FavoriteFood')}
+          accessoryLeft={InfoIcon}
+          title="Favorite Food"
+        />
+        <MenuItem
+          onPress={() => navigation.navigate('OrderHistory')}
+          accessoryLeft={InfoIcon}
+          title="Order History"
+        />
+        <MenuItem
+          onPress={() => navigation.navigate('AutomationSetting')}
+          accessoryLeft={InfoIcon}
+          title="Automation Setting"
+        />
+        <MenuItem 
+          onPress={() => navigation.navigate('LoginPage')}
+          accessoryLeft={LogoutIcon} title='Logout'/>
       </OverflowMenu>
     </React.Fragment>
   );

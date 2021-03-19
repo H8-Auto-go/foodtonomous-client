@@ -31,7 +31,7 @@ function Dashboard({navigation}) {
       url: 'https://randomuser.me/api/',
     })
       .then(({data}) => {
-        console.log(data.results[0].name);
+        console.log(data.results[0].name, '========================');
         setUser(data.results[0].name);
       })
       .catch(console.log);
@@ -40,7 +40,7 @@ function Dashboard({navigation}) {
     <>
       <NavbarTop />
       {/* <ScrollView> */}
-         <Card>
+        <Card>
           <View style={styles.flexContainer}>
             <View>
               <Text>gopay status</Text>
@@ -55,9 +55,9 @@ function Dashboard({navigation}) {
           </View>
         </Card>
         <ScrollView>
-          <Text style={styles.center}>Food Order Schedule</Text>
+          <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
           <CardDashboard />
-          <CardDashboard />
+        <CardDashboard />
           <CardDashboard />
           <CardDashboard />
         </ScrollView>
@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
   center: {
     textAlign: 'center',
     justifyContent: 'center',
-    padding: 10,
-    marginLeft: 30,
+    // padding: 10,
+    // marginLeft: 30,
   },
   CardDashboardContainer: {
     backgroundColor: 'red'

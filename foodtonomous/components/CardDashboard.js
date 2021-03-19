@@ -20,35 +20,20 @@ import {NavbarTop} from '../components/NavbarTop';
 
 const Header = (props) => (
   <View {...props}>
-    <Text category='h6'>nama orderan(misal sarapan)</Text>
-    <Text category='s1'>jam ordernya</Text>
+    <Text category="h6">my daily food automation</Text>
+    {/* <Text category="s1">jam ordernya</Text> */}
   </View>
 );
 
-const Footer = (props) => (
-  <View {...props} style={[props.style, styles.footerContainer]}>
-    <Button
-      style={styles.footerControl}
-      size='small'
-      status='basic'>
-      CANCEL
-    </Button>
-    <Button
-      style={styles.footerControl}
-      size='small'>
-      ORDER
-    </Button>
-  </View>
-);
 
 function CardDashboard() {
   return (
     <>
-     <Card style={styles.card} header={Header} footer={Footer}>
+      <Card style={styles.card} header={Header}>
       <Text>
-          list makanan dan nama resto {"\n"}
-          list makanan dan nama resto {"\n"}
-          list makanan dan nama resto{"\n"}
+          list makanan dan nama resto | toggle | X {"\n"}
+          list makanan dan nama resto | toggle | X {"\n"}
+          list makanan dan nama resto | toggle | X {"\n"}
       </Text>
     </Card>
     </>

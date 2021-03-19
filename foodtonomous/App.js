@@ -27,6 +27,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import Dashboard from '../foodtonomous/screens/Dashboard'
 import MapTracking from './screens/MapTracking'
+import FavoriteFood from './screens/FavoriteFood'
+import LoginPage from './screens/LoginPage'
+import OrderHistory from './screens/OrderHistory'
+import AutomationSetting from './screens/AutomationSetting'
 /**
  * Use any valid `name` property from eva icons (e.g `github`, or `heart-outline`)
  * https://akveo.github.io/eva-icons
@@ -47,10 +51,17 @@ export default () => (
     <IconRegistry icons={EvaIconsPack}/>
     <ApplicationProvider {...eva} theme={eva.light}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home"  screenOptions={{headerShown: false}}>
+        <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{headerShown: false}}>
+          <Stack.Screen name="LoginPage" component={LoginPage} />
           <Stack.Screen name="Home" component={Dashboard} />
           <Stack.Screen name="Details" component={DetailsScreen} />
           <Stack.Screen name="MapTracking" component={MapTracking} />
+          <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
+          <Stack.Screen name="OrderHistory" component={OrderHistory} />
+          <Stack.Screen
+            name="AutomationSetting"
+            component={AutomationSetting}
+          />
         </Stack.Navigator>
       </NavigationContainer>
     </ApplicationProvider>
