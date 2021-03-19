@@ -19,9 +19,9 @@ import axios from 'axios';
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
 import { ScrollView } from 'react-native-gesture-handler';
-
+import {notification} from '../src/store/actions/pushNotification'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
-
+let num = 1;
 function Dashboard({navigation}) {
   const [user, setUser] = useState({});
   console.log(user);
@@ -36,6 +36,12 @@ function Dashboard({navigation}) {
       })
       .catch(console.log);
   }, []);
+  const handleNotification = () => {
+    notification.configure()
+    notification.createChannel(num.toString())
+    notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
+    num++
+  }
   return (
     <>
       <NavbarTop />
@@ -55,6 +61,9 @@ function Dashboard({navigation}) {
           </View>
         </Card>
         <ScrollView>
+          <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
+            PRIMARY
+          </Button>
           <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
           <CardDashboard />
         <CardDashboard />
@@ -91,7 +100,7 @@ const styles = StyleSheet.create({
   },
   CardDashboardContainer: {
     backgroundColor: 'red'
-    
+
   }
 });
 
