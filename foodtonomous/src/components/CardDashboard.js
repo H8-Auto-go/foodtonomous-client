@@ -8,7 +8,7 @@ import {
   Layout,
   Text,
   TopNavigation,
-  // TopNavigationAction
+  Toggle, 
   Card,
 } from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
@@ -27,20 +27,39 @@ const Header = (props) => (
 
 
 function CardDashboard() {
+  const [checked, setChecked] = React.useState(false);
+
+  const onCheckedChange = (isChecked) => {
+    setChecked(isChecked);
+  };
   return (
     <>
       <Card style={styles.card} header={Header}>
-      <Text>
-          list makanan dan nama resto | toggle | X {"\n"}
-          list makanan dan nama resto | toggle | X {"\n"}
-          list makanan dan nama resto | toggle | X {"\n"}
-      </Text>
+        <View style={styles.container}>
+          <Text>
+              list makanan dan nama resto 
+          </Text>
+          <Toggle checked={checked} onChange={onCheckedChange}>
+            {`Auto: ${checked ? 'on' : 'off'}`}
+          </Toggle>
+          <Layout style={styles.containerBtn} level='1'>
+            <Button style={styles.button} size='tiny'>
+              X
+            </Button>
+          </Layout>
+        </View>
     </Card>
     </>
   )
 }
 
 const styles = StyleSheet.create({
+  container:{
+    display: 'flex',
+    flexDirection: 'row',
+    padding: 1
+
+  },
   topContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -55,6 +74,14 @@ const styles = StyleSheet.create({
   },
   footerControl: {
     marginHorizontal: 2,
+  },
+  button: {
+    margin: 2,
+  },
+  containerBtn: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    flexWrap: 'wrap',
   },
 });
 
