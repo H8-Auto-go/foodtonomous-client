@@ -43,7 +43,7 @@ function CardDashboard() {
             {`Auto: ${checked ? 'on' : 'off'}`}
           </Toggle>
           <Layout style={styles.containerBtn} level='1'>
-            <Button style={styles.button} size='tiny'>
+            <Button style={styles.button} size='tiny' appearance='ghost'>
               X
             </Button>
           </Layout>
