@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, } from 'react-native';
+import { useSelector } from 'react-redux'
 import {
   Button,
   Icon,
@@ -11,20 +12,19 @@ import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
 import { ScrollView } from 'react-native-gesture-handler';
 import {notification} from '../store/actions/pushNotification'
+import { useDispatch } from 'react-redux'
+import { getAutoSchedule } from '../store/actions/automationSchedule'
+
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
 let num = 1;
 function Dashboard({navigation}) {
+  const { schedule } = useSelector(state => state.schedule)
+  const dispatch = useDispatch()
+  console.log(schedule);
   const [user, setUser] = useState({});
   console.log(user);
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'https://randomuser.me/api/',
-    })
-      .then(({data}) => {
-        setUser(data.results[0].name);
-      })
-      .catch(console.log);
+    dispatch(getAutoSchedule())
   }, []);
   const handleNotification = () => {
     notification.configure()
@@ -55,10 +55,15 @@ function Dashboard({navigation}) {
             PRIMARY
           </Button>
           <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
+          {
+            schedule.map(food => {
+              return <CardDashboard food={food} key={food.id} />
+            })
+          }
+          {/* <CardDashboard />
           <CardDashboard />
-        <CardDashboard />
           <CardDashboard />
-          <CardDashboard />
+          <CardDashboard /> */}
         </ScrollView>
       {/* </ScrollView> */}
     </>

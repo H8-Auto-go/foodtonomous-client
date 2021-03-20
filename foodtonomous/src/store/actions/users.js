@@ -23,25 +23,28 @@ export function register({email, password}) {
   }
 }
 
-export function login(user) {
+export function login(user, navigation) {
+  // navigation.navigate('Home')
   return async () => {
     try {
       const {data} = await serverAxios({
         method: "POST",
-        url: "/users",
+        url: "/users/login",
         data: user
       })
-      await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
+      // console.log(data);
+      await AsyncStorage.setItem('access_token', JSON.stringify(data.token))
     } catch(err) {
       console.log(err)
     }
   }
 }
 
-export function logout() {
+export function logout(navigation) {
   return async () => {
     try {
       await AsyncStorage.removeItem('access_token')
+      navigation.navigate('LoginPage')
     } catch(err) {
       console.log(err)
     }

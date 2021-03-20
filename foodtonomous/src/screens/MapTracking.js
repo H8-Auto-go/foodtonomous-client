@@ -26,6 +26,9 @@ import { NavbarTop } from '../components/NavbarTop';
 // import { DrawerNavigator, AppNavigator } from '../components/DrawerBottom';
 
 function MapTracking({ navigation }) {
+  // console.log(navigation, '========================');
+  // navigation.pop('MapTracking')
+
   const [userLocation, setUserLocation] = useState({})
   const [mapMargin, setMapMargin] = useState(1)
   const [marker, setMarker] = useState({})

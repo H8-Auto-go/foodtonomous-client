@@ -3,11 +3,13 @@ import thunk from "redux-thunk";
 import favoriteFoodsReducer from './reducers/favoriteFood';
 import restaurantsReducer from './reducers/restaurant';
 import usersReducer from './reducers/users'
+import scheduleReducer from './reducers/schedule'
 
 const rootReducer = combineReducers({
   favoriteFoods: favoriteFoodsReducer,
   restaurants: restaurantsReducer,
-  users: usersReducer
+  users: usersReducer,
+  schedule: scheduleReducer,
 })
 
 

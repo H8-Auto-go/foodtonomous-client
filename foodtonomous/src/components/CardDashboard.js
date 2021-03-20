@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Image} from 'react-native';
 import {
   ApplicationProvider,
   Button,
@@ -26,7 +26,7 @@ const Header = (props) => (
 );
 
 
-function CardDashboard() {
+function CardDashboard({ food }) {
   const [checked, setChecked] = React.useState(false);
 
   const onCheckedChange = (isChecked) => {
@@ -36,8 +36,15 @@ function CardDashboard() {
     <>
       <Card style={styles.card} header={Header}>
         <View style={styles.container}>
+          <Image
+            style={styles.tinyLogo}
+            source={{uri: food.picture}}
+          />
           <Text>
-              list makanan dan nama resto 
+              {food.name}
+          </Text>
+          <Text>
+              RP.{food.price}
           </Text>
           <Toggle checked={checked} onChange={onCheckedChange}>
             {`Auto: ${checked ? 'on' : 'off'}`}
@@ -82,6 +89,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
   },
 });
 
