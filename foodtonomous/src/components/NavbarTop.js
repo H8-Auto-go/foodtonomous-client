@@ -67,6 +67,11 @@ export const NavbarTop = () => {
           accessoryLeft={InfoIcon}
           title="Automation Setting"
         />
+        <MenuItem
+          onPress={() => navigation.navigate('ChatRoom')}
+          accessoryLeft={InfoIcon}
+          title="Chat Room"
+        />
         <MenuItem 
           onPress={() => navigation.navigate('LoginPage')}
           accessoryLeft={LogoutIcon} title='Logout'/>

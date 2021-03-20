@@ -1,11 +1,12 @@
 import React, {setState, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View } from 'react-native';
 import {Button, Input} from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
 import {IndexPath, Layout, Select, SelectItem} from '@ui-kitten/components';
 import DatePicker from 'react-native-datepicker';
 
 function AutomationSetting() {
+
   const [date, setDate] = useState("2016-05-15")
   const [value, setValue] = React.useState('');
   const [selectedIndex, setSelectedIndex] = React.useState([
@@ -67,8 +68,6 @@ function AutomationSetting() {
 const styles = StyleSheet.create({
   wrapper: {
     flex: 1,
-    // justifyContent: 'space-around',
-    // alignItems: 'center',
   },
   container: {
     height: 128,

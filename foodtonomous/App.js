@@ -31,9 +31,10 @@ import {
   AutomationSetting,
   FavoriteFood,
   LoginPage,
-  OrderHistory
+  OrderHistory,
+  
 } from './src/screens'
-// import Dashboard from './src/screens/Dashboard'
+import ChatRoom from './src/screens/ChatRoom'
 // import MapTracking from './src/screens/MapTracking'
 // import FavoriteFood from './src/screens/FavoriteFood'
 // import LoginPage from './src/screens/LoginPage'
@@ -66,6 +67,7 @@ export default () => (
           <Stack.Screen name="MapTracking" component={MapTracking} />
           <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
           <Stack.Screen name="OrderHistory" component={OrderHistory} />
+          <Stack.Screen name="ChatRoom" component={ChatRoom} />
           <Stack.Screen
             name="AutomationSetting"
             component={AutomationSetting}
