@@ -27,6 +27,7 @@ const Header = (props) => (
 
 
 function CardDashboard({ food }) {
+  console.log(food);
   const [checked, setChecked] = React.useState(false);
 
   const onCheckedChange = (isChecked) => {
@@ -38,13 +39,13 @@ function CardDashboard({ food }) {
         <View style={styles.container}>
           <Image
             style={styles.tinyLogo}
-            source={{uri: food.picture}}
+            source={{uri: food.food.picture}}
           />
           <Text>
-              {food.name}
+              {food.food.name}
           </Text>
           <Text>
-              RP.{food.price}
+              RP.{food.food.price}
           </Text>
           <Toggle checked={checked} onChange={onCheckedChange}>
             {`Auto: ${checked ? 'on' : 'off'}`}

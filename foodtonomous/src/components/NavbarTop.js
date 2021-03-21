@@ -41,9 +41,9 @@ export const NavbarTop = () => {
   );
 
   const handleLogout = () => {
-    navigation.navigate('LoginPage')
+    // navigation.navigate('LoginPage')
     //untuk hit ke actions
-    // dispatch(logout(navigation))
+    dispatch(logout(navigation))
   }
   const renderRightActions = () => (
     <React.Fragment>

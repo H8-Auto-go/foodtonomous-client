@@ -34,8 +34,8 @@ import {
   FavoriteFood,
   LoginPage,
   OrderHistory,
+  ChatRoom
 } from './src/screens'
-import ChatRoom from './src/screens/ChatRoom'
 import RegisterPage from './src/screens/RegisterPage'
 import { Provider } from 'react-redux'
 import store from './src/store/index'

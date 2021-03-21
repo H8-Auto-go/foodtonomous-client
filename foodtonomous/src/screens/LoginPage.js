@@ -1,20 +1,20 @@
-import {Button} from '@ui-kitten/components';
-import React, {useState} from 'react';
-import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, View} from 'react-native';
-import {useDispatch} from 'react-redux';
-import {Input, Text} from '@ui-kitten/components';
-import {login} from '../store/actions/users';
-import {Dimensions} from 'react-native';
+
+import { Button } from '@ui-kitten/components'
+import React, { useState } from 'react'
+import { useNavigation } from '@react-navigation/native';
+import { StyleSheet, View, Dimensions } from 'react-native';
+import { useDispatch } from 'react-redux'
+import { Input,Text } from '@ui-kitten/components';
+import { login } from '../store/actions/users'
 
 function LoginPage() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-
+  
   const handleLogin = () => {
     navigation.navigate('Home');
 
