@@ -50,3 +50,21 @@ export function logout(navigation) {
     }
   }
 }
+
+
+export function loginDriver(driver, navigation) {
+  // return async () => {
+  //   try {
+  //     const {data} = await serverAxios({
+  //       method: "POST",
+  //       url: "/users/login",
+  //       data: driver
+  //     })
+  //     console.log(data);
+  //     await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
+  //     navigation.navigate('Home')
+  //   } catch(err) {
+  //     console.log(err)
+  //   }
+  // }
+}

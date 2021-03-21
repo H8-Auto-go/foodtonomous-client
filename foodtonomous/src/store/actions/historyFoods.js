@@ -1,11 +1,11 @@
 import { serverAxios, axios } from './apis/axios'
 
-export const setFavouriteFoods = (payload) => ({
+export const setHistoryFoods = (payload) => ({
     type: 'SET_HISTORYFOODS/HISTORYSFOODS',
     payload
 })
 
-export function getFavouriteFoods () {
+export function getHistoryFoods () {
   return async (dispatch) => {
     try {
       const {data} = await serverAxios({
@@ -13,7 +13,7 @@ export function getFavouriteFoods () {
         url: '/users/history'
       })
       // console.log('dari action favouriteFoods', data);
-      dispatch(setFavouriteFoods(data))
+      dispatch(setHistoryFoods(data))
     } catch (error) {
       console.log(error)
     }

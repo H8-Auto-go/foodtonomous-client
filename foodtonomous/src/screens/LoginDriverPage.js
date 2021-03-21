@@ -5,19 +5,19 @@ import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { Input,Text,Toggle } from '@ui-kitten/components';
-import { login } from '../store/actions/users'
+import { loginDriver } from '../store/actions/users'
 
-function LoginPage() {
-  const navigation = useNavigation(); 
-  const [activeChecked, setActiveChecked] = React.useState(false);
+function LoginDriverPage() {
+  const [activeChecked, setActiveChecked] = React.useState(true);
 
   const onActiveCheckedChange = (isChecked) => {
-    setActiveChecked(isChecked);
-    // if (activeChecked) {
-      navigation.navigate('LoginDriverPage')
+    // if (!activeChecked) {
+      navigation.navigate('LoginPage')
     // } 
+    setActiveChecked(isChecked);
   };
   const dispatch = useDispatch();
+  const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const windowWidth = Dimensions.get('window').width;
@@ -31,13 +31,14 @@ function LoginPage() {
     //   email,
     //   password,
     // }
-    // dispatch(login(user, navigation))
+    // dispatch(loginDriver(driver, navigation))
     // setEmail('')
     // setPassword('')
   };
 
   const handleRegister = () => {
     navigation.navigate('RegisterPage');
+
     console.log('ke halaman register');
   };
   return (
@@ -54,7 +55,7 @@ function LoginPage() {
         <Text>logo here</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text>Login User</Text>
+        <Text>Login Driver</Text>
         <Input
           placeholder="your email"
           value={email}
@@ -74,13 +75,13 @@ function LoginPage() {
             status="success">
             Login
           </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
-            Register
-          </Button>
-        </View>
-        <Button style={styles.button} onPress={()=> navigation.navigate('LoginDriverPage')}appearance='ghost'>
-          I'm a driver
+          <Button style={{width: windowWidth / 3.5}} onPress={()=> navigation.navigate('LoginPage')}appearance='ghost'>
+          I'm a user
         </Button>
+          {/* <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
+            Register
+          </Button> */}
+        </View>
       </View>
     </View>
   );
@@ -109,4 +110,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default LoginDriverPage;

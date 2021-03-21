@@ -37,6 +37,7 @@ import {
   ChatRoom
 } from './src/screens'
 import RegisterPage from './src/screens/RegisterPage'
+import LoginDriverPage from './src/screens/LoginDriverPage'
 import { Provider } from 'react-redux'
 import store from './src/store/index'
 // import { NavigationContainer } from '@react-navigation/native';
@@ -78,6 +79,7 @@ export default () => (
             <Stack.Screen name="OrderHistory" component={OrderHistory} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
             <Stack.Screen name="RegisterPage" component={RegisterPage} />
+            <Stack.Screen name="LoginDriverPage" component={LoginDriverPage} />
             <Stack.Screen
               name="AutomationSetting"
               component={AutomationSetting}

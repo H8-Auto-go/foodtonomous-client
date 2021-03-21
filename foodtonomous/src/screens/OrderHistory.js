@@ -2,7 +2,7 @@ import React from 'react'
 import {Card, Text} from '@ui-kitten/components';
 import { StyleSheet, View } from 'react-native';
 import {NavbarTop} from '../components/NavbarTop';
-
+// import { }
 function OrderHistory() {
   return (
     <View style={styles.container}>
