@@ -7,7 +7,7 @@ import {Input, Text} from '@ui-kitten/components';
 import {login} from '../store/actions/users';
 import {Dimensions} from 'react-native';
 
-function LoginPage() {
+function RegisterPage() {
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
@@ -39,7 +39,7 @@ function LoginPage() {
         <Text>logo here</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text>Login</Text>
+        <Text>Register</Text>
         <Input
           placeholder="your email"
           value={email}
@@ -53,13 +53,13 @@ function LoginPage() {
           style={{width: windowWidth / 1.6}}
         />
         <View style={styles.buttonContainer}>
-          <Button
+          {/* <Button
             style={{width: windowWidth / 3.5}}
             onPress={handleLogin}
             status="success">
-            Login
-          </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
+            To Login
+          </Button> */}
+          <Button style={{width: windowWidth / 1.6}} onPress={handleRegister}>
             Register
           </Button>
         </View>
@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     display: 'flex',
+    justifyContent: 'center',
+    // alignItems: 'center',
   },
   buttonContainer: {
     display: 'flex',
@@ -91,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default RegisterPage;

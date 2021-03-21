@@ -34,9 +34,9 @@ import {
   FavoriteFood,
   LoginPage,
   OrderHistory,
-  
 } from './src/screens'
 import ChatRoom from './src/screens/ChatRoom'
+import RegisterPage from './src/screens/RegisterPage'
 import { Provider } from 'react-redux'
 import store from './src/store/index'
 // import { NavigationContainer } from '@react-navigation/native';
@@ -77,6 +77,7 @@ export default () => (
             <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
             <Stack.Screen name="OrderHistory" component={OrderHistory} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
+            <Stack.Screen name="RegisterPage" component={RegisterPage} />
             <Stack.Screen
               name="AutomationSetting"
               component={AutomationSetting}
