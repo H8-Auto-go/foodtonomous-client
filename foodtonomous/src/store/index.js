@@ -7,7 +7,7 @@ import scheduleReducer from './reducers/schedule'
 import historyReducer from './reducers/historyFood'
 import userPositionReducer from './reducers/userPosition'
 // import historyFoodsReducer from './reducers/historyFood'
-// import orderReducer from './reducers/orders'
+import orderReducer from './reducers/orders'
 const rootReducer = combineReducers({
   favoriteFoods: favoriteFoodsReducer,
   restaurants: restaurantsReducer,
@@ -15,7 +15,7 @@ const rootReducer = combineReducers({
   schedule: scheduleReducer,
   historyFoods: historyReducer,
   userPosition: userPositionReducer,
-  // orders: orderReducer
+  orders: orderReducer
   // historyFoods: historyFoodsReducer
 })
 

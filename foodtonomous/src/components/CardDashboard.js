@@ -23,15 +23,20 @@ const Header = (props) => (
 );
 
 
-function CardDashboard({ food }) {
+function CardDashboard({ data: {food, restaurant}, setOrder, userId }) {
   // console.log(food);
   const [checked, setChecked] = React.useState(false);
 
   useEffect(() => {
-    console.log(checked)
+    if(checked) {
+      setOrder({
+        userId,
+        foodId: food.id,
+        restaurantId: restaurant.id
+      })
+    }
   }, [checked])
   const onCheckedChange = (isChecked) => {
-    console.log('lewat')
     setChecked(isChecked);
   };
   return (
@@ -40,13 +45,13 @@ function CardDashboard({ food }) {
         <View style={styles.container}>
           <Image
             style={styles.tinyLogo}
-            source={{uri: food.food.picture}}
+            source={{uri: food.picture}}
           />
           <Text>
-              {food.food.name}
+              {food.name}
           </Text>
           <Text>
-              RP.{food.food.price}
+              RP.{food.price}
           </Text>
           <Toggle checked={checked} onChange={onCheckedChange}>
             {`Auto: ${checked ? 'on' : 'off'}`}

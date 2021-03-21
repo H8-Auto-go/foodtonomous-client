@@ -14,8 +14,6 @@ export function getAutoSchedule (params) {
         method: "GET",
         url: '/automationSchedules'
       })
-      // const response = await data.json()
-      console.log('dari action', data);
       dispatch(setAutoSchedule(data.automationSchedules))
     } catch (error) {
       console.log(error)

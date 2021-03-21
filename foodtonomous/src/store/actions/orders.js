@@ -1,12 +1,28 @@
 import {serverAxios, axios} from "./apis/axios"
-// import io from 'socket.io-client'
-// const socket = io.connect('http://10.0.2.2:3000')
-export function createOrder() {
+import socket from './apis/socket'
+export function createOrder(order) {
   return async () => {
     try {
+      // console.log(order, '<<diacorder')
+      socket.emit('create order', order)
     } catch(err) {
       console.log(err)
     }
   }
 }
 
+export function getOrder() {
+  return async (dispatch) => {
+    try {
+      socket.on('broadcast', order => {
+        alert(order)
+        dispatch({ type: 'orders/setOrder', order })
+      })
+      socket.on('hello', message => {
+        alert(message)
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  }
+}

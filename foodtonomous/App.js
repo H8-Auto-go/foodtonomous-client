@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-// import 'com.facebook.react.bridge.JSIModulePackage'; 
-// import 'com.swmansion.reanimated.ReanimatedJSIModulePackage'; 
+// import 'com.facebook.react.bridge.JSIModulePackage';
+// import 'com.swmansion.reanimated.ReanimatedJSIModulePackage';
 /**
  * Sample React Native App
  * https://github.com/facebook/react-native
@@ -54,7 +54,6 @@ const HeartIcon = (props) => <Icon {...props} name="heart" />;
 import axios from 'axios'
 const Stack = createStackNavigator();
 // const Drawer = createDrawerNavigator();
-
 function DetailsScreen() {
   return (
     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>

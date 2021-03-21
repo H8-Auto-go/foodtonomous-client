@@ -1,6 +1,6 @@
 
 import { Button } from '@ui-kitten/components'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
@@ -43,7 +43,7 @@ function LoginPage() {
 
     const validate = validateForm(form)
     if(validate.status) {
-      console.log('anjay')
+      // console.log('anjay')
       dispatch(login(form, navigation))
       // if(isAuth) {
       //   setEmail('')
@@ -58,7 +58,6 @@ function LoginPage() {
 
   const handleRegister = () => {
     navigation.navigate('RegisterPage');
-    console.log('ke halaman register');
   };
   return (
     <View style={styles.container}>

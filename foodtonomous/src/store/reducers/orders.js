@@ -1,5 +1,6 @@
 const initialState = {
-  order: []
+  order: [],
+  availableOrder: null
 }
 
 function reducer(state = initialState, action) {
@@ -8,6 +9,11 @@ function reducer(state = initialState, action) {
       return {
         ...state,
         order: action.order
+      }
+    case 'orders/setOrder':
+      return {
+        ...state,
+        availableOrder: action.order
       }
     default:
       return state

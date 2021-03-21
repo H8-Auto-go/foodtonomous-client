@@ -12,7 +12,6 @@ export function getHistoryFoods () {
         method: "GET",
         url: '/users/history'
       })
-      // console.log('dari action favouriteFoods', data);
       dispatch(setHistoryFoods(data))
     } catch (error) {
       console.log(error)

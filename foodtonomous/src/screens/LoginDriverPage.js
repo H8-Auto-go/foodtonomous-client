@@ -1,13 +1,13 @@
 
 import { Button } from '@ui-kitten/components'
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { Input,Text,Toggle } from '@ui-kitten/components';
 import { loginDriver } from '../store/actions/users'
 import {useSelector} from 'react-redux'
-
+// import socket from '../store/actions/apis/socket'
 function LoginDriverPage() {
   const [activeChecked, setActiveChecked] = React.useState(true);
 
@@ -62,8 +62,6 @@ function LoginDriverPage() {
 
   const handleRegister = () => {
     navigation.navigate('RegisterPage');
-
-    console.log('ke halaman register');
   };
   return (
     <View style={styles.container}>
