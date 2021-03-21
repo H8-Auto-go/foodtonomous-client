@@ -26,6 +26,7 @@ export function register({email, password}) {
 export function login(user, navigation) {
   return async () => {
     try {
+      console.log(user)
       const {data} = await serverAxios({
         method: "POST",
         url: "/users/login",

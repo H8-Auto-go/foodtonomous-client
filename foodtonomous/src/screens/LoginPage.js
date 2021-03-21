@@ -6,6 +6,7 @@ import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { Input,Text,Toggle } from '@ui-kitten/components';
 import { login } from '../store/actions/users'
+import {useSelector} from 'react-redux'
 
 function LoginPage() {
   const navigation = useNavigation(); 
@@ -23,17 +24,35 @@ function LoginPage() {
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   
-  const handleLogin = () => {
+
+  const validateForm = ({email, password}) => {
+    const errorList = []
+    if(!email) { errorList.push("email required") }
+    if(!password) { errorList.push('password required') }
+    return { status: errorList.length === 0, errorList }
+  }
+  const isAuth = useSelector(state => state.isAuthenticate)
+
+  const handleLogin = async () => {
     navigation.navigate('Home');
 
-    //untuk hit ke axios
-    // let user = {
-    //   email,
-    //   password,
+    // untuk hit ke axios
+    const form = {
+      email, password
+    }
+    // const validate = validateForm(form)
+    // if(validate.status) {
+    //   dispatch(login(form, navigation))
+    //   // if(isAuth) {
+    //   //   console.log('test')
+    //   //   setEmail('')
+    //   //   setPassword('')
+    //   // } else {
+    //   //   alert('email or password is wrong')
+    //   // }
+    // } else {
+    //   alert('please insert email or password')
     // }
-    // dispatch(login(user, navigation))
-    // setEmail('')
-    // setPassword('')
   };
 
   const handleRegister = () => {
