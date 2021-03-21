@@ -1,3 +1,4 @@
+
 import { Button } from '@ui-kitten/components'
 import React, { useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
@@ -7,16 +8,15 @@ import { Input,Text } from '@ui-kitten/components';
 import { login } from '../store/actions/users'
 
 function LoginPage() {
-  const dispatch = useDispatch()
+  const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-
-
+  
   const handleLogin = () => {
-  navigation.navigate('Home')
+    navigation.navigate('Home');
 
     //untuk hit ke axios
     // let user = {
@@ -26,7 +26,8 @@ function LoginPage() {
     // dispatch(login(user, navigation))
     // setEmail('')
     // setPassword('')
-  }
+  };
+
   const handleRegister = () => {
     navigation.navigate('RegisterPage');
 
@@ -90,4 +91,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage
+export default LoginPage;

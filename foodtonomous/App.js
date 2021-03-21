@@ -36,7 +36,6 @@ import {
   OrderHistory,
   ChatRoom
 } from './src/screens'
-// import ChatRoom from './src/screens/ChatRoom'
 import RegisterPage from './src/screens/RegisterPage'
 import { Provider } from 'react-redux'
 import store from './src/store/index'
@@ -79,7 +78,6 @@ export default () => (
             <Stack.Screen name="OrderHistory" component={OrderHistory} />
             <Stack.Screen name="ChatRoom" component={ChatRoom} />
             <Stack.Screen name="RegisterPage" component={RegisterPage} />
-
             <Stack.Screen
               name="AutomationSetting"
               component={AutomationSetting}

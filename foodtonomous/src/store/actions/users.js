@@ -10,7 +10,7 @@ export function register({email, password}) {
       })
       await serverAxios({
         method: "POST",
-        url: "/users",
+        url: "/users/register",
         data: {
           avatar,
           email,
