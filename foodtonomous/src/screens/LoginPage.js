@@ -19,8 +19,8 @@ function LoginPage() {
     // } 
   };
   const dispatch = useDispatch();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("angga@xavier.com");
+  const [password, setPassword] = useState("1234");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   
@@ -28,31 +28,31 @@ function LoginPage() {
   const validateForm = ({email, password}) => {
     const errorList = []
     if(!email) { errorList.push("email required") }
-    if(!password) { errorList.push('password required') }
+    // !password) { errorList.push('password required') }
     return { status: errorList.length === 0, errorList }
   }
   const isAuth = useSelector(state => state.isAuthenticate)
 
   const handleLogin = async () => {
-    navigation.navigate('Home');
+    // navigation.navigate('Home');
 
     // untuk hit ke axios
     const form = {
       email, password
     }
-    // const validate = validateForm(form)
-    // if(validate.status) {
-    //   dispatch(login(form, navigation))
-    //   // if(isAuth) {
-    //   //   console.log('test')
-    //   //   setEmail('')
-    //   //   setPassword('')
-    //   // } else {
-    //   //   alert('email or password is wrong')
-    //   // }
-    // } else {
-    //   alert('please insert email or password')
-    // }
+
+    const validate = validateForm(form)
+    if(validate.status) {
+      dispatch(login(form, navigation))
+      // if(isAuth) {
+      //   setEmail('')
+      //   setPassword('')
+      // } else {
+      //   alert('email or password is wrong')
+      // }
+    } else {
+      alert('please insert email or password')
+    }
   };
 
   const handleRegister = () => {

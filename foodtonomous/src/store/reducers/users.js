@@ -1,5 +1,6 @@
 const initialState = {
-  isAuthenticate: false
+  isAuthenticate: false,
+  user: {}
 }
 
 function reducer(state = initialState, action) {
@@ -9,6 +10,11 @@ function reducer(state = initialState, action) {
         ...state,
         isAuthenticate: action.isAuthenticate
       }
+      case 'users/setUser':
+        return {
+          ...state,
+          user: action.user
+        }
     default:
       return state
   }

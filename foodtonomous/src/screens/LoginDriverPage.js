@@ -6,6 +6,7 @@ import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { Input,Text,Toggle } from '@ui-kitten/components';
 import { loginDriver } from '../store/actions/users'
+import {useSelector} from 'react-redux'
 
 function LoginDriverPage() {
   const [activeChecked, setActiveChecked] = React.useState(true);
@@ -22,10 +23,33 @@ function LoginDriverPage() {
   const [password, setPassword] = useState("");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-  
-  const handleLogin = () => {
-    navigation.navigate('Home');
 
+  const validateForm = ({email, password}) => {
+    const errorList = []
+    if(!email) { errorList.push("email required") }
+    // !password) { errorList.push('password required') }
+    return { status: errorList.length === 0, errorList }
+  }
+
+  const isAuth = useSelector(state => state.isAuthenticate)
+
+  const handleLoginDriver = () => {
+    // navigation.navigate('Home');
+    const form = {
+      email, password
+    }
+    const validate = validateForm(form)
+    if(validate.status) {
+      dispatch(loginDriver(form, navigation))
+      // if(isAuth) {
+      //   setEmail('')
+      //   setPassword('')
+      // } else {
+      //   alert('email or password is wrong')
+      // }
+    } else {
+      alert('please insert email or password')
+    }
     //untuk hit ke axios
     // let user = {
     //   email,
@@ -71,7 +95,7 @@ function LoginDriverPage() {
         <View style={styles.buttonContainer}>
           <Button
             style={{width: windowWidth / 3.5}}
-            onPress={handleLogin}
+            onPress={handleLoginDriver}
             status="success">
             Login
           </Button>

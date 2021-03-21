@@ -1,9 +1,21 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import {Card, Text} from '@ui-kitten/components';
 import { StyleSheet, View } from 'react-native';
 import {NavbarTop} from '../components/NavbarTop';
-// import { }
+import { getHistoryFoods } from '../store/actions/historyFoods'
+import {useSelector} from 'react-redux'
+import { useDispatch } from 'react-redux'
+
 function OrderHistory() {
+  const dispatch = useDispatch();
+  const { historyFoods } = useSelector(state => state.historyFoods)
+  console.log(historyFoods);
+  useEffect(() => {
+    dispatch(getHistoryFoods())
+    return () => {
+      console.log('cleaned up');
+    }
+  }, [])
   return (
     <View style={styles.container}>
       <NavbarTop />

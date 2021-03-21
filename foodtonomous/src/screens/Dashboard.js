@@ -14,19 +14,21 @@ import { ScrollView } from 'react-native-gesture-handler';
 import {notification} from '../store/actions/pushNotification'
 import { useDispatch } from 'react-redux'
 import { getAutoSchedule } from '../store/actions/automationSchedule'
-
+import { getUserData } from '../store/actions/users'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
 let num = 1;
 function Dashboard({navigation}) {
   const { schedule } = useSelector(state => state.schedule)
-  console.log(schedule);
+  const user = useSelector(state => state.users.user)
+  console.log(user, '>>>>> userData');
   const dispatch = useDispatch()
-  console.log(schedule);
-  const [user, setUser] = useState({});
-  console.log(user);
+  // console.log(schedule);
+  // const [user, setUser] = useState({});
+  // console.log(user);
   useEffect(() => {
     dispatch(getAutoSchedule())
-  }, []);
+    dispatch(getUserData())
+  }, [dispatch]);
   const handleNotification = () => {
     notification.configure()
     notification.createChannel(num.toString())
@@ -37,20 +39,22 @@ function Dashboard({navigation}) {
     <>
       <NavbarTop />
       {/* <ScrollView> */}
-        <Card>
-          <View style={styles.flexContainer}>
-            <View>
-              <Text>gopay status</Text>
-              <Text>Rp.10.000</Text>
-            </View>
-            <View>
-              <Text style={styles.center}>top up</Text>
-            </View>
-            <View>
-              <Text style={styles.center}>top up</Text>
-            </View>
-          </View>
-        </Card>
+      {user && (
+                <Card>
+                <View style={styles.flexContainer}>
+                  <View>
+                    <Text>gopay status</Text>
+                    <Text>RP.{user.saldo}</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.center}>top up</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.center}>top up</Text>
+                  </View>
+                </View>
+              </Card>
+      )}
         <ScrollView>
           <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
             PRIMARY

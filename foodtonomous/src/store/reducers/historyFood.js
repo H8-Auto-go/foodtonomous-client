@@ -1,13 +1,13 @@
 const initialState = {
     historyFoods: []
-  }
+}
 
   function reducer(state = initialState, {type, payload}) {
     switch(type) {
       case 'SET_HISTORYFOODS/HISTORYSFOODS':
         return {
           ...state,
-          favoriteFoods: payload
+          historyFoods: payload
         }
       default:
         return state
