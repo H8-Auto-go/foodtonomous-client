@@ -24,7 +24,6 @@ export function register({email, password}) {
 }
 
 export function login(user, navigation) {
-  // navigation.navigate('Home')
   return async () => {
     try {
       const {data} = await serverAxios({
@@ -32,8 +31,9 @@ export function login(user, navigation) {
         url: "/users/login",
         data: user
       })
-      // console.log(data);
-      await AsyncStorage.setItem('access_token', JSON.stringify(data.token))
+      console.log(data);
+      await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
+      navigation.navigate('Home')
     } catch(err) {
       console.log(err)
     }

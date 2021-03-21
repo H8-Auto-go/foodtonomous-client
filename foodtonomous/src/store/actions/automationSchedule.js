@@ -10,13 +10,13 @@ export function getAutoSchedule (params) {
   // console.log('===================');
   return async (dispatch) => {
     try {
-      const { data } = await axios({
+      const {data} = await serverAxios({
         method: "GET",
-        url: 'http://10.0.2.2:3000/automationSchedule'
+        url: '/automationSchedules'
       })
       // const response = await data.json()
-      // console.log(data[0].food);
-      dispatch(setAutoSchedule(data[0].food))
+      console.log('dari action', data);
+      dispatch(setAutoSchedule(data.automationSchedules))
     } catch (error) {
       console.log(error)
     }

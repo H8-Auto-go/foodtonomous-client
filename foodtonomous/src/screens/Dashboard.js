@@ -19,6 +19,7 @@ const HeartIcon = (props) => <Icon {...props} name="heart" />;
 let num = 1;
 function Dashboard({navigation}) {
   const { schedule } = useSelector(state => state.schedule)
+  console.log(schedule);
   const dispatch = useDispatch()
   console.log(schedule);
   const [user, setUser] = useState({});
@@ -56,7 +57,7 @@ function Dashboard({navigation}) {
           </Button>
           <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
           {
-            schedule.map(food => {
+            schedule && schedule.map(food => {
               return <CardDashboard food={food} key={food.id} />
             })
           }

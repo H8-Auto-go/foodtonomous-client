@@ -4,12 +4,16 @@ import favoriteFoodsReducer from './reducers/favoriteFood';
 import restaurantsReducer from './reducers/restaurant';
 import usersReducer from './reducers/users'
 import scheduleReducer from './reducers/schedule'
+import historyReducer from './reducers/historyFood'
+import userPositionReducer from './reducers/userPosition'
 
 const rootReducer = combineReducers({
   favoriteFoods: favoriteFoodsReducer,
   restaurants: restaurantsReducer,
   users: usersReducer,
   schedule: scheduleReducer,
+  historyFoods: historyReducer,
+  userPosition: userPositionReducer
 })
 
 

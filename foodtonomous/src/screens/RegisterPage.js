@@ -1,22 +1,22 @@
-import { Button } from '@ui-kitten/components'
-import React, { useState } from 'react'
-import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Dimensions } from 'react-native';
-import { useDispatch } from 'react-redux'
-import { Input,Text } from '@ui-kitten/components';
-import { login } from '../store/actions/users'
+import {Button} from '@ui-kitten/components';
+import React, {useState} from 'react';
+import {useNavigation} from '@react-navigation/native';
+import {StyleSheet, View} from 'react-native';
+import {useDispatch} from 'react-redux';
+import {Input, Text} from '@ui-kitten/components';
+import {login} from '../store/actions/users';
+import {Dimensions} from 'react-native';
 
-function LoginPage() {
-  const dispatch = useDispatch()
+function RegisterPage() {
+  const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-
   const handleLogin = () => {
-  navigation.navigate('Home')
+    navigation.navigate('Home');
 
     //untuk hit ke axios
     // let user = {
@@ -26,7 +26,8 @@ function LoginPage() {
     // dispatch(login(user, navigation))
     // setEmail('')
     // setPassword('')
-  }
+  };
+
   const handleRegister = () => {
     navigation.navigate('RegisterPage');
 
@@ -38,7 +39,7 @@ function LoginPage() {
         <Text>logo here</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text>Login</Text>
+        <Text>Register</Text>
         <Input
           placeholder="your email"
           value={email}
@@ -52,13 +53,13 @@ function LoginPage() {
           style={{width: windowWidth / 1.6}}
         />
         <View style={styles.buttonContainer}>
-          <Button
+          {/* <Button
             style={{width: windowWidth / 3.5}}
             onPress={handleLogin}
             status="success">
-            Login
-          </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
+            To Login
+          </Button> */}
+          <Button style={{width: windowWidth / 1.6}} onPress={handleRegister}>
             Register
           </Button>
         </View>
@@ -82,6 +83,8 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     display: 'flex',
+    justifyContent: 'center',
+    // alignItems: 'center',
   },
   buttonContainer: {
     display: 'flex',
@@ -90,4 +93,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage
+export default RegisterPage;
