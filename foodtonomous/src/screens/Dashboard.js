@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, } from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
 import { useSelector } from 'react-redux'
 import {
   Button,
@@ -7,7 +7,6 @@ import {
   Text,
   Card,
 } from '@ui-kitten/components';
-import axios from 'axios';
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -15,36 +14,62 @@ import {notification} from '../store/actions/pushNotification'
 import { useDispatch } from 'react-redux'
 import { getAutoSchedule } from '../store/actions/automationSchedule'
 import { getUserData } from '../store/actions/users'
-import socket from '../store/actions/apis/socket'
 import {createOrder} from "../store/actions/orders";
+import socket from '../store/actions/apis/socket'
+// import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
 let num = 1;
 function Dashboard({navigation}) {
+  const dispatch = useDispatch()
   const { schedule } = useSelector(state => state.schedule)
-  const {availableOrder} = useSelector(state => state.orders)
+  const {user} = useSelector(state => state.users)
   const [order, setOrder] = useState({
     userId: '',
     foodId: '',
     restaurantId: ''
   })
+  const [orderId, setOrderId] = useState(-1)
+  const [statusOrder, setStatusOrder] = useState("")
+
   useEffect(() => {
-    if(availableOrder) {
-      alert('ada orderan bang')
-    }
-  }, [availableOrder])
-  useEffect(() => {
-    socket.on('hello', message => {
-      alert(message)
+    socket.on('give a rating', () => {
+      if(user.role === 'user') {
+        alert('give rating')
+      }
+    })
+    socket.on('on going order', order => {
+      if(user.role === 'user') {
+        alert('pesanan sedang di proses')
+      }
+    })
+    socket.on('incoming order', order => {
+      if(user.role === 'driver') {
+        Alert.alert(
+          "Incoming Order",
+          `from ${order.User.name} to buy ${order.Food.name}`,
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => {
+              setOrderId(order.id)
+                const updatedOrderForm = {
+                  status: 'on going restaurant',
+                  id: order.id,
+                  userId: order.User.id,
+                  foodId: order.Food.id,
+                  restaurantId: order.Restaurant.id,
+                  driverId: user.id
+                }
+              socket.emit('order confirmation', updatedOrderForm)
+            } }
+          ]
+        );
+      }
     }, [socket])
   })
-  useEffect(() => {
-    socket.on('broadcast', message => {
-      alert(message)
-    }, [socket])
-  })
-  const user = useSelector(state => state.users.user)
-  // console.log(user, '>>>>> userData');
-  const dispatch = useDispatch()
 
   useEffect(() => {
     if(order) {
@@ -53,13 +78,18 @@ function Dashboard({navigation}) {
       }
     }
   }, [order])
-  // console.log(schedule);
-  // const [user, setUser] = useState({});
-  // console.log(user);
+
+  useEffect(() => {
+    if(statusOrder === 'done') {
+      socket.emit('order done', {status:'done', id:orderId})
+    }
+  }, [statusOrder])
+
   useEffect(() => {
     dispatch(getAutoSchedule())
     dispatch(getUserData())
   }, [dispatch]);
+
   useEffect(() => {
     if(user) {
       if(user.role === 'driver') {
@@ -67,6 +97,7 @@ function Dashboard({navigation}) {
       }
     }
   }, [user])
+
   const handleNotification = () => {
     notification.configure()
     notification.createChannel(num.toString())
@@ -87,9 +118,9 @@ function Dashboard({navigation}) {
                   <View>
                     <Text style={styles.center}>top up</Text>
                   </View>
-                  <View>
-                    <Text style={styles.center}>top up</Text>
-                  </View>
+                  {/*<View>*/}
+                  {/*  <Text style={styles.center}>top up</Text>*/}
+                  {/*</View>*/}
                 </View>
               </Card>
       )}
@@ -100,7 +131,7 @@ function Dashboard({navigation}) {
           <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
           {
             schedule && schedule.map(data => {
-              return <CardDashboard setOrder={setOrder} userId={user.id} data={data} key={data.id} />
+              return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
             })
           }
           {/* <CardDashboard />
