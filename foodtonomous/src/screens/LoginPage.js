@@ -9,21 +9,21 @@ import { login } from '../store/actions/users'
 import {useSelector} from 'react-redux'
 
 function LoginPage() {
-  const navigation = useNavigation(); 
+  const navigation = useNavigation();
   const [activeChecked, setActiveChecked] = React.useState(false);
 
   const onActiveCheckedChange = (isChecked) => {
     setActiveChecked(isChecked);
     // if (activeChecked) {
       navigation.navigate('LoginDriverPage')
-    // } 
+    // }
   };
   const dispatch = useDispatch();
   const [email, setEmail] = useState("angga@xavier.com");
   const [password, setPassword] = useState("1234");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
-  
+
 
   const validateForm = ({email, password}) => {
     const errorList = []
@@ -31,7 +31,7 @@ function LoginPage() {
     // !password) { errorList.push('password required') }
     return { status: errorList.length === 0, errorList }
   }
-  const isAuth = useSelector(state => state.isAuthenticate)
+  // const isAuth = useSelector(state => state.isAuthenticate)
 
   const handleLogin = async () => {
     // navigation.navigate('Home');
@@ -43,6 +43,7 @@ function LoginPage() {
 
     const validate = validateForm(form)
     if(validate.status) {
+      console.log('anjay')
       dispatch(login(form, navigation))
       // if(isAuth) {
       //   setEmail('')

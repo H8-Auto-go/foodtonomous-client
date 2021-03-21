@@ -8,7 +8,7 @@ import {
   Layout,
   Text,
   TopNavigation,
-  Toggle, 
+  Toggle,
   Card,
 } from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
@@ -28,9 +28,10 @@ function CardDashboard({ food }) {
   const [checked, setChecked] = React.useState(false);
 
   useEffect(() => {
-    
+    console.log(checked)
   }, [checked])
   const onCheckedChange = (isChecked) => {
+    console.log('lewat')
     setChecked(isChecked);
   };
   return (

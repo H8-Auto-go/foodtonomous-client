@@ -14,13 +14,13 @@ function LoginDriverPage() {
   const onActiveCheckedChange = (isChecked) => {
     // if (!activeChecked) {
       navigation.navigate('LoginPage')
-    // } 
+    // }
     setActiveChecked(isChecked);
   };
   const dispatch = useDispatch();
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("amos@xavier.com");
+  const [password, setPassword] = useState("1234");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 

@@ -26,6 +26,7 @@ export function register({email, password}) {
 export function login(user, navigation) {
   return async () => {
     try {
+      console.log('ini login user')
       const {data} = await serverAxios({
         method: "POST",
         url: "/login/user",
@@ -54,6 +55,7 @@ export function logout(navigation) {
 export function loginDriver(driver, navigation) {
   return async () => {
     try {
+      console.log('ini login driver')
       const {data} = await serverAxios({
         method: "POST",
         url: "/login/driver",
@@ -71,14 +73,13 @@ export function loginDriver(driver, navigation) {
 export function getUserData() {
   return async (dispatch) => {
     try {
-      const access_token = await AsyncStorage.getItem('access_token')
+      const access_token = JSON.parse(await AsyncStorage.getItem('access_token'))
       console.log(access_token, '>>>>>> 319283718943')
       const {data} = await serverAxios({
         method: "GET",
-        url: "/login/users",
+        url: "/users",
         headers: {access_token}
-      })
-      console.log(data, '<<<< fetch data yser')
+      });
       dispatch({ type: "users/setUser", user:data })
     } catch(err) {
       console.log(err)
