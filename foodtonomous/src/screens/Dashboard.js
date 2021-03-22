@@ -14,7 +14,7 @@ import {notification} from '../store/actions/pushNotification'
 import { useDispatch } from 'react-redux'
 import { getAutoSchedule } from '../store/actions/automationSchedule'
 import { getUserData } from '../store/actions/users'
-import {createOrder} from "../store/actions/orders";
+import {createOrder, getOrder} from "../store/actions/orders";
 import socket from '../store/actions/apis/socket'
 // import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
@@ -63,7 +63,8 @@ function Dashboard({navigation}) {
                   restaurantId: order.Restaurant.id,
                   driverId: user.id
                 }
-              socket.emit('order confirmation', updatedOrderForm)
+                socket.emit('order confirmation', updatedOrderForm)
+                dispatch(getOrder(order.id))
             } }
           ]
         );
