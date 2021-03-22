@@ -30,9 +30,8 @@ function MapTracking({ navigation }) {
   const userPosition = useSelector(state => state.userPosition.userPosition)
   const markerPosition = useSelector(state => state.userPosition.markerPosition)
   const restaurantPosition = useSelector(state => state.userPosition.restaurantPosition)
-  // const [orderPosition, setorder] = useState([])
-  // const [userLocation, setUserLocation] = useState({})
   const [mapMargin, setMapMargin] = useState(1)
+  const [userPosition1, setUSerPosition1] = useState({})
   const [marker, setMarker] = useState({})
   const [coordination, setCoordination] = useState([])
   const [time, setTime] = useState('')
@@ -43,19 +42,19 @@ function MapTracking({ navigation }) {
     dispatch(getOrderData())
   }, [])
   
-    useEffect(() => {
-      requstLocationPermission()
-    }, [])
+  useEffect(() => {
+    requstLocationPermission()
+  }, [])
 
-    useEffect(() => {
-      mergeCoords()
-    }, [marker])
-  
+  useEffect(() => {
+    mergeCoords()
+  }, [marker, userPosition1])
+
     
     
     
     // console.log('dari mapTracking',userPosition);
-    if (markerPosition.location){
+    // if (markerPosition.location){
       // console.log('dari mapTracking',markerPosition.location);
       // const [marker, setMarker] = useState(
       //     {latitude: markerPosition.location.latitude,
@@ -64,7 +63,7 @@ function MapTracking({ navigation }) {
       //       latitude: restaurantPosition.location.latitutde,
       //       longitude: restaurantPosition.location.longitude
       //     })
-    }
+    // }
     
     // console.log('dari mapTracking',restaurantPosition.location);
     // const [marker, setMarker] = useState(
@@ -79,7 +78,6 @@ function MapTracking({ navigation }) {
       let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
   
       if(response == 'granted') {
-        console.log(response);
         locateCurrentPosition()
       }
   
@@ -94,9 +92,8 @@ function MapTracking({ navigation }) {
             latitudeDelta: 0.015,
             longitudeDelta: 0.0121,
           }
-          // console.log(coordinates);
           dispatch(setUserPosition(coordinates))
-          // setUserLocation(coordinates)
+          setUSerPosition1(coordinates)
         }, error => {
           console.log('error getting location');
         }, { enableHighAccuracy: true }
@@ -108,16 +105,10 @@ function MapTracking({ navigation }) {
     }
   
     const getDirection = async (startLoc, desLoc) => {
-      console.log('kesini');
-      console.log(startLoc);
-      console.log(desLoc);
       if (desLoc) {
         try {
           const resp = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=${GOOGLE_API}`)
           const respJson = await resp.json()
-          console.log(respJson.routes[0].legs[0].distance.text);
-          console.log(respJson.routes[0].legs[0].duration.text);
-          console.log(respJson.routes[0].legs[0].end_address);
           setDistance(respJson.routes[0].legs[0].distance.text)
           setTime(respJson.routes[0].legs[0].duration.text)
           setAdress(respJson.routes[0].legs[0].end_address)
@@ -136,32 +127,22 @@ function MapTracking({ navigation }) {
       }
     }
   
-    // const onPressHandler = (payload) => {
-    //   console.log(payload);
-    //   setMarker([])
-    //   setCoordination([])
-    //   let secondTime = false
-    //   let coordinates = {
-    //     latitude: payload.coordinate.latitude,
-    //     longitude: payload.coordinate.longitude
-    //   }
-    //   setMarker(coordinates)
-    // }
-  
     const mergeCoords = () => {
       if (markerPosition.location){
-      //   console.log( 'dari mergeCoords user',userPosition.latitude);
-      //   console.log('dari mergeCoords user' ,markerPosition.location.latitude);
-      // console.log('kesini dulu');
-        const hasStartAndEnd = userPosition.latitude != null && markerPosition.location.latitude != null
-        console.log(hasStartAndEnd);
+        const hasStartAndEnd = userPosition1.latitude != null && markerPosition.location.latitude != null
         if (hasStartAndEnd) {
-          const concatStart = `${userPosition.latitude},${userPosition.longitude}`
+          const concatStart = `${userPosition1.latitude},${userPosition1.longitude}`
           const concatEnd = `${markerPosition.location.latitude},${markerPosition.location.longitude}`
           getDirection(concatStart, concatEnd)
         }
       }
     }
+
+    const onUserChange = (payload) => {
+      setTimeout(()=>{requstLocationPermission()}, 50000);
+    }
+
+
     if (markerPosition.location){
       let orderPosition = [
         restaurantPosition, markerPosition
@@ -169,7 +150,6 @@ function MapTracking({ navigation }) {
        if (marker.latitude !== markerPosition.location.latitude) {
          setMarker(markerPosition.location)
        } 
-       console.log(coordination);
       return (
         <SafeAreaView>
           <NavbarTop />
@@ -181,7 +161,8 @@ function MapTracking({ navigation }) {
             showsUserLocation
             followsUserLocation
             onMapReady={setMargin}
-            regionegion={ userPosition }
+            region={ userPosition }
+            // onUserLocationChange={e => onUserChange(e.nativeEvent)}
             //  onPress={e => onPressHandler(e.nativeEvent)}
           >
             {
@@ -211,7 +192,6 @@ function MapTracking({ navigation }) {
             style={styles.container2}>
               <Text style={{fontWeight: 'bold'}}>Estimated Time: {time}</Text>
               <Text style={{fontWeight: 'bold'}}>Estimated DIstance: {distance}</Text>
-    
               {/* untuk driver tambahin customer address ini */}
               <Text style={{fontWeight: 'bold'}}>Customer Address: {adress}</Text>
             </View>

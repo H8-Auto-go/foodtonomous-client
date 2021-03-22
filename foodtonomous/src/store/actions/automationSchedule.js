@@ -20,3 +20,18 @@ export function getAutoSchedule (params) {
     }
   }
 }
+
+export function addSchedule (form) {
+  console.log(form);
+  return async (dispatch) => {
+    try {
+      const {data} = await serverAxios({
+        method: "POST",
+        url: '/automationSchedules'
+      })
+      dispatch(getAutoSchedule())
+    } catch (error) {
+      console.log(error)
+    }
+  }
+}
