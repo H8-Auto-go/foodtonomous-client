@@ -8,11 +8,44 @@ import { Input,Text,Toggle, Icon } from '@ui-kitten/components';
 import { login } from '../store/actions/users'
 import {useSelector} from 'react-redux'
 import { TouchableWithoutFeedback } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
+import {request, PERMISSIONS, requestLocationAccuracy} from 'react-native-permissions';
 
 function LoginPage() {
   const navigation = useNavigation();
   const [activeChecked, setActiveChecked] = React.useState(false);
   const [secureTextEntry, setSecureTextEntry] = React.useState(true)
+  const [location, setLocation] = useState({})
+
+  useEffect(() => {
+    requstLocationPermission()
+  }, [])
+  const requstLocationPermission = async () => {
+    let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+    if(response == 'granted') {
+      console.log(response);
+      locateCurrentPosition()
+    }
+  }
+
+  function locateCurrentPosition () {
+    try {
+      Geolocation.getCurrentPosition(
+        position => {
+          let coordinates = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }
+          console.log(coordinates);
+          setLocation(coordinates)
+        }, error => {
+        }, { enableHighAccuracy: true }
+      )
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   const onActiveCheckedChange = (isChecked) => {
     setActiveChecked(isChecked);
@@ -40,7 +73,7 @@ function LoginPage() {
   const validateForm = ({email, password}) => {
     const errorList = []
     if(!email) { errorList.push("email required") }
-    // !password) { errorList.push('password required') }
+    // if(!password) { errorList.push('password required') }
     return { status: errorList.length === 0, errorList }
   }
   // const isAuth = useSelector(state => state.isAuthenticate)
@@ -50,7 +83,7 @@ function LoginPage() {
 
     // untuk hit ke axios
     const form = {
-      email, password
+      email, password, location
     }
 
     const validate = validateForm(form)

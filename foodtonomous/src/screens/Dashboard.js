@@ -37,9 +37,19 @@ function Dashboard({navigation}) {
         alert('give rating')
       }
     })
-    socket.on('on going order', order => {
+    socket.on('on going order', ({user, restaurant, driver, food}) => {
       if(user.role === 'user') {
         alert('pesanan sedang di proses')
+        //bikin estimasi
+        /*
+        location driver => location restaurant = %km
+        location restaurant => location user = %km
+        + cookEstimation = hasil
+
+        driver => click tombol (order completed)
+        //pesanan sudah sampai
+        */
+        socket.emit('update location driver')
       }
     })
     socket.on('incoming order', order => {

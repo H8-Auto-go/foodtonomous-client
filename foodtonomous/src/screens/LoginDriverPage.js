@@ -1,4 +1,3 @@
-
 import { Button } from '@ui-kitten/components'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
@@ -8,6 +7,8 @@ import { Input,Text,Toggle,Icon } from '@ui-kitten/components';
 import { loginDriver } from '../store/actions/users'
 import {useSelector} from 'react-redux'
 import { TouchableWithoutFeedback } from 'react-native';
+import Geolocation from '@react-native-community/geolocation';
+import {request, PERMISSIONS, requestLocationAccuracy} from 'react-native-permissions';
 // import socket from '../store/actions/apis/socket'
 function LoginDriverPage() {
   const [activeChecked, setActiveChecked] = React.useState(true);
@@ -24,6 +25,37 @@ function LoginDriverPage() {
   const [password, setPassword] = useState("1234");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
+  const [location, setLocation] = useState({})
+
+  useEffect(() => {
+    requstLocationPermission()
+  }, [])
+  const requstLocationPermission = async () => {
+    let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+
+    if(response == 'granted') {
+      console.log(response);
+      locateCurrentPosition()
+    }
+  }
+
+  function locateCurrentPosition () {
+    try {
+      Geolocation.getCurrentPosition(
+        position => {
+          let coordinates = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }
+          console.log(coordinates);
+          setLocation(coordinates)
+        }, error => {
+        }, { enableHighAccuracy: true }
+      )
+    } catch(err) {
+      console.log(err)
+    }
+  }
 
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
@@ -47,8 +79,9 @@ function LoginDriverPage() {
   const handleLoginDriver = () => {
     // navigation.navigate('Home');
     const form = {
-      email, password
+      email, password, location
     }
+    console.log(form);
     const validate = validateForm(form)
     if(validate.status) {
       dispatch(loginDriver(form, navigation))

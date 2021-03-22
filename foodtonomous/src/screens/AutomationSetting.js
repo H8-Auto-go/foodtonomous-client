@@ -7,13 +7,13 @@ import DatePicker from 'react-native-datepicker'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useDispatch } from 'react-redux'
 import { addSchedule } from '../store/actions/automationSchedule'
-// import { Picker } from '@react-native-picker/picker';
+import { Picker } from '@react-native-picker/picker';
 
 function AutomationSetting() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [time, setTime] = useState('')
   const [orderName, setOrderName] = useState('')
-  const [selecetedFoodName, setSelecetedFoodName] = useState('')
+  const [selectedFoodName, setSelectedFoodName] = useState('')
   // const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
 
   const dispatch = useDispatch()
@@ -65,15 +65,15 @@ function AutomationSetting() {
             onCancel={hideDatePicker}
           />
         </View>
-        {/* <Picker
-          selectedValue={selecetedFoodName}
+        <Picker
+          selectedValue={selectedFoodName}
           onValueChange={(itemValue, itemIndex) =>
-            setSelecetedFoodName(itemValue)
+            setSelectedFoodName(itemValue)
           }>
-          <Picker.Item label="lele goreng" value="lele goren" />
+          <Picker.Item label="lele goreng" value="lele goreng" />
           <Picker.Item label="lele rebus" value="lele rebus" />
           <Picker.Item label="lele fermentasi" value="lele fermentasi" />
-        </Picker> */}
+        </Picker>
 
         {/* <Layout style={styles.container} level="1">
         <Select
@@ -83,8 +83,8 @@ function AutomationSetting() {
           <SelectItem title='lele rebus'/>
           <SelectItem title='lele kukus'/>
         </Select>
-
         </Layout> */}
+
         <Button onPress={handleOnOK}> ok </Button>
         <Button> cancel </Button>
       </View>

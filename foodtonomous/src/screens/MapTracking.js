@@ -16,7 +16,8 @@ import {
   Text,
   TopNavigation,
   Card,
-  Drawer
+  Drawer,
+  Spinner
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -24,6 +25,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios'
 import { NavbarTop } from '../components/NavbarTop';
+import socket from '../store/actions/apis/socket'
 
 function MapTracking({ navigation }) {
   const dispatch = useDispatch()
@@ -37,6 +39,7 @@ function MapTracking({ navigation }) {
   const [time, setTime] = useState('')
   const [distance, setDistance] = useState('')
   const [adress, setAdress] = useState('')
+  const [ttime, setTtime] = useState(0)
 
   useEffect (() => {
     dispatch(getOrderData())
@@ -51,7 +54,14 @@ function MapTracking({ navigation }) {
   }, [marker, userPosition1])
 
     
-    
+  // useEffect(() => {
+  //   const driverData = {}
+  //   setTimeout(() => {
+  //     setTime(ttime+3)
+      
+  //     console.log('anjir', ttime)
+  //   }, 3000)
+  // }, [socket, ttime])
     
     // console.log('dari mapTracking',userPosition);
     // if (markerPosition.location){
@@ -78,26 +88,31 @@ function MapTracking({ navigation }) {
       let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
   
       if(response == 'granted') {
+        console.log(response);
         locateCurrentPosition()
       }
   
     }
   
     function locateCurrentPosition () {
-      Geolocation.getCurrentPosition(
-        position => {
-          let coordinates = {
-            latitude: position.coords.latitude,
-            longitude: position.coords.longitude,
-            latitudeDelta: 0.015,
-            longitudeDelta: 0.0121,
-          }
-          dispatch(setUserPosition(coordinates))
-          setUSerPosition1(coordinates)
-        }, error => {
-          console.log('error getting location');
-        }, { enableHighAccuracy: true }
-      )
+      try {
+        Geolocation.getCurrentPosition(
+          position => {
+            let coordinates = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }
+            console.log(coordinates);
+            dispatch(setUserPosition(coordinates))
+            setUSerPosition1(coordinates)
+          }, error => {
+          }, { enableHighAccuracy: true }
+        )
+      } catch(err) {
+        console.log(err)
+      }
     }
   
     const setMargin = () => {
@@ -122,7 +137,6 @@ function MapTracking({ navigation }) {
           setCoordination(coords)
         } catch (error) {
           console.log(error.message);
-          console.log('error dari get direction');
         }
       }
     }
@@ -139,6 +153,8 @@ function MapTracking({ navigation }) {
     }
 
     const onUserChange = (payload) => {
+      setTtime(ttime+3)
+      socket.emit('update location driver', {ttime})
       setTimeout(()=>{requstLocationPermission()}, 50000);
     }
 
@@ -147,9 +163,9 @@ function MapTracking({ navigation }) {
       let orderPosition = [
         restaurantPosition, markerPosition
       ]
-       if (marker.latitude !== markerPosition.location.latitude) {
-         setMarker(markerPosition.location)
-       } 
+      if (marker.latitude !== markerPosition.location.latitude) {
+        setMarker(markerPosition.location)
+      } 
       return (
         <SafeAreaView>
           <NavbarTop />
@@ -166,7 +182,7 @@ function MapTracking({ navigation }) {
             //  onPress={e => onPressHandler(e.nativeEvent)}
           >
             {
-          ( markerPosition.location.latitude) ? 
+          (markerPosition.location.latitude) ? 
           orderPosition.map((data, index) => {
             return <Marker
             coordinate={data.location}
@@ -199,10 +215,10 @@ function MapTracking({ navigation }) {
       )
     } else {
       return (
-        <View>
-          <Text>
-            fetching data
-          </Text>
+        <View  style={styles.containerSpinner}>
+          <Layout level='1'>
+            <Spinner status='warning'/>
+          </Layout>
         </View>
       )
     }
@@ -219,6 +235,14 @@ const styles = StyleSheet.create({
     padding: 50,
     borderRadius: 15
   },
+  containerSpinner: {
+    flex: 1,
+    // flexDirection: 'row',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // flexWrap: 'wrap',
+  },
   wrapper: {
     flex: 1,
     display: 'flex',
@@ -227,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container1: {
-    height: Dimensions.get('window').height * 0.75,
+    height: Dimensions.get('window').height * 0.70,
     width: Dimensions.get('window').width,
     justifyContent: 'center',
   },

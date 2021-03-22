@@ -1520,6 +1520,11 @@
   "resolved" "https://registry.npmjs.org/@react-native-community/masked-view/-/masked-view-0.1.10.tgz"
   "version" "0.1.10"
 
+"@react-native-picker/picker@^1.12.0":
+  "integrity" "sha512-LxtFcuQ/jxsNwH9byM4mMSusqGfaj0LHXTh6fJgvIKOBjAWwV+FjWHszQSPCbnycdezirf8dFLhF9phcNuE8CA=="
+  "resolved" "https://registry.npmjs.org/@react-native-picker/picker/-/picker-1.12.0.tgz"
+  "version" "1.12.0"
+
 "@react-native-windows/cli@0.64.0":
   "integrity" "sha512-iDGBqiN86qfno4vnc+Lr2FUGZQZtCdBbTss1wPLpKP50kVRu4zs3nbuyUNuSjUFI+up4hWk1cfsOJNN7+JqgSQ=="
   "resolved" "https://registry.npmjs.org/@react-native-windows/cli/-/cli-0.64.0.tgz"
@@ -7197,7 +7202,7 @@
     "react-is" "^16.8.6"
     "scheduler" "^0.17.0"
 
-"react@*", "react@^16.0", "react@^16.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@>= 16.0 || < 17.0", "react@>=16.13.1", "react@>=16.8.3", "react@~16.8.6 || ~16.9.0 || ~16.11.0 || ~16.13.1 || ~17.0.1", "react@16.11.0", "react@16.5.0", "react@17.0.1":
+"react@*", "react@^16.0", "react@^16.0.0", "react@^16.8.0 || ^17.0.0", "react@^16.8.3 || ^17", "react@>= 16.0 || < 17.0", "react@>=16.13.1", "react@>=16.8.3", "react@~16.8.6 || ~16.9.0 || ~16.11.0 || ~16.13.1 || ~17.0.1", "react@16 || 17", "react@16.11.0", "react@16.5.0", "react@17.0.1":
   "integrity" "sha512-M5Y8yITaLmU0ynd0r1Yvfq98Rmll6q8AxaEe88c8e7LxO8fZ2cNgmFt0aGAS9wzf1Ao32NKXtCl+/tVVtkxq6g=="
   "resolved" "https://registry.npmjs.org/react/-/react-16.11.0.tgz"
   "version" "16.11.0"

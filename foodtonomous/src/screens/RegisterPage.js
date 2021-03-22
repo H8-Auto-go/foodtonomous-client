@@ -4,34 +4,44 @@ import {useNavigation} from '@react-navigation/native';
 import {StyleSheet, View} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Input, Text} from '@ui-kitten/components';
-import {login} from '../store/actions/users';
+import {register} from '../store/actions/users';
 import {Dimensions} from 'react-native';
+import {Picker} from '@react-native-picker/picker';
 
 function RegisterPage() {
   const dispatch = useDispatch();
+  const [role, setRole] = useState('user')
   const navigation = useNavigation();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [name, setName] = useState('')
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
 
-  const handleLogin = () => {
-    navigation.navigate('Home');
-
-    //untuk hit ke axios
-    // let user = {
-    //   email,
-    //   password,
-    // }
-    // dispatch(login(user, navigation))
-    // setEmail('')
-    // setPassword('')
-  };
+  const validateForm = (payload) => {
+    const errorList = []
+    if(!payload.email) { errorList.push("email required") }
+    if(!payload.name) { errorList.push("name required") }
+    if(!payload.password) {errorList.push("name required")}
+    return { status: errorList.length === 0, errorList }
+  }
 
   const handleRegister = () => {
-    navigation.navigate('RegisterPage');
+    const form = {
+      name,
+      email,
+      password,
+      role
+    }
 
-    console.log('ke halaman register');
+    const validate = validateForm(form)
+    if (validate.status) {
+      dispatch(register(form, navigation))
+    }
+    // console.log(form);
+    // navigation.navigate('RegisterPage');
+
+    // console.log('ke halaman register');
   };
   return (
     <View style={styles.container}>
@@ -40,6 +50,12 @@ function RegisterPage() {
       </View>
       <View style={styles.formContainer}>
         <Text>Register</Text>
+        <Input
+          placeholder="your name"
+          value={name}
+          onChangeText={(nextValue) => setName(nextValue)}
+          style={{width: windowWidth / 1.6}}
+        />
         <Input
           placeholder="your email"
           value={email}
@@ -52,13 +68,15 @@ function RegisterPage() {
           onChangeText={(nextValue) => setPassword(nextValue)}
           style={{width: windowWidth / 1.6}}
         />
+        <Picker
+          selectedValue={role}
+          onValueChange={(itemValue, itemIndex) =>
+            setRole(itemValue)
+          }>
+          <Picker.Item label="I am user" value="user" />
+          <Picker.Item label="I am a driver" value="driver" />
+        </Picker>
         <View style={styles.buttonContainer}>
-          {/* <Button
-            style={{width: windowWidth / 3.5}}
-            onPress={handleLogin}
-            status="success">
-            To Login
-          </Button> */}
           <Button style={{width: windowWidth / 1.6}} onPress={handleRegister}>
             Register
           </Button>

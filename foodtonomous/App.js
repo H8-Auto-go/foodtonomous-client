@@ -13,6 +13,7 @@ import 'react-native-gesture-handler';
  * @format
  */
 import React, { useEffect, useState } from 'react';
+import {useSelector, useDispatch } from 'react-redux'
 import { StyleSheet, View } from 'react-native';
 import {
   ApplicationProvider,
@@ -40,6 +41,7 @@ import RegisterPage from './src/screens/RegisterPage'
 import LoginDriverPage from './src/screens/LoginDriverPage'
 import { Provider } from 'react-redux'
 import store from './src/store/index'
+import {getUserData} from './src/store/actions/users'
 // import { NavigationContainer } from '@react-navigation/native';
 // import MapTracking from './src/screens/MapTracking'
 // import FavoriteFood from './src/screens/FavoriteFood'
@@ -69,20 +71,20 @@ export default () => (
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
         {/* <Drawer.Navigator initialRouteName="LoginPage"> */}
-            <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{headerShown: false}}>
-          <Stack.Screen name="LoginPage" component={LoginPage} />
-            <Stack.Screen name="Home" component={Dashboard} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
-            <Stack.Screen name="MapTracking" component={MapTracking} />
-            <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
-            <Stack.Screen name="OrderHistory" component={OrderHistory} />
-            <Stack.Screen name="ChatRoom" component={ChatRoom} />
-            <Stack.Screen name="RegisterPage" component={RegisterPage} />
-            <Stack.Screen name="LoginDriverPage" component={LoginDriverPage} />
-            <Stack.Screen
-              name="AutomationSetting"
-              component={AutomationSetting}
-            />
+          <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{headerShown: false}}>
+                <Stack.Screen name="LoginPage" component={LoginPage} />
+                <Stack.Screen name="Home" component={Dashboard} />
+                <Stack.Screen name="Details" component={DetailsScreen} />
+                <Stack.Screen name="MapTracking" component={MapTracking} />
+                <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
+                <Stack.Screen name="OrderHistory" component={OrderHistory} />
+                <Stack.Screen name="ChatRoom" component={ChatRoom} />
+                <Stack.Screen name="RegisterPage" component={RegisterPage} />
+                <Stack.Screen name="LoginDriverPage" component={LoginDriverPage} />
+                <Stack.Screen
+                  name="AutomationSetting"
+                  component={AutomationSetting}
+                />
         {/* </Drawer.Navigator> */}
           </Stack.Navigator>
         </NavigationContainer>
