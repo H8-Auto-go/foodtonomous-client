@@ -1479,7 +1479,7 @@
     "sudo-prompt" "^9.0.0"
     "wcwidth" "^1.0.1"
 
-"@react-native-community/datetimepicker@>=3.0.0":
+"@react-native-community/datetimepicker@^3.4.0", "@react-native-community/datetimepicker@>=3.0.0":
   "integrity" "sha512-k/Mn8upo1P++YMO7KdC5FbZbk3uY78B2by6Ni2pyFDlItWCFwZ5A/dPnwlFZvKD35VPXMKxbTCEaJI35Fot2+A=="
   "resolved" "https://registry.npmjs.org/@react-native-community/datetimepicker/-/datetimepicker-3.4.0.tgz"
   "version" "3.4.0"
@@ -6255,11 +6255,6 @@
   "resolved" "https://registry.npmjs.org/mockdate/-/mockdate-3.0.4.tgz"
   "version" "3.0.4"
 
-"moment@^2.22.0":
-  "integrity" "sha512-kHmoybcPV8Sqy59DwNDY3Jefr64lK/by/da0ViFcuA4DH0vQg5Q6Ze5VimxkfQNSC+Mls/Kx53s7TjP1RhFEDQ=="
-  "resolved" "https://registry.npmjs.org/moment/-/moment-2.29.1.tgz"
-  "version" "2.29.1"
-
 "ms@2.0.0":
   "integrity" "sha1-VgiurfwAvmwpAd9fmGF4jeDVl8g="
   "resolved" "https://registry.npmjs.org/ms/-/ms-2.0.0.tgz"
@@ -6998,13 +6993,6 @@
     "flow-parser" "^0.121.0"
     "jscodeshift" "^0.11.0"
     "nullthrows" "^1.1.1"
-
-"react-native-datepicker@^1.7.2":
-  "integrity" "sha1-WNCCJZGgrJsyq6CCZQIioO4pZp0="
-  "resolved" "https://registry.npmjs.org/react-native-datepicker/-/react-native-datepicker-1.7.2.tgz"
-  "version" "1.7.2"
-  dependencies:
-    "moment" "^2.22.0"
 
 "react-native-dotenv@^2.5.3":
   "integrity" "sha512-Fibw5q6vy91aRwol7yO6U9Om+EyE7Vs4pO70AYGRkDuMkaQ4EIyYw9mmiPcKo6VFCwlpE8y1AZImxoKREFASXA=="
