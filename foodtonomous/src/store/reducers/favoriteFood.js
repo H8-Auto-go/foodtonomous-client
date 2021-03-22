@@ -2,22 +2,22 @@ const initialState = {
   favoriteFoods: []
 }
 
-function reducer(state = initialState, action) {
-  switch(action.type) {
-    case 'favoriteFoods/setFavoriteFoods':
+function reducer(state = initialState, {type, payload}) {
+  switch(type) {
+    case 'SET_FAVOURITEFOODS/FAVOURITESFOODS':
       return {
         ...state,
-        favoriteFoods: action.favoriteFoods
+        favoriteFoods: payload
       }
     case 'favororiteFoods/addFood':
       return {
         ...state,
-        favoriteFoods: state.favoriteFoods.concat(action.newFavoriteFood)
+        favoriteFoods: state.favoriteFoods.concat(payload)
       }
     case 'favoriteFoods/deleteFood':
       return {
         ...state,
-        favoriteFoods: [...state.favoriteFoods].filter(food => food.id !== action.foodId)
+        favoriteFoods: [...state.favoriteFoods].filter(food => food.id !== payload)
       }
     default:
       return state

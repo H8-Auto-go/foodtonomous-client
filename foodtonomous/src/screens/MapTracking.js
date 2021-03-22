@@ -3,7 +3,9 @@ import MapView, { Marker, PROVIDER_GOOGLE, Callout } from 'react-native-maps'
 import { StyleSheet, View, SafeAreaView, Dimensions } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS} from 'react-native-permissions';
+import { useDispatch, useSelector } from 'react-redux'
 import Polyline from '@mapbox/polyline'
+import { getOrderData, setUserPosition } from '../store/actions/userPositionAction'
 import {GOOGLE_API} from "@env"
 import {
   ApplicationProvider,
@@ -13,9 +15,9 @@ import {
   Layout,
   Text,
   TopNavigation,
-  // TopNavigationAction
   Card,
-  Drawer
+  Drawer,
+  Spinner
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -23,149 +25,205 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios'
 import { NavbarTop } from '../components/NavbarTop';
-// import { DrawerNavigator, AppNavigator } from '../components/DrawerBottom';
+import socket from '../store/actions/apis/socket'
 
 function MapTracking({ navigation }) {
-  const [userLocation, setUserLocation] = useState({})
+  const dispatch = useDispatch()
+  const userPosition = useSelector(state => state.userPosition.userPosition)
+  const markerPosition = useSelector(state => state.userPosition.markerPosition)
+  const restaurantPosition = useSelector(state => state.userPosition.restaurantPosition)
   const [mapMargin, setMapMargin] = useState(1)
+  const [userPosition1, setUSerPosition1] = useState({})
   const [marker, setMarker] = useState({})
   const [coordination, setCoordination] = useState([])
   const [time, setTime] = useState('')
   const [distance, setDistance] = useState('')
   const [adress, setAdress] = useState('')
+  const [ttime, setTtime] = useState(0)
 
+  useEffect (() => {
+    dispatch(getOrderData())
+  }, [])
+  
   useEffect(() => {
     requstLocationPermission()
   }, [])
 
   useEffect(() => {
     mergeCoords()
-  }, [marker])
+  }, [marker, userPosition1])
 
-  const requstLocationPermission = async () => {
-    let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
-
-    if(response == 'granted') {
-      console.log(response);
-      locateCurrentPosition()
-    }
-
-  }
-
-  function locateCurrentPosition () {
-    Geolocation.getCurrentPosition(
-      position => {
-        let coordinates = {
-          latitude: position.coords.latitude,
-          longitude: position.coords.longitude,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }
-        setUserLocation(coordinates)
+    
+  // useEffect(() => {
+  //   const driverData = {}
+  //   setTimeout(() => {
+  //     setTime(ttime+3)
+      
+  //     console.log('anjir', ttime)
+  //   }, 3000)
+  // }, [socket, ttime])
+    
+    // console.log('dari mapTracking',userPosition);
+    // if (markerPosition.location){
+      // console.log('dari mapTracking',markerPosition.location);
+      // const [marker, setMarker] = useState(
+      //     {latitude: markerPosition.location.latitude,
+      //     longitude: markerPosition.location.longitude})
+      //     const [restaurant, setRestaurant] = useState({
+      //       latitude: restaurantPosition.location.latitutde,
+      //       longitude: restaurantPosition.location.longitude
+      //     })
+    // }
+    
+    // console.log('dari mapTracking',restaurantPosition.location);
+    // const [marker, setMarker] = useState(
+    //   {latitude: markerPosition.location.latitude,
+    //   longitude: markerPosition.location.longitude})
+    //   const [restaurant, setRestaurant] = useState({
+    //     latitude: restaurantPosition.location.latitutde,
+    //     longitude: restaurantPosition.location.longitude
+    //   })
+  
+    const requstLocationPermission = async () => {
+      let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
+  
+      if(response == 'granted') {
+        console.log(response);
+        locateCurrentPosition()
       }
-    )
-  }
-
-  const setMargin = () => {
-    setMapMargin(0)
-  }
-
-  const getDirection = async (startLoc, desLoc) => {
-    if (desLoc) {
+  
+    }
+  
+    function locateCurrentPosition () {
       try {
-        const resp = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=${GOOGLE_API}`)
-        const respJson = await resp.json()
-        console.log(respJson.routes[0].legs[0].distance.text);
-        console.log(respJson.routes[0].legs[0].duration.text);
-        console.log(respJson.routes[0].legs[0].end_address);
-        setDistance(respJson.routes[0].legs[0].distance.text)
-        setTime(respJson.routes[0].legs[0].duration.text)
-        setAdress(respJson.routes[0].legs[0].end_address)
-        const points = Polyline.decode(respJson.routes[0].overview_polyline.points);
-        const coords = points.map(point => {
-          return {
-            latitude: point[0],
-            longitude: point[1]
-          }
-        })
-        setCoordination(coords)
-      } catch (error) {
-        console.log(error.message);
-        console.log('error dari get direction');
+        Geolocation.getCurrentPosition(
+          position => {
+            let coordinates = {
+              latitude: position.coords.latitude,
+              longitude: position.coords.longitude,
+              latitudeDelta: 0.015,
+              longitudeDelta: 0.0121,
+            }
+            console.log(coordinates);
+            dispatch(setUserPosition(coordinates))
+            setUSerPosition1(coordinates)
+          }, error => {
+          }, { enableHighAccuracy: true }
+        )
+      } catch(err) {
+        console.log(err)
       }
     }
-  }
-
-  const onPressHandler = (payload) => {
-    console.log(payload);
-    setMarker([])
-    setCoordination([])
-    let secondTime = false
-    let coordinates = {
-      latitude: payload.coordinate.latitude,
-      longitude: payload.coordinate.longitude
+  
+    const setMargin = () => {
+      setMapMargin(0)
     }
-    setMarker(coordinates)
-  }
-
-  const mergeCoords = () => {
-    const hasStartAndEnd = userLocation.latitude != null && marker.latitude != null
-
-    if (hasStartAndEnd) {
-      const concatStart = `${userLocation.latitude},${userLocation.longitude}`
-      // coba debug disni
-      const concatEnd = `${marker.latitude},${marker.longitude}`
-      getDirection(concatStart, concatEnd)
+  
+    const getDirection = async (startLoc, desLoc) => {
+      if (desLoc) {
+        try {
+          const resp = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=${GOOGLE_API}`)
+          const respJson = await resp.json()
+          setDistance(respJson.routes[0].legs[0].distance.text)
+          setTime(respJson.routes[0].legs[0].duration.text)
+          setAdress(respJson.routes[0].legs[0].end_address)
+          const points = Polyline.decode(respJson.routes[0].overview_polyline.points);
+          const coords = points.map(point => {
+            return {
+              latitude: point[0],
+              longitude: point[1]
+            }
+          })
+          setCoordination(coords)
+        } catch (error) {
+          console.log(error.message);
+        }
+      }
     }
-  }
+  
+    const mergeCoords = () => {
+      if (markerPosition.location){
+        const hasStartAndEnd = userPosition1.latitude != null && markerPosition.location.latitude != null
+        if (hasStartAndEnd) {
+          const concatStart = `${userPosition1.latitude},${userPosition1.longitude}`
+          const concatEnd = `${markerPosition.location.latitude},${markerPosition.location.longitude}`
+          getDirection(concatStart, concatEnd)
+        }
+      }
+    }
 
-  return (
-    <SafeAreaView>
-      <NavbarTop />
-    <View style={styles.container1}>
-      <MapView
-       provider={PROVIDER_GOOGLE} 
-       style={{ ...styles.map, marginBottom: mapMargin }}
-       showsUserLocation
-       //  showsTraffic
-        showsCompass
-        // followsUserLocation kecuali untuk drive
-        onMapReady={setMargin}
-        region={userLocation.latitude ? userLocation : {
-          latitude: 37.78825,
-          longitude: -122.4324,
-          latitudeDelta: 0.015,
-          longitudeDelta: 0.0121,
-        }}
-        onPress={e => onPressHandler(e.nativeEvent)}
-      >
-         {
-      (coordination.length > 0) ? <Marker
-      coordinate={marker}
-      title='foodtonomous courier'
-     /> : undefined 
-     }
-     {
-       (coordination.length > 0) ? 
-       <MapView.Polyline 
-       strokeWidth={4}
-       strokeColor='red'
-       coordinates={coordination} 
-       /> : undefined
-     }
-      </MapView>
-    </View>
-    <View
-        style={styles.container2}>
-          <Text style={{fontWeight: 'bold'}}>Estimated Time: {time}</Text>
-          <Text style={{fontWeight: 'bold'}}>Estimated DIstance: {distance}</Text>
+    const onUserChange = (payload) => {
+      setTtime(ttime+3)
+      socket.emit('update location driver', {ttime})
+      setTimeout(()=>{requstLocationPermission()}, 50000);
+    }
 
-          {/* untuk driver tambahin customer address ini */}
-          <Text style={{fontWeight: 'bold'}}>Customer Address: {adress}</Text>
+
+    if (markerPosition.location){
+      let orderPosition = [
+        restaurantPosition, markerPosition
+      ]
+      if (marker.latitude !== markerPosition.location.latitude) {
+        setMarker(markerPosition.location)
+      } 
+      return (
+        <SafeAreaView>
+          <NavbarTop />
+        <View style={styles.container1}>
+          {
+            userPosition.latitude ? <MapView
+            provider={PROVIDER_GOOGLE} 
+            style={{ ...styles.map, marginBottom: mapMargin }}
+            showsUserLocation
+            followsUserLocation
+            onMapReady={setMargin}
+            region={ userPosition }
+            // onUserLocationChange={e => onUserChange(e.nativeEvent)}
+            //  onPress={e => onPressHandler(e.nativeEvent)}
+          >
+            {
+          (markerPosition.location.latitude) ? 
+          orderPosition.map((data, index) => {
+            return <Marker
+            coordinate={data.location}
+            title={data.name}
+            key = {index}
+            />
+          })
+           : undefined 
+          }
+          {
+            (coordination.length > 0) ? 
+            <MapView.Polyline 
+            strokeWidth={4}
+            strokeColor='red'
+            coordinates={coordination} 
+            /> : undefined
+          }
+          </MapView> : undefined
+          }
+          
         </View>
-    </SafeAreaView>
-  )
-}
+        <View
+            style={styles.container2}>
+              <Text style={{fontWeight: 'bold'}}>Estimated Time: {time}</Text>
+              <Text style={{fontWeight: 'bold'}}>Estimated DIstance: {distance}</Text>
+              {/* untuk driver tambahin customer address ini */}
+              <Text style={{fontWeight: 'bold'}}>Customer Address: {adress}</Text>
+            </View>
+        </SafeAreaView>
+      )
+    } else {
+      return (
+        <View  style={styles.containerSpinner}>
+          <Layout level='1'>
+            <Spinner status='warning'/>
+          </Layout>
+        </View>
+      )
+    }
+  }
+  
 
 const styles = StyleSheet.create({
   container: {
@@ -177,6 +235,14 @@ const styles = StyleSheet.create({
     padding: 50,
     borderRadius: 15
   },
+  containerSpinner: {
+    flex: 1,
+    // flexDirection: 'row',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    // flexWrap: 'wrap',
+  },
   wrapper: {
     flex: 1,
     display: 'flex',
@@ -185,7 +251,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   container1: {
-    height: Dimensions.get('window').height * 0.75,
+    height: Dimensions.get('window').height * 0.70,
     width: Dimensions.get('window').width,
     justifyContent: 'center',
   },

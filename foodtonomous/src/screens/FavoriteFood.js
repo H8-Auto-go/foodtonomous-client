@@ -2,78 +2,31 @@ import React, { useEffect, useState } from 'react'
 import {Card, Text} from '@ui-kitten/components';
 import { StyleSheet, View } from 'react-native';
 import {NavbarTop} from '../components/NavbarTop';
+import {useDispatch, useSelector} from 'react-redux'
+import {getFavouriteFoods} from '../store/actions/favouriteFoods'
+import FavouriteCard from '../components/FavouriteCard'
 import axios from 'axios';
 
 function FavoriteFood() {
+  const favouriteFoods = useSelector(state => state.favoriteFoods.favoriteFoods)
+  const dispatch = useDispatch()
   const [user, setUser] = useState({});
-
+  // console.log(favouriteFoods);
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'https://randomuser.me/api/',
-    })
-      .then(({data}) => {
-        console.log(data.results[0].name, '+++++++++++++++++++++++++++++++++++++++++++++++');
-        setUser(data.results[0].name);
-      })
-      .catch(console.log);
+    dispatch(getFavouriteFoods())
   }, []);
   return (
     <View style={styles.container}>
       <NavbarTop />
       <Text style={{textAlign: 'center'}}>{"\n"}Favorite Food{"\n"}</Text>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-          </View>
-        </View>
-      </Card>
+      {
+        favouriteFoods &&
+        favouriteFoods ? 
+        favouriteFoods.map(data => {
+          return <FavouriteCard data={data} key={data.id}/>
+        })
+        : null
+      }
     </View>
   )
 }

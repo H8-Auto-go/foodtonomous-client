@@ -1,22 +1,19 @@
-import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {useEffect} from 'react';
+import {StyleSheet, View, Image} from 'react-native';
 import {
-  ApplicationProvider,
+  // ApplicationProvider,
   Button,
   Icon,
-  IconRegistry,
+  // IconRegistry,
   Layout,
   Text,
-  TopNavigation,
-  Toggle, 
+  // TopNavigation,
+  Toggle,
   Card,
 } from '@ui-kitten/components';
-import {EvaIconsPack} from '@ui-kitten/eva-icons';
-import * as eva from '@eva-design/eva';
-import {NavigationContainer} from '@react-navigation/native';
-import {createStackNavigator} from '@react-navigation/stack';
-import axios from 'axios';
-import {NavbarTop} from './NavbarTop';
+// import {EvaIconsPack} from '@ui-kitten/eva-icons';
+// import * as eva from '@eva-design/eva';
+// import {NavbarTop} from './NavbarTop';
 
 const Header = (props) => (
   <View {...props}>
@@ -26,9 +23,22 @@ const Header = (props) => (
 );
 
 
-function CardDashboard() {
+function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, user: {id, role} }) {
   const [checked, setChecked] = React.useState(false);
 
+  useEffect(() => {
+    if(role === 'user') {
+      if(checked) {
+        setOrder({
+          userId: id,
+          foodId: food.id,
+          restaurantId: restaurant.id
+        })
+      }
+    } else {
+      setStatusOrder(checked?"done":"")
+    }
+  }, [checked])
   const onCheckedChange = (isChecked) => {
     setChecked(isChecked);
   };
@@ -36,9 +46,19 @@ function CardDashboard() {
     <>
       <Card style={styles.card} header={Header}>
         <View style={styles.container}>
-          <Text>
-              list makanan dan nama resto 
-          </Text>
+          <Image
+            style={styles.tinyLogo}
+            source={{uri: food.picture}}
+          />
+          {/*<Text>*/}
+          {/*    {food.name}*/}
+          {/*</Text>*/}
+          {/*<Text>*/}
+          {/*    RP.{food.price}*/}
+          {/*</Text>*/}
+          {role === 'user'
+          ? <Text>untuk mesan(sementara)</Text>
+          : <Text>menyelesaikan orderan(sementara)</Text>}
           <Toggle checked={checked} onChange={onCheckedChange}>
             {`Auto: ${checked ? 'on' : 'off'}`}
           </Toggle>
@@ -82,6 +102,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     flexWrap: 'wrap',
+  },
+  tinyLogo: {
+    width: 50,
+    height: 50,
   },
 });
 

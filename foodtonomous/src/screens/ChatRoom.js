@@ -8,9 +8,9 @@ import {
   Layout,
   Text,
   TopNavigation,
-  Toggle, 
+  Toggle,
   Card,
-  Input, 
+  Input,
 } from '@ui-kitten/components';
 import {EvaIconsPack} from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -19,44 +19,54 @@ import {createStackNavigator} from '@react-navigation/stack';
 import axios from 'axios';
 import {NavbarTop} from '../components/NavbarTop';
 import { ScrollView } from 'react-native-gesture-handler';
+import {useDispatch, useSelector} from "react-redux";
+import {setMessages} from "../store/actions/users";
+import {getOrder} from '../store/actions/orders'
 
 function ChatRoom() {
+  const dispatch = useDispatch()
   const windowWidth = useWindowDimensions().width;
   const windowHeight = useWindowDimensions().height;
-  const [value, setValue] = useState('');
+  const messages = useSelector(state => state.users.messages)
+  const user = useSelector(state => state.users.user)
+  const order = useSelector(state => state.users)
+  useEffect(() => {
+    console.log('pati ga ke invok rn bodoh')
+    console.log(order)
+  }, [order])
+  console.log(user)
+  console.log(order, '<<<<<dasdasd')
+  const [message, setMessage] = useState({
+    sender: '',
+    text: ''
+  })
+  const sendMessage = () => {
+    dispatch(setMessages(message))
+    setMessage({
+      sender: '',
+      text: ''
+    })
+  }
   return (
     <View style={styles.container}>
       <NavbarTop />
       <ScrollView style={styles.chatContainer} >
-        <Card style={styles.userChat}>
-          <Text >
-            samlikum
-          </Text>
-        </Card>
-        <Card style={styles.driverChat}>
-          <Text>
-            KOMSALAM
-          </Text>
-        </Card>
-        <Card style={styles.userChat}>
-          <Text>
-            DI mana packk?
-          </Text>
-        </Card>
-        <Card style={styles.driverChat}>
-          <Text>
-            sudah deket nichh
-          </Text>
-        </Card>
+        {messages.length > 0 && messages.map((message,i) => (
+          <Card key={i} style={message.sender === 'user'? styles.userChat:styles.driverChat}>
+            <Text >
+              {message.text}
+            </Text>
+          </Card>
+        ))}
       </ScrollView>
       <View style={styles.inputContainer}>
         <Input
           placeholder='Chat'
-          value={value}
-          onChangeText={nextValue => setValue(nextValue)}
+          value={message.text}
+          onChangeText={nextValue => setMessage({sender: user.role, text: nextValue })}
           style={{width: windowWidth -80 }}
           />
-        <Button size='small'>
+        <Button size='small' onPress={sendMessage}>
           Send
         </Button>
       </View>
@@ -69,16 +79,16 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-between',
-  }, 
+  },
   inputContainer: {
     // flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between'
   },
   inputBar: {
-    // width: 
+    // width:
     // width: useWindowDimensions().width /2
-  },  
+  },
   chatContainer: {
     flexDirection: 'column-reverse',
     padding: 10
@@ -87,7 +97,6 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     marginLeft: 100,
     marginBottom: 10
-    
   },
   driverChat: {
     alignItems: 'flex-start',

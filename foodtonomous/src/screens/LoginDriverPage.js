@@ -1,20 +1,30 @@
-
 import { Button } from '@ui-kitten/components'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
-import { Input,Text,Toggle, Icon } from '@ui-kitten/components';
-import { login } from '../store/actions/users'
+import { Input,Text,Toggle,Icon } from '@ui-kitten/components';
+import { loginDriver } from '../store/actions/users'
 import {useSelector} from 'react-redux'
 import { TouchableWithoutFeedback } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import {request, PERMISSIONS, requestLocationAccuracy} from 'react-native-permissions';
-
-function LoginPage() {
-  const navigation = useNavigation();
-  const [activeChecked, setActiveChecked] = React.useState(false);
+// import socket from '../store/actions/apis/socket'
+function LoginDriverPage() {
+  const [activeChecked, setActiveChecked] = React.useState(true);
   const [secureTextEntry, setSecureTextEntry] = React.useState(true)
+  const onActiveCheckedChange = (isChecked) => {
+    // if (!activeChecked) {
+      navigation.navigate('LoginPage')
+    // }
+    setActiveChecked(isChecked);
+  };
+  const dispatch = useDispatch();
+  const navigation = useNavigation();
+  const [email, setEmail] = useState("amos@xavier.com");
+  const [password, setPassword] = useState("1234");
+  const windowWidth = Dimensions.get('window').width;
+  const windowHeight = Dimensions.get('window').height;
   const [location, setLocation] = useState({})
 
   useEffect(() => {
@@ -47,18 +57,6 @@ function LoginPage() {
     }
   }
 
-  const onActiveCheckedChange = (isChecked) => {
-    setActiveChecked(isChecked);
-    // if (activeChecked) {
-      navigation.navigate('LoginDriverPage')
-    // }
-  };
-  const dispatch = useDispatch();
-  const [email, setEmail] = useState("angga@xavier.com");
-  const [password, setPassword] = useState("1234");
-  const windowWidth = Dimensions.get('window').width;
-  const windowHeight = Dimensions.get('window').height;
-
   const toggleSecureEntry = () => {
     setSecureTextEntry(!secureTextEntry);
   };
@@ -69,27 +67,24 @@ function LoginPage() {
     </TouchableWithoutFeedback>
   );
 
-
   const validateForm = ({email, password}) => {
     const errorList = []
     if(!email) { errorList.push("email required") }
-    // if(!password) { errorList.push('password required') }
+    // !password) { errorList.push('password required') }
     return { status: errorList.length === 0, errorList }
   }
-  // const isAuth = useSelector(state => state.isAuthenticate)
 
-  const handleLogin = async () => {
+  const isAuth = useSelector(state => state.isAuthenticate)
+
+  const handleLoginDriver = () => {
     // navigation.navigate('Home');
-
-    // untuk hit ke axios
     const form = {
       email, password, location
     }
-
+    console.log(form);
     const validate = validateForm(form)
     if(validate.status) {
-      // console.log('anjay')
-      dispatch(login(form, navigation))
+      dispatch(loginDriver(form, navigation))
       // if(isAuth) {
       //   setEmail('')
       //   setPassword('')
@@ -99,6 +94,14 @@ function LoginPage() {
     } else {
       alert('please insert email or password')
     }
+    //untuk hit ke axios
+    // let user = {
+    //   email,
+    //   password,
+    // }
+    // dispatch(loginDriver(driver, navigation))
+    // setEmail('')
+    // setPassword('')
   };
 
   const handleRegister = () => {
@@ -118,7 +121,7 @@ function LoginPage() {
         <Text>logo here</Text>
       </View>
       <View style={styles.formContainer}>
-        <Text>Login User</Text>
+        <Text>Login Driver</Text>
         <Input
           placeholder="your email"
           value={email}
@@ -137,17 +140,17 @@ function LoginPage() {
         <View style={styles.buttonContainer}>
           <Button
             style={{width: windowWidth / 3.5}}
-            onPress={handleLogin}
+            onPress={handleLoginDriver}
             status="success">
             Login
           </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
-            Register
-          </Button>
-        </View>
-        <Button style={styles.button} onPress={()=> navigation.navigate('LoginDriverPage')}appearance='ghost'>
-          I'm a driver
+          <Button style={{width: windowWidth / 3.5}} onPress={()=> navigation.navigate('LoginPage')}appearance='ghost'>
+          I'm a user
         </Button>
+          {/* <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
+            Register
+          </Button> */}
+        </View>
       </View>
     </View>
   );
@@ -176,4 +179,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default LoginPage;
+export default LoginDriverPage;

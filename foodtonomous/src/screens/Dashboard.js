@@ -1,68 +1,182 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View, Alert} from 'react-native';
+import { useSelector } from 'react-redux'
 import {
   Button,
   Icon,
   Text,
   Card,
 } from '@ui-kitten/components';
-import axios from 'axios';
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
 import { ScrollView } from 'react-native-gesture-handler';
 import {notification} from '../store/actions/pushNotification'
+import { useDispatch } from 'react-redux'
+import { getAutoSchedule } from '../store/actions/automationSchedule'
+import { getUserData } from '../store/actions/users'
+import {createOrder, getOrder} from "../store/actions/orders";
+import socket from '../store/actions/apis/socket'
+// import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
 let num = 1;
 function Dashboard({navigation}) {
-  const [user, setUser] = useState({});
-  console.log(user);
+  const dispatch = useDispatch()
+  const { schedule } = useSelector(state => state.schedule)
+  const {user} = useSelector(state => state.users)
+  const [order, setOrder] = useState({
+    userId: '',
+    foodId: '',
+    restaurantId: ''
+  })
+  const [orderId, setOrderId] = useState(-1)
+  const [statusOrder, setStatusOrder] = useState("")
+
   useEffect(() => {
-    axios({
-      method: 'GET',
-      url: 'https://randomuser.me/api/',
+    socket.on('give a rating', () => {
+      if(user.role === 'user') {
+        alert('give rating')
+      }
     })
-      .then(({data}) => {
-        setUser(data.results[0].name);
-      })
-      .catch(console.log);
-  }, []);
+    socket.on('on going order', ({user, restaurant, driver, food}) => {
+      if(user.role === 'user') {
+        alert('pesanan sedang di proses')
+        //bikin estimasi
+        /*
+        location driver => location restaurant = %km
+        location restaurant => location user = %km
+        + cookEstimation = hasil
+
+        driver => click tombol (order completed)
+        //pesanan sudah sampai
+        */
+        socket.emit('update location driver')
+      }
+    })
+    socket.on('incoming order', order => {
+      if(user.role === 'driver') {
+        Alert.alert(
+          "Incoming Order",
+          `from ${order.User.name} to buy ${order.Food.name}`,
+          [
+            {
+              text: "Cancel",
+              onPress: () => console.log("Cancel Pressed"),
+              style: "cancel"
+            },
+            { text: "OK", onPress: () => {
+              setOrderId(order.id)
+                const updatedOrderForm = {
+                  status: 'on going restaurant',
+                  id: order.id,
+                  userId: order.User.id,
+                  foodId: order.Food.id,
+                  restaurantId: order.Restaurant.id,
+                  driverId: user.id
+                }
+                socket.emit('order confirmation', updatedOrderForm)
+                dispatch(getOrder(order.id))
+            } }
+          ]
+        );
+      }
+    }, [socket])
+  })
+
+  useEffect(() => {
+    if(order) {
+      if(order.userId && order.foodId && order.restaurantId){
+        dispatch(createOrder(order))
+      }
+    }
+  }, [order])
+
+  useEffect(() => {
+    if(statusOrder === 'done') {
+      socket.emit('order done', {status:'done', id:orderId})
+    }
+  }, [statusOrder])
+
+  useEffect(() => {
+    dispatch(getAutoSchedule())
+    dispatch(getUserData())
+  }, [dispatch]);
+
+  useEffect(() => {
+    if(user) {
+      if(user.role === 'driver') {
+        socket.emit('driver login', user)
+      }
+    }
+  }, [user])
+
   const handleNotification = () => {
     notification.configure()
     notification.createChannel(num.toString())
     notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
     num++
   }
-  return (
-    <>
-      <NavbarTop />
-      {/* <ScrollView> */}
-        <Card>
-          <View style={styles.flexContainer}>
-            <View>
-              <Text>gopay status</Text>
-              <Text>Rp.10.000</Text>
+  if (user && user.role === 'driver') {
+    return (
+      <>
+        <NavbarTop />
+        {user && (
+          <Card>
+            <View style={styles.flexContainer}>
+              <View>
+                <Text>gopay status</Text>
+                <Text>RP.{user.saldo}</Text>
+              </View>
+              <View>
+                <Text style={styles.center}>top up</Text>
+              </View>
+              {/*<View>*/}
+              {/*  <Text style={styles.center}>top up</Text>*/}
+              {/*</View>*/}
             </View>
-            <View>
-              <Text style={styles.center}>top up</Text>
+          </Card>
+        )}
+      <View>
+        <Text>
+          ini halaman driver, nanti driver bisa pickup order
+          </Text>
+        </View>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <NavbarTop />
+        {user && (
+          <Card>
+            <View style={styles.flexContainer}>
+              <View>
+                <Text>gopay status</Text>
+                <Text>RP.{user.saldo}</Text>
+              </View>
+              <View>
+                <Text style={styles.center}>top up</Text>
+              </View>
+              {/*<View>*/}
+              {/*  <Text style={styles.center}>top up</Text>*/}
+              {/*</View>*/}
             </View>
-            <View>
-              <Text style={styles.center}>top up</Text>
-            </View>
-          </View>
-        </Card>
-        <ScrollView>
-          <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
-            PRIMARY
-          </Button>
-          <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
-          <CardDashboard />
-        <CardDashboard />
-          <CardDashboard />
-          <CardDashboard />
-        </ScrollView>
-      {/* </ScrollView> */}
-    </>
-  );
+          </Card>
+        )}
+          <ScrollView>
+            <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
+              PRIMARY
+            </Button>
+            <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
+            {
+              schedule && schedule.map(data => {
+                return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
+              })
+            }
+          </ScrollView>
+      </>
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({
