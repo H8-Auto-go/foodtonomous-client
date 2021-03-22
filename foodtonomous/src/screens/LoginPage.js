@@ -23,8 +23,7 @@ function LoginPage() {
   const requstLocationPermission = async () => {
     let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
 
-    if(response == 'granted') {
-      console.log(response);
+    if(response === 'granted') {
       locateCurrentPosition()
     }
   }
@@ -37,7 +36,6 @@ function LoginPage() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           }
-          console.log(coordinates);
           setLocation(coordinates)
         }, error => {
         }, { enableHighAccuracy: true }

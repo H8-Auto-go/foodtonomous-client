@@ -34,7 +34,6 @@ function LoginDriverPage() {
     let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
 
     if(response == 'granted') {
-      console.log(response);
       locateCurrentPosition()
     }
   }
@@ -47,7 +46,6 @@ function LoginDriverPage() {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           }
-          console.log(coordinates);
           setLocation(coordinates)
         }, error => {
         }, { enableHighAccuracy: true }
@@ -81,7 +79,6 @@ function LoginDriverPage() {
     const form = {
       email, password, location
     }
-    console.log(form);
     const validate = validateForm(form)
     if(validate.status) {
       dispatch(loginDriver(form, navigation))

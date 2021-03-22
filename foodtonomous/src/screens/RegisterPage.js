@@ -6,7 +6,7 @@ import {useDispatch} from 'react-redux';
 import {Input, Text} from '@ui-kitten/components';
 import {register} from '../store/actions/users';
 import {Dimensions} from 'react-native';
-import {Picker} from '@react-native-picker/picker';
+// import {Picker} from '@react-native-picker/picker';
 
 function RegisterPage() {
   const dispatch = useDispatch();
@@ -68,14 +68,14 @@ function RegisterPage() {
           onChangeText={(nextValue) => setPassword(nextValue)}
           style={{width: windowWidth / 1.6}}
         />
-        <Picker
-          selectedValue={role}
-          onValueChange={(itemValue, itemIndex) =>
-            setRole(itemValue)
-          }>
-          <Picker.Item label="I am user" value="user" />
-          <Picker.Item label="I am a driver" value="driver" />
-        </Picker>
+        {/*<Picker*/}
+        {/*  selectedValue={role}*/}
+        {/*  onValueChange={(itemValue, itemIndex) =>*/}
+        {/*    setRole(itemValue)*/}
+        {/*  }>*/}
+        {/*  <Picker.Item label="I am user" value="user" />*/}
+        {/*  <Picker.Item label="I am a driver" value="driver" />*/}
+        {/*</Picker>*/}
         <View style={styles.buttonContainer}>
           <Button style={{width: windowWidth / 1.6}} onPress={handleRegister}>
             Register

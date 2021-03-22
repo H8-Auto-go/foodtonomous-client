@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Alert} from 'react-native';
+import {StyleSheet, View, Alert, Image} from "react-native";
 import { useSelector } from 'react-redux'
 import {
   Button,
   Icon,
   Text,
-  Card,
-} from '@ui-kitten/components';
+  Card, Toggle, Layout
+} from "@ui-kitten/components";
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
 import { ScrollView } from 'react-native-gesture-handler';
@@ -24,36 +24,35 @@ function Dashboard({navigation}) {
   const { schedule } = useSelector(state => state.schedule)
   const {user} = useSelector(state => state.users)
   const [order, setOrder] = useState({
-    userId: '',
-    foodId: '',
-    restaurantId: ''
+    id: "",
+    driverId: "",
+    userId: "",
+    foodId: "",
+    restaurantId: ""
   })
+  const [orderDetail, setOrderDetail] = useState({})
   const [orderId, setOrderId] = useState(-1)
-  const [statusOrder, setStatusOrder] = useState("")
+  const [statusOrder, setStatusOrder] = useState(false)
 
   useEffect(() => {
     socket.on('give a rating', () => {
       if(user.role === 'user') {
-        alert('give rating')
+        // alert('give rating')
+        handleNotification('Your food is arrived!!', 'Happy meal :))')
       }
     })
-    socket.on('on going order', ({user, restaurant, driver, food}) => {
+    socket.on('on going order', order => {
+      setOrderDetail(order)
       if(user.role === 'user') {
-        alert('pesanan sedang di proses')
-        //bikin estimasi
-        /*
-        location driver => location restaurant = %km
-        location restaurant => location user = %km
-        + cookEstimation = hasil
-
-        driver => click tombol (order completed)
-        //pesanan sudah sampai
-        */
-        socket.emit('update location driver')
+        // alert('pesanan sedang di proses')
+        handleNotification('Just relax', 'your food is on progress')
+        // socket.emit('update location driver')
       }
     })
     socket.on('incoming order', order => {
       if(user.role === 'driver') {
+        console.log(order, '>>>>>>orderan')
+        console.log(user, '<<<<<user')
         Alert.alert(
           "Incoming Order",
           `from ${order.User.name} to buy ${order.Food.name}`,
@@ -73,6 +72,7 @@ function Dashboard({navigation}) {
                   restaurantId: order.Restaurant.id,
                   driverId: user.id
                 }
+                console.log(updatedOrderForm, '^^^^updated form')
                 socket.emit('order confirmation', updatedOrderForm)
                 dispatch(getOrder(order.id))
             } }
@@ -109,12 +109,13 @@ function Dashboard({navigation}) {
     }
   }, [user])
 
-  const handleNotification = () => {
+  const handleNotification = (title, message) => {
     notification.configure()
     notification.createChannel(num.toString())
-    notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
+    notification.sendNotification(num.toString(), title, message)
     num++
   }
+
   if (user && user.role === 'driver') {
     return (
       <>
@@ -135,11 +136,7 @@ function Dashboard({navigation}) {
             </View>
           </Card>
         )}
-      <View>
-        <Text>
-          ini halaman driver, nanti driver bisa pickup order
-          </Text>
-        </View>
+        <Text>You dont have order yet</Text>
       </>
     )
   } else {
@@ -156,27 +153,24 @@ function Dashboard({navigation}) {
               <View>
                 <Text style={styles.center}>top up</Text>
               </View>
-              {/*<View>*/}
-              {/*  <Text style={styles.center}>top up</Text>*/}
-              {/*</View>*/}
             </View>
           </Card>
         )}
           <ScrollView>
-            <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
-              PRIMARY
-            </Button>
+            {/*<Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>*/}
+            {/*  PRIMARY*/}
+            {/*</Button>*/}
             <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
             {
-              schedule && schedule.map(data => {
-                return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
+              schedule && schedule.map((data) => {
+                return <CardDashboard user={user} data={data} key={data.id} />
               })
             }
           </ScrollView>
       </>
     );
   }
-  
+
 }
 
 const styles = StyleSheet.create({

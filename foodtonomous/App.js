@@ -81,10 +81,10 @@ export default () => (
                 <Stack.Screen name="ChatRoom" component={ChatRoom} />
                 <Stack.Screen name="RegisterPage" component={RegisterPage} />
                 <Stack.Screen name="LoginDriverPage" component={LoginDriverPage} />
-                <Stack.Screen
-                  name="AutomationSetting"
-                  component={AutomationSetting}
-                />
+                {/*<Stack.Screen*/}
+                {/*  name="AutomationSetting"*/}
+                {/*  component={AutomationSetting}*/}
+                {/*/>*/}
         {/* </Drawer.Navigator> */}
           </Stack.Navigator>
         </NavigationContainer>

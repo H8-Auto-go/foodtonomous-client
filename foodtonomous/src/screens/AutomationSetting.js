@@ -2,12 +2,12 @@ import React, {setState, useState} from 'react';
 import {StyleSheet, View, TextInput } from 'react-native';
 import {Button, Input} from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
-import {IndexPath, Layout, Select, SelectItem, Datepicker} from '@ui-kitten/components';
-import DatePicker from 'react-native-datepicker'
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+// import {IndexPath, Layout, Select, SelectItem, Datepicker} from '@ui-kitten/components';
+// import DatePicker from 'react-native-datepicker'
+// import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { useDispatch } from 'react-redux'
 import { addSchedule } from '../store/actions/automationSchedule'
-import { Picker } from '@react-native-picker/picker';
+// import { Picker } from '@react-native-picker/picker';
 
 function AutomationSetting() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -57,13 +57,13 @@ function AutomationSetting() {
         />
         <View>
           <Button onPress={showDatePicker}  appearance='ghost'> pick a time </Button>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="time"
-            locale="en_GB"
-            onConfirm={handleConfirm}
-            onCancel={hideDatePicker}
-          />
+          {/*<DateTimePickerModal*/}
+          {/*  isVisible={isDatePickerVisible}*/}
+          {/*  mode="time"*/}
+          {/*  locale="en_GB"*/}
+          {/*  onConfirm={handleConfirm}*/}
+          {/*  onCancel={hideDatePicker}*/}
+          {/*/>*/}
         </View>
         <Picker
           selectedValue={selectedFoodName}
