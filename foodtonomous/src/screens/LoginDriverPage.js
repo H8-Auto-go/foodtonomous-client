@@ -4,13 +4,14 @@ import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { useDispatch } from 'react-redux'
-import { Input,Text,Toggle } from '@ui-kitten/components';
+import { Input,Text,Toggle,Icon } from '@ui-kitten/components';
 import { loginDriver } from '../store/actions/users'
 import {useSelector} from 'react-redux'
+import { TouchableWithoutFeedback } from 'react-native';
 // import socket from '../store/actions/apis/socket'
 function LoginDriverPage() {
   const [activeChecked, setActiveChecked] = React.useState(true);
-
+  const [secureTextEntry, setSecureTextEntry] = React.useState(true)
   const onActiveCheckedChange = (isChecked) => {
     // if (!activeChecked) {
       navigation.navigate('LoginPage')
@@ -23,6 +24,16 @@ function LoginDriverPage() {
   const [password, setPassword] = useState("1234");
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
+
+  const toggleSecureEntry = () => {
+    setSecureTextEntry(!secureTextEntry);
+  };
+
+  const renderIcon = (props) => (
+    <TouchableWithoutFeedback onPress={toggleSecureEntry}>
+      <Icon {...props} name={secureTextEntry ? 'eye-off' : 'eye'}/>
+    </TouchableWithoutFeedback>
+  );
 
   const validateForm = ({email, password}) => {
     const errorList = []
@@ -85,10 +96,13 @@ function LoginDriverPage() {
           style={{width: windowWidth / 1.6}}
         />
         <Input
+          label='Password'
           placeholder="your password"
           value={password}
           onChangeText={(nextValue) => setPassword(nextValue)}
           style={{width: windowWidth / 1.6}}
+          secureTextEntry={secureTextEntry}
+          accessoryRight={renderIcon}
         />
         <View style={styles.buttonContainer}>
           <Button

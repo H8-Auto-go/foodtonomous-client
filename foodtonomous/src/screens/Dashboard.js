@@ -105,44 +105,68 @@ function Dashboard({navigation}) {
     notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
     num++
   }
-  return (
-    <>
-      <NavbarTop />
-      {/* <ScrollView> */}
-      {user && (
-                <Card>
-                <View style={styles.flexContainer}>
-                  <View>
-                    <Text>gopay status</Text>
-                    <Text>RP.{user.saldo}</Text>
-                  </View>
-                  <View>
-                    <Text style={styles.center}>top up</Text>
-                  </View>
-                  {/*<View>*/}
-                  {/*  <Text style={styles.center}>top up</Text>*/}
-                  {/*</View>*/}
-                </View>
-              </Card>
-      )}
-        <ScrollView>
-          <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
-            PRIMARY
-          </Button>
-          <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
-          {
-            schedule && schedule.map(data => {
-              return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
-            })
-          }
-          {/* <CardDashboard />
-          <CardDashboard />
-          <CardDashboard />
-          <CardDashboard /> */}
-        </ScrollView>
-      {/* </ScrollView> */}
-    </>
-  );
+  if (user && user.role === 'driver') {
+    return (
+      <>
+        <NavbarTop />
+        {user && (
+          <Card>
+            <View style={styles.flexContainer}>
+              <View>
+                <Text>gopay status</Text>
+                <Text>RP.{user.saldo}</Text>
+              </View>
+              <View>
+                <Text style={styles.center}>top up</Text>
+              </View>
+              {/*<View>*/}
+              {/*  <Text style={styles.center}>top up</Text>*/}
+              {/*</View>*/}
+            </View>
+          </Card>
+        )}
+      <View>
+        <Text>
+          ini halaman driver, nanti driver bisa pickup order
+          </Text>
+        </View>
+      </>
+    )
+  } else {
+    return (
+      <>
+        <NavbarTop />
+        {user && (
+          <Card>
+            <View style={styles.flexContainer}>
+              <View>
+                <Text>gopay status</Text>
+                <Text>RP.{user.saldo}</Text>
+              </View>
+              <View>
+                <Text style={styles.center}>top up</Text>
+              </View>
+              {/*<View>*/}
+              {/*  <Text style={styles.center}>top up</Text>*/}
+              {/*</View>*/}
+            </View>
+          </Card>
+        )}
+          <ScrollView>
+            <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
+              PRIMARY
+            </Button>
+            <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
+            {
+              schedule && schedule.map(data => {
+                return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
+              })
+            }
+          </ScrollView>
+      </>
+    );
+  }
+  
 }
 
 const styles = StyleSheet.create({
