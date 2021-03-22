@@ -22,14 +22,20 @@ export function getAutoSchedule (params) {
 }
 
 export function addSchedule (form) {
-  console.log(form);
   return async (dispatch) => {
     try {
+      console.log(form, 'sljdkfnalksjdhflaksudhflaisuhflaksdhfalksd')
       const {data} = await serverAxios({
         method: "POST",
-        url: '/automationSchedules'
+        url: '/automationSchedules/',
+        data: {
+          time: form.time,
+          isActive: form.isActive,
+          restaurantId: form.restaurantId,
+          foodId: form.foodId
+        }
       })
-      dispatch(getAutoSchedule())
+      // dispatch(getAutoSchedule())
     } catch (error) {
       console.log(error)
     }

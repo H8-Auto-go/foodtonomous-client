@@ -47,14 +47,14 @@ function AutomationSetting() {
       return food.food.name === selectedFoodName
     })
     let form = {
-      time,
-      iSactive: false,
-      restaurantId: favFood[0].food.id,
-      foodId: favFood[0].restaurant.id
+      time: '08:00',
+      isActive: false,
+      restaurantId: favFood[0].restaurant.id,
+      foodId: favFood[0].food.id,
     };
-    console.log(form);
+    // console.log(form);
     //hit ke action dan axios
-    // dispatch(addSchedule(form))
+    dispatch(addSchedule(form))
   }
 
   return (
