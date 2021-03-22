@@ -10,12 +10,12 @@ import userPositionReducer from './reducers/userPosition'
 import orderReducer from './reducers/orders'
 const rootReducer = combineReducers({
   favoriteFoods: favoriteFoodsReducer,
+  orders: orderReducer,
   restaurants: restaurantsReducer,
   users: usersReducer,
   schedule: scheduleReducer,
   historyFoods: historyReducer,
   userPosition: userPositionReducer,
-  orders: orderReducer
   // historyFoods: historyFoodsReducer
 })
 

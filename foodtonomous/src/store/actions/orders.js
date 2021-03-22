@@ -3,7 +3,6 @@ import socket from './apis/socket'
 export function createOrder(order) {
   return async () => {
     try {
-      // console.log(order, '<<diacorder')
       socket.emit('create order', order)
     } catch(err) {
       console.log(err)
@@ -11,16 +10,15 @@ export function createOrder(order) {
   }
 }
 
-export function getOrder() {
+export function getOrder(orderId) {
   return async (dispatch) => {
     try {
-      socket.on('broadcast', order => {
-        alert(order)
-        dispatch({ type: 'orders/setOrder', order })
+      const {data} = await serverAxios({
+        method: 'GET',
+        url: '/orders/' + orderId
       })
-      socket.on('hello', message => {
-        alert(message)
-      })
+      console.log(data, 'ADADADAD>??>?>?>?>>?')
+      dispatch({type: 'users/setOrder', order: data})
     } catch(err) {
       console.log(err)
     }

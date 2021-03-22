@@ -71,7 +71,6 @@ export function getUserData() {
   return async (dispatch) => {
     try {
       const access_token = JSON.parse(await AsyncStorage.getItem('access_token'))
-      // console.log(access_token, '>>>>>> 319283718943')
       const {data} = await serverAxios({
         method: "GET",
         url: "/users",
@@ -81,5 +80,11 @@ export function getUserData() {
     } catch(err) {
       console.log(err)
     }
+  }
+}
+
+export function setMessages(message) {
+  return (dispatch) => {
+    dispatch({type: "users/setMessages", message})
   }
 }
