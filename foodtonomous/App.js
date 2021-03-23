@@ -70,7 +70,7 @@ export default () => (
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
         {/* <Drawer.Navigator initialRouteName="LoginPage"> */}
-          <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{headerShown: false}}>
+          <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{headerShown: false,  cardStyle: { backgroundColor: '#cbf3f0' }}}>
                 <Stack.Screen name="LoginPage" component={LoginPage} />
                 <Stack.Screen name="Home" component={Dashboard} />
                 <Stack.Screen name="Details" component={DetailsScreen} />

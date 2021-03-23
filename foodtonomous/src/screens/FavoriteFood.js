@@ -21,7 +21,9 @@ function FavoriteFood() {
   return (
     <View style={styles.container}>
       {/* <NavbarTop /> */}
-      <Text style={{textAlign: 'center'}}>{"\n"}Favorite Food{"\n"}</Text>
+      <Text 
+      category='h4'
+      style={{textAlign: 'center'}}>{"\n"}Favorites Food{"\n"}</Text>
       <ScrollView>
         {
           favouriteFoods &&

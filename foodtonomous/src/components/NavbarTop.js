@@ -56,6 +56,7 @@ export const NavbarTop = () => {
   const renderRightActions = () => (
     <React.Fragment>
       <OverflowMenu
+        style={{backgroundColor: '#ffbf69'}}
         anchor={renderMenuAction}
         visible={menuVisible}
         onBackdropPress={toggleMenu}>
@@ -79,11 +80,11 @@ export const NavbarTop = () => {
           accessoryLeft={CarIcon}
           title="Order History"
         />
-        <MenuItem
+        {/* <MenuItem
           onPress={() => navigation.navigate('AutomationSetting')}
           accessoryLeft={ClipboardIcon}
           title="Automation Setting"
-        />
+        /> */}
         <MenuItem 
           onPress={() => handleLogout()}
           accessoryLeft={LogoutIcon} title='Logout'/>
@@ -96,19 +97,21 @@ export const NavbarTop = () => {
   );
 
   return (
-    <Layout style={styles.container} level='1'>
+    <Layout style={styles.container} level='4'>
       <TopNavigation
         alignment='center'
         title='HelloFood'
-        subtitle='schedule your food'
+        // subtitle='schedule your food'
         accessoryLeft={renderRightActions}
+        style={{backgroundColor: '#ff9f1c'}}
       />
     </Layout>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
-    minHeight: 65,
-  },
+  // container: {
+  //   minHeight: 65,
+  //   backgroundColor: '#bc6c25'
+  // },
 });

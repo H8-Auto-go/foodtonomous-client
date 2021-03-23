@@ -29,11 +29,11 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrde
         <Icon name='credit-card-outline' fill='black' width={24} height={24} />
         <Text
         category='h6'
-        >{restaurant.name}</Text>
+        >{' '}{restaurant.name}</Text>
       </View>
       <View style={{ flexDirection: 'row' }}>
         <Icon name='clock-outline' fill='black' width={24} height={24} />
-        <Text>{time}</Text>
+        <Text>{' '}{time}</Text>
       </View>
       {/* <Text category="s1">jam ordernya</Text> */}
     </View>
@@ -110,10 +110,12 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    margin: 7,
+    marginVertical: 5,
+    marginHorizontal: 9,
     elevation: 2,
     // width: 370,
-    borderRadius: 15
+    borderRadius: 15,
+    backgroundColor: 'ghostwhite'
   },
   footerContainer: {
     flexDirection: 'row',

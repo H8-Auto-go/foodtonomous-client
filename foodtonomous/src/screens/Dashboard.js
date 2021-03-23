@@ -6,6 +6,7 @@ import {
   Icon,
   Text,
   Card,
+  Layout
 } from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
@@ -133,6 +134,11 @@ function Dashboard({navigation}) {
     notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
     num++
   }
+
+  const PlusIcon = (props) => (
+    <Icon name='plus-outline' {...props} />
+  );
+
   if (user && user.role === 'driver') {
     return (
       <>
@@ -164,7 +170,7 @@ function Dashboard({navigation}) {
     return (
       <>
         <NavbarTop />
-        {user && (
+        {/* {user && (
           <Card>
             <View style={styles.flexContainer}>
               <View>
@@ -174,23 +180,28 @@ function Dashboard({navigation}) {
               <View>
                 <Text style={styles.center}>top up</Text>
               </View>
-              {/*<View>*/}
-              {/*  <Text style={styles.center}>top up</Text>*/}
-              {/*</View>*/}
             </View>
           </Card>
-        )}
+        )} */}
           <ScrollView style={{marginBottom: 50}}>
             {/* <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
               PRIMARY
             </Button> */}
             <Text style={styles.heading} category="h5">{"\n"}Food Order Schedule{"\n"}</Text>
             {/* <Text>{schedule}</Text> */}
+            <Layout style={styles.layoutContainer} level='1'>
+              <Button appearance='outline' status='warning'
+              accessoryLeft={PlusIcon}
+              onPress={()=> navigation.navigate('AutomationSetting')}
+              > Add New
+              </Button>
+            </Layout>
             {
               schedule && schedule.map(data => {
                 return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
               })
             }
+            
           </ScrollView>
           <SwipeUpDown		
             itemMini={<MiniItemSwipe />} // Pass props component when collapsed
@@ -200,9 +211,9 @@ function Dashboard({navigation}) {
             onMoveDown={() => console.log('down')}
             onMoveUp={() => console.log('up')}
             disablePressToShow={false} // Press item mini to show full
-            style={{ backgroundColor: '#F3D5B4' }} // style for swipe
+            style={{ backgroundColor: '#ffbf69' }} // style for swipe
             animation="easeInEaseOut" 
-            swipeHeight={60}
+            swipeHeight={50}
           />
       </>
     );
@@ -219,9 +230,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
   },
-  likeButton: {
-    marginVertical: 16,
-  },
   flexContainer: {
     display: 'flex',
     flexDirection: 'row',
@@ -233,13 +241,20 @@ const styles = StyleSheet.create({
   },
   heading: {
     textAlign: 'center',
-    backgroundColor: '#F4A460',
-    borderRadius: 10,
-    margin: 10,
+    // backgroundColor: '#F4A460',
+    // borderRadius: 10,
+    // margin: 10,
   },
   CardDashboardContainer: {
     backgroundColor: 'red'
 
+  },
+  layoutContainer:{
+    // width: 100,
+    alignItems: 'center',
+    justifyContent: 'center',
+    // margin: 10,
+    backgroundColor: '#cbf3f0'
   }
 });
 

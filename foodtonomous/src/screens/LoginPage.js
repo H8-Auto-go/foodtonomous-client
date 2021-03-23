@@ -117,10 +117,9 @@ function LoginPage() {
       <View >
         {/* <Text>logo here</Text> */}
         <Image
-            style={styles.logo}
-            source={require('../assets/logo.png')}
-            style={{width: windowWidth / 1.3, height: windowHeight / 2.6}}
-          />
+          source={require('../assets/logo2.png')}
+          style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
+        />
       </View>
       <View style={styles.formContainer}>
         <Text>Login User</Text>
@@ -178,11 +177,6 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
-  },
-  logo: {
-    // width: 50,
-    // height: 50,
-    borderRadius: 15,
   },
 });
 

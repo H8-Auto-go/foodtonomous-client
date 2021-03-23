@@ -1,7 +1,7 @@
 import { Button } from '@ui-kitten/components'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions,Image } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { Input,Text,Toggle,Icon } from '@ui-kitten/components';
 import { loginDriver } from '../store/actions/users'
@@ -116,10 +116,13 @@ function LoginDriverPage() {
         onChange={onActiveCheckedChange}>
         {activeChecked ? 'driver' : "user"}
       </Toggle> */}
-
-      <View style={styles.logoContainer}>
-        <Text>logo here</Text>
+      <View>
+      <Image
+          source={require('../assets/logo2.png')}
+          style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
+        />
       </View>
+        
       <View style={styles.formContainer}>
         <Text>Login Driver</Text>
         <Input
@@ -139,12 +142,12 @@ function LoginDriverPage() {
         />
         <View style={styles.buttonContainer}>
           <Button
-            style={{width: windowWidth / 3.5}}
+            style={{width: windowWidth / 1.7}}
             onPress={handleLoginDriver}
             status="success">
             Login
           </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={()=> navigation.navigate('LoginPage')}appearance='ghost'>
+          <Button style={{width: windowWidth / 2}} onPress={()=> navigation.navigate('LoginPage')}appearance='ghost'>
           I'm a user
         </Button>
           {/* <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
@@ -174,8 +177,14 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  logo: {
+    // width: 50,
+    // height: 50,
+    borderRadius: 15,
   },
 });
 

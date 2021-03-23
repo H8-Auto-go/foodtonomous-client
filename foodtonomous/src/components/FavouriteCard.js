@@ -62,6 +62,7 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     elevation: 2,
     marginBottom: 5,
+    backgroundColor: 'ghostwhite'
   },
 });
 

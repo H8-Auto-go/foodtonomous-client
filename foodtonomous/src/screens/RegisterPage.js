@@ -1,7 +1,7 @@
 import {Button} from '@ui-kitten/components';
 import React, {useState} from 'react';
 import {useNavigation} from '@react-navigation/native';
-import {StyleSheet, View} from 'react-native';
+import {StyleSheet, View,Image} from 'react-native';
 import {useDispatch} from 'react-redux';
 import {Input, Text} from '@ui-kitten/components';
 import {register} from '../store/actions/users';
@@ -45,8 +45,11 @@ function RegisterPage() {
   };
   return (
     <View style={styles.container}>
-      <View style={styles.logoContainer}>
-        <Text>logo here</Text>
+      <View>
+        <Image
+          source={require('../assets/logo2.png')}
+          style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
+        />
       </View>
       <View style={styles.formContainer}>
         <Text>Register</Text>
@@ -108,6 +111,9 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  logo: {
+    borderRadius: 15,
   },
 });
 
