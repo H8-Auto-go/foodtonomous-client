@@ -18,11 +18,12 @@ import {useDispatch} from 'react-redux'
 // );
 
 
-function CardDashboard({ data: {food, id, restaurant, isActive}, user: {id: userId, role} }) {
+function CardDashboard({setAutomation, data: {food, id, restaurant, isActive}, user: {id: userId, role} }) {
   const dispatch = useDispatch()
   const [isChecked, setIsChecked] = useState(isActive)
   useEffect(() => {
     dispatch(updateScheduleStatus({id, isActive: isChecked}))
+    setAutomation({id, isActive: isChecked})
   }, [isChecked])
   return (
     <>

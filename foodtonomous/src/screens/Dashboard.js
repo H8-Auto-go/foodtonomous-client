@@ -33,51 +33,67 @@ function Dashboard({navigation}) {
   const [orderDetail, setOrderDetail] = useState({})
   const [orderId, setOrderId] = useState(-1)
   const [statusOrder, setStatusOrder] = useState(false)
+  const [automation, setAutomation] = useState({})
+  const [isReceived, setIsReceived] = useState(false)
+
+  useEffect(() => {
+    return () => {
+      setAutomation({})
+      console.log('componen dilepas')
+    }
+  }, [])
+
+  useEffect(() => {
+    if(Object.keys(automation).length > 0) {
+      socket.emit('set automation', automation)
+    }
+  }, [automation])
 
   useEffect(() => {
     socket.on('give a rating', () => {
       if(user.role === 'user') {
-        // alert('give rating')
         handleNotification('Your food is arrived!!', 'Happy meal :))')
       }
     })
     socket.on('on going order', order => {
       setOrderDetail(order)
       if(user.role === 'user') {
-        // alert('pesanan sedang di proses')
         handleNotification('Just relax', 'your food is on progress')
-        // socket.emit('update location driver')
       }
     })
     socket.on('incoming order', order => {
+      console.log('ini pesanan diterima di driver', new Date().toISOString())
       if(user.role === 'driver') {
-        console.log(order, '>>>>>>orderan')
-        console.log(user, '<<<<<user')
-        Alert.alert(
-          "Incoming Order",
-          `from ${order.User.name} to buy ${order.Food.name}`,
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            },
-            { text: "OK", onPress: () => {
-              setOrderId(order.id)
-                const updatedOrderForm = {
-                  status: 'on going restaurant',
-                  id: order.id,
-                  userId: order.User.id,
-                  foodId: order.Food.id,
-                  restaurantId: order.Restaurant.id,
-                  driverId: user.id
-                }
-                console.log(updatedOrderForm, '^^^^updated form')
-                socket.emit('order confirmation', updatedOrderForm)
-                dispatch(getOrder(order.id))
-            } }
-          ]
-        );
+        if(!isReceived) {
+          setIsReceived(true)
+          Alert.alert(
+            "Incoming Order",
+            `from ${order.User.name} to buy ${order.Food.name}`,
+            [
+              {
+                text: "Cancel",
+                onPress: () => console.log("Cancel Pressed"),
+                style: "cancel"
+              },
+              { text: "OK", onPress: () => {
+                  setOrderId(order.id)
+                  const updatedOrderForm = {
+                    status: 'on going restaurant',
+                    id: order.id,
+                    userId: order.User.id,
+                    foodId: order.Food.id,
+                    restaurantId: order.Restaurant.id,
+                    driverId: user.id
+                  }
+                  console.log(updatedOrderForm, '^^^^updated form')
+                  socket.emit('order confirmation', updatedOrderForm)
+                  dispatch(getOrder(order.id))
+                } }
+            ]
+          );
+        }else {
+          console.log('anjay')
+        }
       }
     }, [socket])
   })
@@ -101,14 +117,6 @@ function Dashboard({navigation}) {
     dispatch(getUserData())
   }, [dispatch]);
 
-  useEffect(() => {
-    if(user) {
-      if(user.role === 'driver') {
-        socket.emit('driver login', user)
-      }
-    }
-  }, [user])
-
   const handleNotification = (title, message) => {
     notification.configure()
     notification.createChannel(num.toString())
@@ -130,9 +138,6 @@ function Dashboard({navigation}) {
               <View>
                 <Text style={styles.center}>top up</Text>
               </View>
-              {/*<View>*/}
-              {/*  <Text style={styles.center}>top up</Text>*/}
-              {/*</View>*/}
             </View>
           </Card>
         )}
@@ -163,7 +168,7 @@ function Dashboard({navigation}) {
             <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
             {
               schedule && schedule.map((data) => {
-                return <CardDashboard user={user} data={data} key={data.id} />
+                return <CardDashboard setAutomation={setAutomation} user={user} data={data} key={data.id} />
               })
             }
           </ScrollView>

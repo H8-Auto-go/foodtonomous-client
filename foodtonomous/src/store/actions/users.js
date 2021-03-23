@@ -52,6 +52,7 @@ export function logout(navigation) {
 export function loginDriver(driver, navigation) {
   return async () => {
     try {
+      console.log('lewat')
       const {data} = await serverAxios({
         method: "POST",
         url: "/login/driver",

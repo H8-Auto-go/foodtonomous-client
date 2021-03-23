@@ -8,17 +8,10 @@ import { loginDriver } from '../store/actions/users'
 import {useSelector} from 'react-redux'
 import { TouchableWithoutFeedback } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
-import {request, PERMISSIONS, requestLocationAccuracy} from 'react-native-permissions';
-// import socket from '../store/actions/apis/socket'
+import {request, PERMISSIONS} from 'react-native-permissions';
+
 function LoginDriverPage() {
-  const [activeChecked, setActiveChecked] = React.useState(true);
   const [secureTextEntry, setSecureTextEntry] = React.useState(true)
-  const onActiveCheckedChange = (isChecked) => {
-    // if (!activeChecked) {
-      navigation.navigate('LoginPage')
-    // }
-    setActiveChecked(isChecked);
-  };
   const dispatch = useDispatch();
   const navigation = useNavigation();
   const [email, setEmail] = useState("amos@xavier.com");
@@ -33,7 +26,7 @@ function LoginDriverPage() {
   const requstLocationPermission = async () => {
     let response = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION)
 
-    if(response == 'granted') {
+    if(response === 'granted') {
       locateCurrentPosition()
     }
   }
@@ -65,55 +58,13 @@ function LoginDriverPage() {
     </TouchableWithoutFeedback>
   );
 
-  const validateForm = ({email, password}) => {
-    const errorList = []
-    if(!email) { errorList.push("email required") }
-    // !password) { errorList.push('password required') }
-    return { status: errorList.length === 0, errorList }
-  }
-
-  const isAuth = useSelector(state => state.isAuthenticate)
-
   const handleLoginDriver = () => {
-    // navigation.navigate('Home');
-    const form = {
-      email, password, location
-    }
-    const validate = validateForm(form)
-    if(validate.status) {
-      dispatch(loginDriver(form, navigation))
-      // if(isAuth) {
-      //   setEmail('')
-      //   setPassword('')
-      // } else {
-      //   alert('email or password is wrong')
-      // }
-    } else {
-      alert('please insert email or password')
-    }
-    //untuk hit ke axios
-    // let user = {
-    //   email,
-    //   password,
-    // }
-    // dispatch(loginDriver(driver, navigation))
-    // setEmail('')
-    // setPassword('')
+    const form = { email, password, location }
+    dispatch(loginDriver(form, navigation))
   };
 
-  const handleRegister = () => {
-    navigation.navigate('RegisterPage');
-  };
   return (
     <View style={styles.container}>
-      {/* <Toggle
-        style={styles.toggle}
-        checked={activeChecked}
-        status='warning'
-        onChange={onActiveCheckedChange}>
-        {activeChecked ? 'driver' : "user"}
-      </Toggle> */}
-
       <View style={styles.logoContainer}>
         <Text>logo here</Text>
       </View>
@@ -144,9 +95,6 @@ function LoginDriverPage() {
           <Button style={{width: windowWidth / 3.5}} onPress={()=> navigation.navigate('LoginPage')}appearance='ghost'>
           I'm a user
         </Button>
-          {/* <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
-            Register
-          </Button> */}
         </View>
       </View>
     </View>
