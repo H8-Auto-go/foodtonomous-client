@@ -56,7 +56,6 @@ export const NavbarTop = () => {
   const renderRightActions = () => (
     <React.Fragment>
       <OverflowMenu
-        style={{backgroundColor: '#ffbf69'}}
         anchor={renderMenuAction}
         visible={menuVisible}
         onBackdropPress={toggleMenu}>
@@ -103,7 +102,7 @@ export const NavbarTop = () => {
         title='HelloFood'
         // subtitle='schedule your food'
         accessoryLeft={renderRightActions}
-        style={{backgroundColor: '#ff9f1c'}}
+        style={{backgroundColor: '#2ec4b6'}}
       />
     </Layout>
   );

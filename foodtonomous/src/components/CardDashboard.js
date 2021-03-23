@@ -26,7 +26,7 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrde
   const Header = (props, name) => (
     <View {...props}>
       <View style={{ flexDirection: 'row' }}>
-        <Icon name='credit-card-outline' fill='black' width={24} height={24} />
+        <Icon name='home-outline' fill='black' width={24} height={24} />
         <Text
         category='h6'
         >{' '}{restaurant.name}</Text>
@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     elevation: 2,
     // width: 370,
     borderRadius: 15,
-    backgroundColor: 'ghostwhite'
+    backgroundColor: 'white'
   },
   footerContainer: {
     flexDirection: 'row',

@@ -8,7 +8,7 @@ function FavouriteCard ({data}) {
     const Header = (props, name) => (
       <View {...props}>
         <View style={{ flexDirection: 'row' }}>
-          <Icon name='credit-card-outline' fill='black' width={24} height={24} />
+          <Icon name='home-outline' fill='black' width={24} height={24} />
           <Text
           category='h6'
           > {data.restaurant.name}
