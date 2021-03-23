@@ -1853,7 +1853,7 @@
     "hoist-non-react-statics" "^3.2.1"
     "lodash.merge" "^4.6.1"
 
-"@ui-kitten/eva-icons@5.0.0":
+"@ui-kitten/eva-icons@^5.0.0":
   "integrity" "sha512-Iae3FtnNQKC0PnRnFDUpaCFhvUFaN+NkRxag6LstEjNqAMcVnsQbPTqPQFx18j920Z5S7f5/oZqaJ8NxZtPaNA=="
   "resolved" "https://registry.npmjs.org/@ui-kitten/eva-icons/-/eva-icons-5.0.0.tgz"
   "version" "5.0.0"

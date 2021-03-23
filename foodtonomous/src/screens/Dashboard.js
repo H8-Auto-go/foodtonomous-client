@@ -229,6 +229,10 @@ const styles = StyleSheet.create({
   center: {
     textAlign: 'center',
     justifyContent: 'center',
+    fontSize: 20,
+    fontWeight: "600",
+    // text-caption-line-height: 16
+    
     // padding: 10,
     // marginLeft: 30,
   },

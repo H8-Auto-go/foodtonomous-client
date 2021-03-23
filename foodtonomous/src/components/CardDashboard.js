@@ -64,9 +64,9 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
               </Text>
               </View>
           </View>
-          {role === 'user'
+          {/* {role === 'user'
           ? <Text>untuk mesan(sementara)</Text>
-          : <Text>menyelesaikan orderan(sementara)</Text>}
+          : <Text>menyelesaikan orderan(sementara)</Text>} */}
           <Toggle checked={checked} onChange={onCheckedChange}>
             {}
           </Toggle>

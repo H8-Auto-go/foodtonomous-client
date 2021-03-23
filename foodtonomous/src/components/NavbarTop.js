@@ -9,12 +9,8 @@ const BackIcon = (props) => (
   <Icon {...props} name='arrow-back'/>
 );
 
-const EditIcon = (props) => (
-  <Icon {...props} name='edit'/>
-);
-
-const MenuIcon = (props) => (
-  <Icon {...props} name='more-vertical'/>
+const NavigationIcon = (props) => (
+  <Icon {...props} name='navigation-2'/>
 );
 
 const InfoIcon = (props) => (
@@ -23,6 +19,18 @@ const InfoIcon = (props) => (
 
 const LogoutIcon = (props) => (
   <Icon {...props} name='log-out'/>
+);
+
+
+const CarIcon = (props) => (
+  <Icon {...props} name='car'/>
+);
+
+const MenuIcon = (props) => (
+  <Icon name='menu' {...props} />
+);
+const ClipboardIcon = (props) => (
+  <Icon name='clipboard' {...props} />
 );
 
 export const NavbarTop = () => {
@@ -58,7 +66,7 @@ export const NavbarTop = () => {
         />
         <MenuItem
           onPress={() => navigation.navigate('MapTracking')}
-          accessoryLeft={InfoIcon}
+          accessoryLeft={NavigationIcon}
           title="map"
         />
         {/* <MenuItem
@@ -68,19 +76,14 @@ export const NavbarTop = () => {
         /> */}
         <MenuItem
           onPress={() => navigation.navigate('OrderHistory')}
-          accessoryLeft={InfoIcon}
+          accessoryLeft={CarIcon}
           title="Order History"
         />
         <MenuItem
           onPress={() => navigation.navigate('AutomationSetting')}
-          accessoryLeft={InfoIcon}
+          accessoryLeft={ClipboardIcon}
           title="Automation Setting"
         />
-        {/* <MenuItem
-          onPress={() => navigation.navigate('ChatRoom')}
-          accessoryLeft={InfoIcon}
-          title="Chat Room"
-        /> */}
         <MenuItem 
           onPress={() => handleLogout()}
           accessoryLeft={LogoutIcon} title='Logout'/>

@@ -5,6 +5,7 @@ import {NavbarTop} from '../components/NavbarTop';
 import { getHistoryFoods } from '../store/actions/historyFoods'
 import {useSelector} from 'react-redux'
 import { useDispatch } from 'react-redux'
+import FavouriteCard from 'src/components/FavouriteCard';
 
 function OrderHistory() {
   const dispatch = useDispatch();
@@ -20,7 +21,9 @@ function OrderHistory() {
     <View style={styles.container}>
       <NavbarTop />
       <Text style={{textAlign: 'center'}}>{"\n"}Order History {"\n"}</Text>
-      <Card>
+
+      <FavouriteCard></FavouriteCard>
+      {/* <Card>
         <View style={styles.flexCont}>
           <View>
             <Text> IMG here </Text>
@@ -83,7 +86,7 @@ function OrderHistory() {
             </Text>
           </View>
         </View>
-      </Card>
+      </Card> */}
     </View>
   )
 }
