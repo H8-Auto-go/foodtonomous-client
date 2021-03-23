@@ -1,11 +1,24 @@
 import React, { useEffect, useState } from 'react'
 import { StyleSheet, View, Image } from 'react-native';
-import {Card, Text} from '@ui-kitten/components';
+import {Card, Text, Icon} from '@ui-kitten/components';
 
 function FavouriteCard ({data}) {
     // console.log('dari component ',data);
+
+    const Header = (props, name) => (
+      <View {...props}>
+        <View style={{ flexDirection: 'row' }}>
+          <Icon name='credit-card-outline' fill='black' width={24} height={24} />
+          <Text
+          category='h6'
+          > {data.restaurant.name}
+          </Text>
+        </View>
+      </View>
+    );
+    
     return(
-        <Card style={{elevation: 2, marginBottom: 5}}>
+        <Card style={styles.card} header={Header}>
         <View style={styles.flexCont}>
           <View>
             <Image 
@@ -14,7 +27,9 @@ function FavouriteCard ({data}) {
           </View>
           <View style={{marginLeft: 10}}>
             <View>
-              <Text>
+              <Text
+              category='h6'
+              >
                 {data.food.name}
               </Text>
             </View>
@@ -30,17 +45,24 @@ function FavouriteCard ({data}) {
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
+  container: {
+    flex: 1,
+  },
+  flexCont: {
+    display: 'flex',
+    flexDirection: 'row',
+  },
+  tinyLogo: {
+      width: 50,
+      height: 50,
     },
-    flexCont: {
-      display: 'flex',
-      flexDirection: 'row',
-    },
-    tinyLogo: {
-        width: 50,
-        height: 50,
-      },
-  });
+  card:{
+    margin: 7,
+    elevation: 2,
+    borderRadius: 15,
+    elevation: 2,
+    marginBottom: 5,
+  },
+});
 
 export default FavouriteCard

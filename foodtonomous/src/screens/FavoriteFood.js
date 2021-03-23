@@ -5,6 +5,7 @@ import {NavbarTop} from '../components/NavbarTop';
 import {useDispatch, useSelector} from 'react-redux'
 import {getFavouriteFoods} from '../store/actions/favouriteFoods'
 import FavouriteCard from '../components/FavouriteCard'
+import { ScrollView } from 'react-native-gesture-handler';
 
 function FavoriteFood() {
   const favouriteFoods = useSelector(state => state.favoriteFoods.favoriteFoods)
@@ -14,18 +15,24 @@ function FavoriteFood() {
   useEffect(() => {
     dispatch(getFavouriteFoods())
   }, []);
+
+  
+
   return (
     <View style={styles.container}>
       {/* <NavbarTop /> */}
       <Text style={{textAlign: 'center'}}>{"\n"}Favorite Food{"\n"}</Text>
-      {
-        favouriteFoods &&
-        favouriteFoods ? 
-        favouriteFoods.map(data => {
-          return <FavouriteCard data={data} key={data.id}/>
-        })
-        : null
-      }
+      <ScrollView>
+        {
+          favouriteFoods &&
+          favouriteFoods ? 
+          favouriteFoods.map(data => {
+            return <FavouriteCard data={data} key={data.id}/>
+          })
+          : null
+        }
+        </ScrollView>
+      
     </View>
   )
 }

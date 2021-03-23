@@ -13,8 +13,8 @@ const NavigationIcon = (props) => (
   <Icon {...props} name='navigation-2'/>
 );
 
-const InfoIcon = (props) => (
-  <Icon {...props} name='info'/>
+const HomeIcon = (props) => (
+  <Icon {...props} name='home'/>
 );
 
 const LogoutIcon = (props) => (
@@ -61,13 +61,13 @@ export const NavbarTop = () => {
         onBackdropPress={toggleMenu}>
         <MenuItem 
         onPress={() => navigation.navigate('Home')}
-          accessoryLeft={InfoIcon}
+          accessoryLeft={HomeIcon}
           title="Home"
         />
         <MenuItem
           onPress={() => navigation.navigate('MapTracking')}
           accessoryLeft={NavigationIcon}
-          title="map"
+          title="Map"
         />
         {/* <MenuItem
           onPress={() => navigation.navigate('FavoriteFood')}
@@ -99,7 +99,7 @@ export const NavbarTop = () => {
     <Layout style={styles.container} level='1'>
       <TopNavigation
         alignment='center'
-        title='Foodtonomous'
+        title='HelloFood'
         subtitle='schedule your food'
         accessoryLeft={renderRightActions}
       />

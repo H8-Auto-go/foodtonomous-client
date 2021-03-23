@@ -184,7 +184,8 @@ function Dashboard({navigation}) {
             {/* <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
               PRIMARY
             </Button> */}
-            <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
+            <Text style={styles.heading} category="h5">{"\n"}Food Order Schedule{"\n"}</Text>
+            {/* <Text>{schedule}</Text> */}
             {
               schedule && schedule.map(data => {
                 return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
@@ -199,7 +200,7 @@ function Dashboard({navigation}) {
             onMoveDown={() => console.log('down')}
             onMoveUp={() => console.log('up')}
             disablePressToShow={false} // Press item mini to show full
-            style={{ backgroundColor: 'ghostwhite' }} // style for swipe
+            style={{ backgroundColor: '#F3D5B4' }} // style for swipe
             animation="easeInEaseOut" 
             swipeHeight={60}
           />
@@ -229,12 +230,12 @@ const styles = StyleSheet.create({
   center: {
     textAlign: 'center',
     justifyContent: 'center',
-    fontSize: 20,
-    fontWeight: "600",
-    // text-caption-line-height: 16
-    
-    // padding: 10,
-    // marginLeft: 30,
+  },
+  heading: {
+    textAlign: 'center',
+    backgroundColor: '#F4A460',
+    borderRadius: 10,
+    margin: 10,
   },
   CardDashboardContainer: {
     backgroundColor: 'red'

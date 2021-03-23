@@ -15,17 +15,30 @@ import {
 // import * as eva from '@eva-design/eva';
 // import {NavbarTop} from './NavbarTop';
 
-const Header = (props) => (
-  <View {...props}>
-    <Text category="h6">my daily food automation</Text>
-    {/* <Text category="s1">jam ordernya</Text> */}
-  </View>
+const ClockIcon = (props) => (
+  <Icon name='clock-outline' {...props} />
 );
 
 
-function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, user: {id, role} }) {
+function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrder, user: {id, role} }) {
   const [checked, setChecked] = React.useState(false);
 
+  const Header = (props, name) => (
+    <View {...props}>
+      <View style={{ flexDirection: 'row' }}>
+        <Icon name='credit-card-outline' fill='black' width={24} height={24} />
+        <Text
+        category='h6'
+        >{restaurant.name}</Text>
+      </View>
+      <View style={{ flexDirection: 'row' }}>
+        <Icon name='clock-outline' fill='black' width={24} height={24} />
+        <Text>{time}</Text>
+      </View>
+      {/* <Text category="s1">jam ordernya</Text> */}
+    </View>
+  );
+  
   useEffect(() => {
     if(role === 'user') {
       if(checked) {
@@ -44,7 +57,7 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
   };
   return (
     <>
-      <Card style={styles.card}>
+      <Card style={styles.card} header={Header}>
         <View style={styles.container}>
           <View style={{display: 'flex', flexDirection: 'row'}}>
             <Image
@@ -52,7 +65,9 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
               source={{uri: food.picture}}
             />
             <View style={{marginLeft: 15}}>
-              <Text>
+              <Text
+              category='h6'
+              >
                 {food.name}
               </Text>
               <Text>
@@ -60,6 +75,7 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
               </Text>
             </View>
           </View>
+
           {/* {role === 'user'
           ? <Text>untuk mesan(sementara)</Text>
           : <Text>menyelesaikan orderan(sementara)</Text>} */}
@@ -94,8 +110,10 @@ const styles = StyleSheet.create({
   },
   card: {
     flex: 1,
-    margin: 2,
-    elevation: 2
+    margin: 7,
+    elevation: 2,
+    // width: 370,
+    borderRadius: 15
   },
   footerContainer: {
     flexDirection: 'row',
