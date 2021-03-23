@@ -69,6 +69,7 @@ class Notification {
   }
   sendNotification(channelId, title, message) {
     PushNotification.localNotification({
+      largeIconUrl: 'https://www.pngrepo.com/download/43115/burger.png',
       channelId,
       title,
       message

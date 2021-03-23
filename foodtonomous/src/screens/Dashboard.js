@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Alert, Image, Dimensions} from 'react-native';
 import { useSelector } from 'react-redux'
+import {GOOGLE_API} from "@env"
 import {
   Button,
   Icon,
@@ -26,6 +27,8 @@ import FavoriteFood from './FavoriteFood';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import SpinnerLoading from '../components/SpinnerLoading';
 import { logout } from '../store/actions/users'
+import {setTime, setDistance, setAddress } from '../store/actions/destination'
+import store from '../store'
 
 // import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
@@ -53,6 +56,10 @@ function Dashboard({navigation}) {
   const [orderId, setOrderId] = useState(-1)
   const [statusOrder, setStatusOrder] = useState("")
   const [automation, setAutomation] = useState({})
+  const [orderDetail, setOrderDetail] = useState({})
+  const [isHandlingFood, setHandlingFood] = useState(false)
+  const [isReceived, setIsReceived] = useState(false)
+  const address = useSelector(state => state.destination.address)
 
   // useEffect(() => {
   //   if(Object.keys(automation).length > 0) {
@@ -61,20 +68,153 @@ function Dashboard({navigation}) {
   // }, [automation])
 
   useEffect(() => {
+    socket.on('on going order', order => {
+      let user = store.getState().users.user
+      let destination = store.getState().destination
+      console.log(destination, 'dari on going orider');
+      setOrderDetail(order) 
+      if(user.role === 'user') {
+        if(!isReceived) {
+          setIsReceived(true)
+          handleNotification('Food is Comming!!', 
+          `Estimated total time: ${destination.time + 5} mins, Estimated total distance: ${destination.distance} km
+          your address is : ${destination.address}`)
+        } else {
+          console.log('harusnya sekali coy')
+        }
+      }
+    })
+  }, [])
+
+  useEffect(() => {
+    const getDirection = async (startLoc, desLoc, addLoc) => {
+      let time = 0
+      let distance = 0
+      let locations = []
+      if (desLoc) {
+        try {
+          const resp = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=${GOOGLE_API}`)
+          const respJson = await resp.json()
+          // console.log('dari respJson satu',respJson)
+          let timeCount = respJson.routes[0].legs[0].duration.text
+          let distanceCount = respJson.routes[0].legs[0].distance.text
+          let restaurantLocation = respJson.routes[0].legs[0].end_address
+          let inputTime = ''
+          for (let a = 0; a < timeCount.length; a++) {
+            if (timeCount[a] !== ' '){
+              inputTime += timeCount[a]
+            } else if (timeCount[a] == ' '){
+              break;
+            }
+          }
+          let inputDistance = ''
+          for (let a = 0; a < distanceCount.length; a++) {
+            if (distanceCount[a] !== ' '){
+              inputDistance += distanceCount[a]
+            } else if (distanceCount[a] == ' '){
+              break;
+            }
+          }
+          time +=Number(inputTime)
+          distance += Number(inputDistance)
+          locations.push(restaurantLocation)
+          console.log(time, 'ini time dari try 1');
+          console.log(distance, 'ini distance dari try 1');
+
+          // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+          const resp1 = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${desLoc}&destination=${addLoc}&key=${GOOGLE_API}`)
+          const respJson1 = await resp1.json()
+          console.log('dari respJson satu',respJson1)
+          let timeCount1 = respJson1.routes[0].legs[0].duration.text
+          let distanceCount1 = respJson1.routes[0].legs[0].distance.text
+          let customerAddress = respJson1.routes[0].legs[0].end_address
+
+          let inputTime2 = ''
+          for (let a = 0; a < timeCount1.length; a++) {
+            if (timeCount1[a] !== ' '){
+              inputTime2 += timeCount1[a]
+            } else if (timeCount1[a] == ' '){
+              break;
+            }
+          }
+          let inputDistance2 = ''
+          for (let a = 0; a < distanceCount1.length; a++) {
+            if (distanceCount1[a] !== ' '){
+              inputDistance2 += distanceCount1[a]
+            } else if (distanceCount1[a] == ' '){
+              break;
+            }
+          }
+          time +=Number(inputTime2)
+          distance += Number(inputDistance2)
+          locations.push(customerAddress)
+          console.log(time, 'ini time dari try 2');
+          console.log(distance, 'ini distance dari try 2');
+          console.log(locations)
+          dispatch(setTime(time))
+          dispatch(setDistance(distance))
+          dispatch(setAddress(locations))
+        } catch (error) {
+          console.log('error cuy');
+          console.log(error.message);
+        }
+      }
+    }
+    
+    const mergeCoords = (payload1, payload2, payload3) => {
+      console.log(payload1, 'dari mergecoords');
+      console.log(payload3, 'dari mergecoords 2');
+      if (payload1.latitude === 'undefined') {
+        const concatStart = `${-6.94103414525},${107.655786634}`
+      } else {
+        const concatStart = `${payload1.latitude},${payload1.longitude}`
+      }
+      if (payload3.latitude === 'undefined') {
+        const concatAdditional = `${6.92758183739}, ${107.635509328}`
+      } else {
+        const concatAdditional = `${payload3.latitude}, ${payload3.longitude}`
+      }
+      const concatEnd = `${payload2.latitude},${payload2.longitude}`
+      console.log('dari mergeCoords');
+      console.log('concatstart mergecoord 1', concatStart );
+      console.log('concatEnd mergecoord 1',concatEnd);
+      console.log('concatAdditional mergecoord 1',concatAdditional);
+      // console.log(concatAdditional, 'dari additional');
+      getDirection(concatStart, concatEnd, concatAdditional)
+    }
+
     socket.on('give a rating', () => {
+      let user = store.getState().users.user
+      console.log('tolong give rating');
+      setIsReceived(false)
       if(user.role === 'user') {
-        alert('give rating')
+        console.log(user.role);
+        if(!isReceived) {
+          handleNotification('Your food has arrived!!', 'Happy meal :))')
+        } else {
+          console.log('harusnya cuma sekali, ini food arrived')
+        }
       }
     })
-    socket.on('on going order', ({user, restaurant, driver, food}) => {
-      if(user.role === 'user') {
-        alert('pesanan sedang di proses')
-        socket.emit('update location driver')
-      }
-    })
+    // socket.on('on going order', ({user, restaurant, driver, food}) => {
+    //   if(user.role === 'user') {
+    //     handleNotification('Food is Comming!!', 
+    //   `Estimated total time: mins, Estimated total distance:  km`)
+    //     // alert('Food is Comming!!')
+    //     // alert('pesanan sedang di proses')
+    //     // socket.emit('update location driver')
+    //   }
+    // })
 
     socket.on('incoming order', order => {
-      console.log('ini pesanan diterima di driver', order, new Date().toISOString())
+      console.log('ini dari incoming order')
+      let user = store.getState().users.user
+      let restaurantPosition = JSON.parse(order.Restaurant.location)
+      let customerPosition = order.User
+      console.log(user, 'user dari incoming order');
+      console.log(customerPosition, 'customerPosition dari incoming order');
+      // mergeCoords(user.location, restaurantPosition, customerPosition)
+      // console.log('ini pesanan diterima di driver', order, new Date().toISOString())
       if(user.role === 'driver') {
         Alert.alert(
           "Incoming Order",
@@ -86,6 +226,12 @@ function Dashboard({navigation}) {
               style: "cancel"
             },
             { text: "OK", onPress: () => {
+              // let user = store.getState().users.user
+              // let restaurantPosition = JSON.parse(order.Restaurant.location)
+              // let customerPosition = JSON.parse(order.User.location)
+              // console.log(user.role, 'dari incoming order');
+              // mergeCoords(user.location, restaurantPosition, customerPosition)
+              setHandlingFood(true)
               setOrderId(order.id)
                 const updatedOrderForm = {
                   status: 'on going restaurant',
@@ -102,7 +248,9 @@ function Dashboard({navigation}) {
         );
       }
     }, [socket])
-  })
+  }, [])
+
+
 
   useEffect(() => {
     if(order) {
@@ -113,7 +261,7 @@ function Dashboard({navigation}) {
   }, [order])
 
   useEffect(() => {
-    if(statusOrder === 'done') {
+    if(statusOrder === true) {
       socket.emit('order done', {status:'done', id:orderId})
     }
   }, [statusOrder])
@@ -122,7 +270,7 @@ function Dashboard({navigation}) {
     React.useCallback(() => {
       // const unsubscribe = API.subscribe(dispatch);
         dispatch(getAutoSchedule())
-        dispatch(getUserData())
+        // dispatch(getUserData())
 
       // return () => unsubscribe();
     }, [dispatch])
@@ -136,12 +284,12 @@ function Dashboard({navigation}) {
   //   }
   // }, [user])
 
-  const handleNotification = () => {
-    notification.configure()
-    notification.createChannel(num.toString())
-    notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
-    num++
-  }
+  // const handleNotification = () => {
+  //   notification.configure()
+  //   notification.createChannel(num.toString())
+  //   notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
+  //   num++
+  // }
 
   const PlusIcon = (props) => (
     <Icon name='plus-outline' {...props} />
@@ -186,6 +334,22 @@ function Dashboard({navigation}) {
   <Icon name='menu' {...props} />
   );
 
+  const handleNotification = (title, message) => {
+    console.log(title, 'title dari handle');
+    console.log(message, 'message dari handle');
+    notification.configure()
+    notification.createChannel(num.toString())
+    notification.sendNotification(num.toString(), title, message)
+    num++
+  }
+
+  const endOrder = () => {
+    let destination = store.getState().destination
+    console.log(destination.address)
+    console.log(destination.address)
+    setStatusOrder(!statusOrder)
+  }
+
   if (user && user.role === 'driver') {
     return (
       <>
@@ -221,7 +385,22 @@ function Dashboard({navigation}) {
                 category='h4'
                 >Ongoing Order</Text>
               </View>
-            {
+            { address.length !== 0 && isHandlingFood ? 
+            <Card style={styles.cardDriver} status='info'>
+                <Image
+                  source={require('../assets/logo2.png')}
+                  style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
+                />
+              <Text>keterangan orderannya</Text>
+              <Text> Alamat: {address} </Text>
+              <Button
+                onPress={endOrder}
+                starus='warning'
+                color="#841584"
+                accessibilityLabel="Learn more about this purple button">
+                End Order
+              </Button>
+            </Card> : 
               //kalau ga ada order render yang ini
               <Card style={styles.cardDriver} status='info'>
                 <Text
@@ -229,15 +408,7 @@ function Dashboard({navigation}) {
                 >you have no ongoing order</Text>
               </Card>
             }
-            <Card style={styles.cardDriver} status='info'>
-                <Image
-                  source={require('../assets/logo2.png')}
-                  style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
-                />
-              <Text>keterangan orderannya</Text>
-              <Text>cust adress </Text>
-              <Button status="warning">finish delivery</Button>
-            </Card>
+            
           </ScrollView>
         </View>
         

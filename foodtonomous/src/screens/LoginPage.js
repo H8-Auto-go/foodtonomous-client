@@ -85,7 +85,7 @@ function LoginPage() {
     const form = {
       email, password, location
     }
-
+    
     const validate = validateForm(form)
     if(validate.status) {
       // console.log('anjay')

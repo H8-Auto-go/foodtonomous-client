@@ -22,7 +22,7 @@ export function register(payload, navigation) {
 }
 
 export function login(user, navigation) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const {data} = await serverAxios({
         method: "POST",
@@ -30,6 +30,7 @@ export function login(user, navigation) {
         data: user
       })
       await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
+      dispatch(getUserData())
       navigation.navigate('Home')
     } catch(err) {
       console.log(err)
@@ -50,7 +51,7 @@ export function logout(navigation) {
 
 
 export function loginDriver(driver, navigation) {
-  return async () => {
+  return async (dispatch) => {
     try {
       const {data} = await serverAxios({
         method: "POST",
@@ -58,6 +59,7 @@ export function loginDriver(driver, navigation) {
         data: driver
       })
       await AsyncStorage.setItem('access_token', JSON.stringify(data.access_token))
+      dispatch(getUserData())
       navigation.navigate('Home')
     } catch(err) {
       console.log(err)
