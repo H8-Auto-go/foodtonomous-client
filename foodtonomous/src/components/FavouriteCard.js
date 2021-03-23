@@ -5,7 +5,7 @@ import {Card, Text} from '@ui-kitten/components';
 function FavouriteCard ({data}) {
     // console.log('dari component ',data);
     return(
-        <Card>
+        <Card style={{elevation: 2, marginBottom: 5}}>
         <View style={styles.flexCont}>
           <View>
             <Image 

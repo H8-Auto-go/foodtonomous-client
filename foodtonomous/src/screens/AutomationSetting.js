@@ -67,8 +67,8 @@ function AutomationSetting() {
     <>
       <NavbarTop />
     <View style={styles.wrapper}>
-      <View>
-      <Text>Add food to the automation {'\n'}</Text>
+      <View style={styles.formContainer}>
+      <Text>Add food to your Schedule {'\n'}</Text>
         <View >
           <Text>Enter time</Text>
           <View style={styles.timeInputContainer}>
@@ -122,7 +122,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'column',
     justifyContent: 'space-around',
-    margin: 60,
+    margin: 55,
     // backgroundColor: 'red'
   },
   container: {
@@ -137,6 +137,12 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     elevation: 1,
     width: 200,
+  },
+  formContainer: {
+    backgroundColor: 'ghostwhite',
+    elevation: 1,
+    padding: 10,
+    borderRadius: 10,
   }
 });
 

@@ -181,9 +181,9 @@ function Dashboard({navigation}) {
           </Card>
         )}
           <ScrollView style={{marginBottom: 50}}>
-            <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
+            {/* <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
               PRIMARY
-            </Button>
+            </Button> */}
             <Text style={styles.center}>{"\n"}Food Order Schedule{"\n"}</Text>
             {
               schedule && schedule.map(data => {
@@ -199,7 +199,7 @@ function Dashboard({navigation}) {
             onMoveDown={() => console.log('down')}
             onMoveUp={() => console.log('up')}
             disablePressToShow={false} // Press item mini to show full
-            style={{ backgroundColor: '#F3D5B4' }} // style for swipe
+            style={{ backgroundColor: 'ghostwhite' }} // style for swipe
             animation="easeInEaseOut" 
             swipeHeight={60}
           />

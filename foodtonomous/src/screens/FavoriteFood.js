@@ -5,7 +5,6 @@ import {NavbarTop} from '../components/NavbarTop';
 import {useDispatch, useSelector} from 'react-redux'
 import {getFavouriteFoods} from '../store/actions/favouriteFoods'
 import FavouriteCard from '../components/FavouriteCard'
-import axios from 'axios';
 
 function FavoriteFood() {
   const favouriteFoods = useSelector(state => state.favoriteFoods.favoriteFoods)
@@ -36,6 +35,7 @@ const styles = StyleSheet.create({
     // justifyContent: 'center',
     // alignItems: 'center',
     padding: 0,
+    elevation: 2
   },
   flexCont: {
     display: 'flex',

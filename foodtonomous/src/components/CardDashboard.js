@@ -46,35 +46,34 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
     <>
       <Card style={styles.card}>
         <View style={styles.container}>
-          <View>
+          <View style={{display: 'flex', flexDirection: 'row'}}>
             <Image
               style={styles.tinyLogo}
               source={{uri: food.picture}}
             />
-          </View>
-          <View style={{marginLeft: 15}}>
-            <View>
+            <View style={{marginLeft: 15}}>
               <Text>
                 {food.name}
               </Text>
-            </View>
-              <View>
-                <Text>
+              <Text>
                 RP.{food.price}
               </Text>
-              </View>
+            </View>
           </View>
           {/* {role === 'user'
           ? <Text>untuk mesan(sementara)</Text>
           : <Text>menyelesaikan orderan(sementara)</Text>} */}
-          <Toggle checked={checked} onChange={onCheckedChange}>
-            {}
-          </Toggle>
+          
           <Layout style={styles.containerBtn} level='1'>
             {/* <Button style={styles.button} size='tiny' appearance='ghost'>
               X
             </Button> */}
           </Layout>
+          <View  style={{display:'flex', justifyContent: 'center',marginLeft: 10}}
+>
+            <Toggle
+            checked={checked} onChange={onCheckedChange} />
+          </View>
         </View>
     </Card>
     </>
@@ -85,8 +84,9 @@ const styles = StyleSheet.create({
   container:{
     display: 'flex',
     flexDirection: 'row',
-    padding: 1
-
+    padding: 1,
+    flex: 1,
+    justifyContent: 'space-between'
   },
   topContainer: {
     flexDirection: 'row',
@@ -95,6 +95,7 @@ const styles = StyleSheet.create({
   card: {
     flex: 1,
     margin: 2,
+    elevation: 2
   },
   footerContainer: {
     flexDirection: 'row',
@@ -112,8 +113,8 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
   },
   tinyLogo: {
-    width: 50,
-    height: 50,
+    width: 55,
+    height: 55,
   },
 });
 
