@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
-import {StyleSheet, View, Alert, Image, Dimensions} from 'react-native';
+import {StyleSheet, View, Alert, Image, Dimensions, yellowBox } from 'react-native';
 import { useSelector } from 'react-redux'
+// import { Log } from "react-native"
 import {GOOGLE_API} from "@env"
 import {
   Button,
@@ -43,6 +44,7 @@ function MiniItemSwipe(params) {
 
 let num = 1;
 function Dashboard({navigation}) {
+  console.disableYellowBox = true;
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const dispatch = useDispatch()
@@ -162,24 +164,19 @@ function Dashboard({navigation}) {
     }
     
     const mergeCoords = (payload1, payload2, payload3) => {
-      console.log(payload1, 'dari mergecoords');
-      console.log(payload3, 'dari mergecoords 2');
-      if (payload1.latitude === 'undefined') {
-        const concatStart = `${-6.94103414525},${107.655786634}`
-      } else {
+        if (payload1.latitude === 'undefined') {
+          const concatStart = `-6.94103414525,107.655786634`
+        }
+        payload3 = JSON.parse(payload3)
         const concatStart = `${payload1.latitude},${payload1.longitude}`
-      }
-      if (payload3.latitude === 'undefined') {
-        const concatAdditional = `${6.92758183739}, ${107.635509328}`
-      } else {
-        const concatAdditional = `${payload3.latitude}, ${payload3.longitude}`
-      }
+      console.log(payload3.latitude, 'payload 3 calon concat add');
+      console.log(payload3.longitude, 'paylad 3 calon longitude');
+      const concatAdditional = `${payload3.latitude}, ${payload3.longitude}`
       const concatEnd = `${payload2.latitude},${payload2.longitude}`
       console.log('dari mergeCoords');
       console.log('concatstart mergecoord 1', concatStart );
       console.log('concatEnd mergecoord 1',concatEnd);
       console.log('concatAdditional mergecoord 1',concatAdditional);
-      // console.log(concatAdditional, 'dari additional');
       getDirection(concatStart, concatEnd, concatAdditional)
     }
 
@@ -210,10 +207,12 @@ function Dashboard({navigation}) {
       console.log('ini dari incoming order')
       let user = store.getState().users.user
       let restaurantPosition = JSON.parse(order.Restaurant.location)
-      let customerPosition = order.User
-      console.log(user, 'user dari incoming order');
+      let customerPosition = order.User.location
+      // console.log('dari incoming order', typeof user);
+      // console.log('dari incoming order', typeof customerPosition);
+      console.log(user.location, 'user dari incoming order');
       console.log(customerPosition, 'customerPosition dari incoming order');
-      // mergeCoords(user.location, restaurantPosition, customerPosition)
+      mergeCoords(user.location, restaurantPosition, customerPosition)
       // console.log('ini pesanan diterima di driver', order, new Date().toISOString())
       if(user.role === 'driver') {
         Alert.alert(
