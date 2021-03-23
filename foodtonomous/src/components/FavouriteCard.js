@@ -12,18 +12,17 @@ function FavouriteCard ({data}) {
             style={styles.tinyLogo}
             source={{uri: data.food.picture}} />
           </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              {data.food.name}
-            </Text>
-          </View>
-          <Text> | </Text>
-          <View>
+          <View style={{marginLeft: 10}}>
+            <View>
               <Text>
-                  {/* hello word */}
-                  {data.food.price}
+                {data.food.name}
               </Text>
+            </View>
+            <View>
+                <Text>
+                    RP.{data.food.price}
+                </Text>
+            </View>
           </View>
         </View>
       </Card>

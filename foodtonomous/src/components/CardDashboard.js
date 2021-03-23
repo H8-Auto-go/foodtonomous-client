@@ -60,12 +60,12 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
           ? <Text>untuk mesan(sementara)</Text>
           : <Text>menyelesaikan orderan(sementara)</Text>}
           <Toggle checked={checked} onChange={onCheckedChange}>
-            {`Auto: ${checked ? 'on' : 'off'}`}
+            {}
           </Toggle>
           <Layout style={styles.containerBtn} level='1'>
-            <Button style={styles.button} size='tiny' appearance='ghost'>
+            {/* <Button style={styles.button} size='tiny' appearance='ghost'>
               X
-            </Button>
+            </Button> */}
           </Layout>
         </View>
     </Card>

@@ -18,6 +18,7 @@ import {createOrder, getOrder} from "../store/actions/orders";
 import socket from '../store/actions/apis/socket'
 import SwipeUpDown from 'react-native-swipe-up-down';
 import FavoriteFood from './FavoriteFood';
+import { useFocusEffect } from '@react-navigation/native';
 
 // import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
@@ -108,12 +109,17 @@ function Dashboard({navigation}) {
     }
   }, [statusOrder])
 
-  useEffect(() => {
-    dispatch(getAutoSchedule())
-    dispatch(getUserData())
-  }, [dispatch]);
+  useFocusEffect (
+    React.useCallback(() => {
+      // const unsubscribe = API.subscribe(dispatch);
+        dispatch(getAutoSchedule())
+        dispatch(getUserData())
 
-  useEffect(() => {
+      // return () => unsubscribe();
+    }, [dispatch])
+  );
+
+  useEffect (() => {
     if(user) {
       if(user.role === 'driver') {
         socket.emit('driver login', user)
@@ -174,7 +180,7 @@ function Dashboard({navigation}) {
             </View>
           </Card>
         )}
-          <ScrollView>
+          <ScrollView style={{marginBottom: 50}}>
             <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
               PRIMARY
             </Button>
