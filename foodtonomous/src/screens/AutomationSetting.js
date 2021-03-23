@@ -1,23 +1,26 @@
-import React, {setState, useState} from 'react';
+import React, {setState, useState, useEffect} from 'react';
 import {StyleSheet, View, TextInput } from 'react-native';
 import {Button, Input} from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
 import {IndexPath, Layout, Select, SelectItem, Datepicker} from '@ui-kitten/components';
-import DatePicker from 'react-native-datepicker'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { addSchedule } from '../store/actions/automationSchedule'
 import { Picker } from '@react-native-picker/picker';
-
+import {getFavouriteFoods} from '../store/actions/favouriteFoods';
 function AutomationSetting() {
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [time, setTime] = useState('')
   const [orderName, setOrderName] = useState('')
   const [selectedFoodName, setSelectedFoodName] = useState('')
-  // const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  const favouriteFoods = useSelector(
+    (state) => state.favoriteFoods.favoriteFoods,
+  );
 
   const dispatch = useDispatch()
-
+  useEffect(() => {
+    dispatch(getFavouriteFoods());
+  }, [dispatch]);
   const showDatePicker = () => {
     setDatePickerVisibility(true);
   };
@@ -33,15 +36,20 @@ function AutomationSetting() {
   };
 
   function handleOnOK(e) {
-    e.preventDefault()
+    e.preventDefault();
+    let favFood = favouriteFoods.filter(food => {
+      return food.food.name === selectedFoodName
+    })
     let form = {
-      time,
-      orderName,
-      selectedIndex
-    }
-    console.log(form);
+      time: '08:00',
+      isActive: false,
+      restaurantId: favFood[0].restaurant.id,
+      foodId: favFood[0].food.id,
+    };
+    // console.log(form);
     //hit ke action dan axios
-    // dispatch(addSchedule(form))
+    dispatch(addSchedule(form))
+  
   }
 
 
@@ -50,11 +58,6 @@ function AutomationSetting() {
     <View style={styles.wrapper}>
       <NavbarTop />
       <View>
-        <Input
-          placeholder="Name Orderan"
-          value={orderName}
-          onChangeText={(nextValue) => setOrderName(nextValue)}
-        />
         <View>
           <Button onPress={showDatePicker}  appearance='ghost'> pick a time </Button>
           <DateTimePickerModal
@@ -65,15 +68,18 @@ function AutomationSetting() {
             onCancel={hideDatePicker}
           />
         </View>
-        <Picker
-          selectedValue={selectedFoodName}
-          onValueChange={(itemValue, itemIndex) =>
-            setSelectedFoodName(itemValue)
-          }>
-          <Picker.Item label="lele goreng" value="lele goreng" />
-          <Picker.Item label="lele rebus" value="lele rebus" />
-          <Picker.Item label="lele fermentasi" value="lele fermentasi" />
-        </Picker>
+        {favouriteFoods && (
+          <Picker
+            selectedValue={selectedFoodName}
+            onValueChange={(itemValue, itemIndex) =>
+              setSelectedFoodName(itemValue)
+            }>
+            {favouriteFoods.map((food) => (
+              <Picker.Item key={food.food.id} label={food.food.name} value={food.food.name} />
+            ))}
+          </Picker>
+        )}
+
 
         {/* <Layout style={styles.container} level="1">
         <Select

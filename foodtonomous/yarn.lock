@@ -7091,6 +7091,11 @@
     "css-select" "^2.1.0"
     "css-tree" "^1.0.0-alpha.39"
 
+"react-native-swipe-up-down@^1.0.7":
+  "integrity" "sha512-8j3mo+ukZBLRfQNz5N/TXLG7hTKTT8fg/2HkWWJ9umRzPz2kDthxzIkntp9QRPVh7h/sRymkhZdtLY3axdO2Zw=="
+  "resolved" "https://registry.npmjs.org/react-native-swipe-up-down/-/react-native-swipe-up-down-1.0.7.tgz"
+  "version" "1.0.7"
+
 "react-native-windows@>=0.62", "react-native-windows@>=0.62.0":
   "integrity" "sha512-yPS4WqNRz0gyQtiIYJBbgjQbp7TNNXZiOJfo9WOIeJZh942HTPrMJsR6OKU9JAiN3dOxkJW++VcJ7og3H0ko2A=="
   "resolved" "https://registry.npmjs.org/react-native-windows/-/react-native-windows-0.64.0.tgz"
@@ -7131,7 +7136,7 @@
     "whatwg-fetch" "^3.0.0"
     "ws" "^6.1.4"
 
-"react-native@*", "react-native@^0.60.6 || ^0.61.5 || ^0.62.2 || ^0.63.2 || ^0.64.0 || 1000.0.0", "react-native@^0.64.0-rc.1", "react-native@>= 0.51", "react-native@>=0.33", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@>=0.63.3", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.62.2":
+"react-native@*", "react-native@^0.41.2", "react-native@^0.60.6 || ^0.61.5 || ^0.62.2 || ^0.63.2 || ^0.64.0 || 1000.0.0", "react-native@^0.64.0-rc.1", "react-native@>= 0.51", "react-native@>=0.33", "react-native@>=0.42.0", "react-native@>=0.50.0", "react-native@>=0.57", "react-native@>=0.60", "react-native@>=0.62.0-rc.0 <0.64.0", "react-native@>=0.63.3", "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.62.2":
   "integrity" "sha512-gADZZ3jcm2WFTjh8CCBCbl5wRSbdxqZGd+8UpNwLQFgrkp/uHorwAhLNqcd4+fHmADgPBltNL0uR1Vhv47zcOw=="
   "resolved" "https://registry.npmjs.org/react-native/-/react-native-0.62.2.tgz"
   "version" "0.62.2"

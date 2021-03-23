@@ -16,8 +16,20 @@ import { getAutoSchedule } from '../store/actions/automationSchedule'
 import { getUserData } from '../store/actions/users'
 import {createOrder, getOrder} from "../store/actions/orders";
 import socket from '../store/actions/apis/socket'
+import SwipeUpDown from 'react-native-swipe-up-down';
+import FavoriteFood from './FavoriteFood';
+
 // import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
+
+function MiniItemSwipe(params) {
+  return (
+    <View style={{justifyContent:'center', alignItems: 'center', marginTop:-8}}>
+      <Text>Swipe Up to See Favorite</Text>
+    </View>
+  )
+}
+
 let num = 1;
 function Dashboard({navigation}) {
   const dispatch = useDispatch()
@@ -173,6 +185,18 @@ function Dashboard({navigation}) {
               })
             }
           </ScrollView>
+          <SwipeUpDown		
+            itemMini={<MiniItemSwipe />} // Pass props component when collapsed
+            itemFull={<FavoriteFood />} // Pass props component when show full
+            onShowMini={() => console.log('mini')}
+            onShowFull={() => console.log('full')}
+            onMoveDown={() => console.log('down')}
+            onMoveUp={() => console.log('up')}
+            disablePressToShow={false} // Press item mini to show full
+            style={{ backgroundColor: '#F3D5B4' }} // style for swipe
+            animation="easeInEaseOut" 
+            swipeHeight={60}
+          />
       </>
     );
   }

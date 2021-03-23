@@ -61,11 +61,11 @@ export const NavbarTop = () => {
           accessoryLeft={InfoIcon}
           title="map"
         />
-        <MenuItem
+        {/* <MenuItem
           onPress={() => navigation.navigate('FavoriteFood')}
           accessoryLeft={InfoIcon}
           title="Favorite Food"
-        />
+        /> */}
         <MenuItem
           onPress={() => navigation.navigate('OrderHistory')}
           accessoryLeft={InfoIcon}

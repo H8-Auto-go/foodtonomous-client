@@ -17,7 +17,7 @@ function FavoriteFood() {
   }, []);
   return (
     <View style={styles.container}>
-      <NavbarTop />
+      {/* <NavbarTop /> */}
       <Text style={{textAlign: 'center'}}>{"\n"}Favorite Food{"\n"}</Text>
       {
         favouriteFoods &&
