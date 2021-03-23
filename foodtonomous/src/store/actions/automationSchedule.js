@@ -21,7 +21,7 @@ export function getAutoSchedule (form) {
   }
 }
 
-export function addSchedule (form, navigate) {
+export function addSchedule (form, navigation) {
   // console.log(form);
   return async (dispatch) => {
     try {
@@ -39,6 +39,21 @@ export function addSchedule (form, navigate) {
       // dispatch(getAutoSchedule())
     } catch (error) {
       console.log(error)
+    }
+  }
+}
+
+export function updateScheduleStatus({id, isActive}) {
+  return async (dispatch) => {
+    try {
+      console.log('testing')
+      const { data } = await serverAxios({
+        method: 'PATCH',
+        url: '/automationSchedules/' + id,
+        data: {isActive}
+      })
+    } catch(err) {
+      console.log(err)
     }
   }
 }

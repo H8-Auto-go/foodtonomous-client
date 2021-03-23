@@ -13,8 +13,6 @@ function FavoriteFood() {
     dispatch(getFavouriteFoods())
   }, []);
 
-  
-
   return (
     <View style={styles.container}>
       <Text 

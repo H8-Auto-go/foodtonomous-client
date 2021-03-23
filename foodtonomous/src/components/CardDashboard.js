@@ -1,20 +1,30 @@
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {
-  Icon,
+  Button,
   Layout,
   Text,
   Toggle,
   Card,
+  Icon,
 } from '@ui-kitten/components';
+import {updateScheduleStatus} from "../store/actions/automationSchedule";
+import {useDispatch} from 'react-redux'
+
 const ClockIcon = (props) => (
   <Icon name='clock-outline' {...props} />
 );
 
 
-function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrder, user: {id, role} }) {
-  const [checked, setChecked] = React.useState(false);
 
+function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, time}, user: {id: userId, role} }) {
+  const dispatch = useDispatch()
+  const [isChecked, setIsChecked] = useState(isActive)
+  useEffect(() => {
+    dispatch(updateScheduleStatus({id, isActive: isChecked}))
+    setAutomation({id, isActive: isChecked})
+  }, [isChecked])
+  
   const Header = (props, name) => (
     <View {...props}>
       <View style={{ flexDirection: 'row' }}>
@@ -29,26 +39,10 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrde
       </View>
     </View>
   );
-  
-  useEffect(() => {
-    if(role === 'user') {
-      if(checked) {
-        setOrder({
-          userId: id,
-          foodId: food.id,
-          restaurantId: restaurant.id
-        })
-      }
-    } else {
-      setStatusOrder(checked?"done":"")
-    }
-  }, [checked])
-  const onCheckedChange = (isChecked) => {
-    setChecked(isChecked);
-  };
   return (
     <>
-      <Card style={styles.card} header={Header}>
+    <Card style={styles.card} header={Header}>
+    
         <View style={styles.container}>
           <View style={{display: 'flex', flexDirection: 'row'}}>
             <Image
@@ -70,7 +64,7 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrde
           </Layout>
           <View  style={{display:'flex', justifyContent: 'center',marginLeft: 10}}>
             <Toggle
-            checked={checked} onChange={onCheckedChange} />
+            checked={isChecked} onChange={() => setIsChecked(!isChecked)} />
           </View>
         </View>
     </Card>

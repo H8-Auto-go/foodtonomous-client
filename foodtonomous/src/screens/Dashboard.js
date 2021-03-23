@@ -52,6 +52,13 @@ function Dashboard({navigation}) {
   })
   const [orderId, setOrderId] = useState(-1)
   const [statusOrder, setStatusOrder] = useState("")
+  const [automation, setAutomation] = useState({})
+
+  // useEffect(() => {
+  //   if(Object.keys(automation).length > 0) {
+  //     socket.emit('set automation', automation)
+  //   }
+  // }, [automation])
 
   useEffect(() => {
     socket.on('give a rating', () => {
@@ -62,19 +69,12 @@ function Dashboard({navigation}) {
     socket.on('on going order', ({user, restaurant, driver, food}) => {
       if(user.role === 'user') {
         alert('pesanan sedang di proses')
-        //bikin estimasi
-        /*
-        location driver => location restaurant = %km
-        location restaurant => location user = %km
-        + cookEstimation = hasil
-
-        driver => click tombol (order completed)
-        //pesanan sudah sampai
-        */
         socket.emit('update location driver')
       }
     })
+
     socket.on('incoming order', order => {
+      console.log('ini pesanan diterima di driver', order, new Date().toISOString())
       if(user.role === 'driver') {
         Alert.alert(
           "Incoming Order",
@@ -128,13 +128,13 @@ function Dashboard({navigation}) {
     }, [dispatch])
   );
 
-  useEffect (() => {
-    if(user) {
-      if(user.role === 'driver') {
-        socket.emit('driver login', user)
-      }
-    }
-  }, [user])
+  // useEffect (() => {
+  //   if(user) {
+  //     if(user.role === 'driver') {
+  //       socket.emit('driver login', user)
+  //     }
+  //   }
+  // }, [user])
 
   const handleNotification = () => {
     notification.configure()
@@ -276,7 +276,7 @@ function Dashboard({navigation}) {
             {
               schedule ? 
               schedule.map(data => {
-                return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
+                return <CardDashboard setAutomation={setAutomation} user={user} data={data} key={data.id} />
               })
               :
               <SpinnerLoading/>

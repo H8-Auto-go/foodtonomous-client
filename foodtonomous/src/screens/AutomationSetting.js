@@ -8,22 +8,17 @@ import { addSchedule } from '../store/actions/automationSchedule'
 import {getFavouriteFoods} from '../store/actions/favouriteFoods';
 import { useNavigation } from '@react-navigation/native';
 
-const data = [
-  'Developer',
-  'Designer',
-  'Product Manager',
-];
-
 export default function AutomationSetting() {
   const [foodId, setFoodId] = useState('')
   const [restaurantId, setRestaurantId] = useState('')
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
   const navigation = useNavigation(); 
-  const displayValue = data[selectedIndex.row];
-  const [hour, setHour] = useState(0)
-  const [minute, setMinute] = useState(0)
-
+  const [hour, setHour] = useState("")
+  const [minute, setMinute] = useState("")
+  const [selectedFoodName, setSelectedFoodName] = useState('')
   const dispatch = useDispatch()
+  const [data, setData] = useState([])
+  const displayValue = data[selectedIndex.row];
 
   const favouriteFoods = useSelector(
     (state) => state.favoriteFoods.favoriteFoods,
@@ -34,6 +29,11 @@ export default function AutomationSetting() {
   );
 
   useEffect(() => {
+    if(favouriteFoods.length > 0) {
+      setData(favouriteFoods.map(favFood => favFood.food.name))
+    }
+  }, [favouriteFoods])
+  useEffect(() => {
     dispatch(getFavouriteFoods());
     // if (favouriteFoods.length !== 0) {
     //   setSelectedFoodName(favouriteFoods[0].food.name) 
@@ -41,28 +41,28 @@ export default function AutomationSetting() {
   }, [dispatch]);
 
   function handleOnOK(e) {
-    console.log(selectedIndex);
     let time = `${hour}.${minute}`
-    console.log(time);
-    // e.preventDefault();
-    // let favFood = favouriteFoods.filter(food => {
-    //   return food.food.name === selectedFoodName
-    // })
-    // let form = {
-    //   time: time,
-    //   isActive: false,
-    //   restaurantId: favFood[0].restaurant.id,
-    //   foodId: favFood[0].food.id,
-    // };
-    // console.log(time);
-    // //hit ke action dan axios
-    // dispatch(addSchedule(form, navigation))
+    e.preventDefault();
+    let favFood = favouriteFoods.filter(food => {
+      return food.food.name === selectedFoodName
+    })
+    let form = {
+      time: time,
+      isActive: false,
+      restaurantId,
+      foodId,
+    };
+    // console.log(form, '<<<<< this is form');
+    //hit ke action dan axios
+    dispatch(addSchedule(form, navigation))
   
   }
 
   return (
     <>
-    <NavbarTop />
+    {data.length > 0 && (
+      <>
+          <NavbarTop />
     <View style={styles.wrapper}>
       <View style={styles.formContainer}>
       <Text
@@ -82,6 +82,7 @@ export default function AutomationSetting() {
             Select Favorite Foods:
           </Text>
             <Select
+            value={displayValue}
               selectedIndex={selectedIndex}
               onSelect={index => {
                 setSelectedIndex(index)
@@ -99,6 +100,8 @@ export default function AutomationSetting() {
         </View>
     </View>
     </View>
+      </>
+    )}
     </>
   );
 };

@@ -69,7 +69,6 @@ export default () => (
       <IconRegistry icons={EvaIconsPack}/>
       <ApplicationProvider {...eva} theme={eva.light}>
         <NavigationContainer>
-        {/* <Drawer.Navigator initialRouteName="LoginPage"> */}
           <Stack.Navigator initialRouteName="LoginPage"  screenOptions={{headerShown: false,  cardStyle: { backgroundColor: 'ghostwhite' }}}>
                 <Stack.Screen name="LoginPage" component={LoginPage} />
                 <Stack.Screen name="Home" component={Dashboard} />
@@ -77,14 +76,12 @@ export default () => (
                 <Stack.Screen name="MapTracking" component={MapTracking} />
                 <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
                 <Stack.Screen name="OrderHistory" component={OrderHistory} />
-                {/* <Stack.Screen name="ChatRoom" component={ChatRoom} /> */}
                 <Stack.Screen name="RegisterPage" component={RegisterPage} />
                 <Stack.Screen name="LoginDriverPage" component={LoginDriverPage} />
                 <Stack.Screen
                   name="AutomationSetting"
                   component={AutomationSetting}
                 />
-        {/* </Drawer.Navigator> */}
           </Stack.Navigator>
         </NavigationContainer>
       </ApplicationProvider>
