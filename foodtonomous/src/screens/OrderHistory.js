@@ -20,9 +20,22 @@ function OrderHistory() {
   return (
     <View style={styles.container}>
       <NavbarTop />
-      <Text style={{textAlign: 'center'}}>{"\n"}Order History {"\n"}</Text>
+      <Text 
+      category="h4"
+      style={{textAlign: 'center'}}>{"\n"}Order History {"\n"}</Text>
+      {
+        historyFoods.length === 0 ?
+        <View
+        style={styles.headingContainer}>
+          <Text
+          category='h6'
+          >History is empty</Text>
+          <Text>add automation to see your history</Text>
+        </View>
+        : 
+        <FavouriteCard></FavouriteCard>
 
-      {/* <FavouriteCard></FavouriteCard> */}
+      }
       {/* <Card>
         <View style={styles.flexCont}>
           <View>
@@ -100,6 +113,15 @@ const styles = StyleSheet.create({
   flexCont: {
     display: 'flex',
     flexDirection: 'row',
+  },
+  headingContainer: {
+    alignItems:'center',
+    textAlign: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'ghostwhite',
+    borderRadius: 10,
+    marginHorizontal: 20,
+    padding: 10
   }
 });
 

@@ -20,6 +20,7 @@ import socket from '../store/actions/apis/socket'
 import SwipeUpDown from 'react-native-swipe-up-down';
 import FavoriteFood from './FavoriteFood';
 import { useFocusEffect } from '@react-navigation/native';
+import SpinnerLoading from '../components/SpinnerLoading';
 
 // import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
@@ -197,9 +198,12 @@ function Dashboard({navigation}) {
               </Button>
             </Layout>
             {
-              schedule && schedule.map(data => {
+              schedule ? 
+              schedule.map(data => {
                 return <CardDashboard setStatusOrder={setStatusOrder} setOrder={setOrder} user={user} data={data} key={data.id} />
               })
+              :
+              <SpinnerLoading/>
             }
             
           </ScrollView>

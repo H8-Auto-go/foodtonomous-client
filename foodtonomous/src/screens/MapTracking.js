@@ -17,7 +17,6 @@ import {
   TopNavigation,
   Card,
   Drawer,
-  Spinner
 } from '@ui-kitten/components';
 import { EvaIconsPack } from '@ui-kitten/eva-icons';
 import * as eva from '@eva-design/eva';
@@ -26,6 +25,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import axios from 'axios'
 import { NavbarTop } from '../components/NavbarTop';
 import socket from '../store/actions/apis/socket'
+import Spinner from '../components/SpinnerLoading'
 
 function MapTracking({ navigation }) {
   const dispatch = useDispatch()
@@ -215,11 +215,7 @@ function MapTracking({ navigation }) {
       )
     } else {
       return (
-        <View  style={styles.containerSpinner}>
-          <Layout level='1'>
-            <Spinner status='warning'/>
-          </Layout>
-        </View>
+        <Spinner></Spinner>
       )
     }
   }
@@ -234,14 +230,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 50,
     borderRadius: 15
-  },
-  containerSpinner: {
-    flex: 1,
-    // flexDirection: 'row',
-    backgroundColor: 'white',
-    justifyContent: 'center',
-    alignItems: 'center',
-    // flexWrap: 'wrap',
   },
   wrapper: {
     flex: 1,

@@ -4,6 +4,7 @@ import {Button, Input, Text} from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
 import {IndexPath, Layout, Select, SelectItem, Datepicker} from '@ui-kitten/components';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePicker from '@react-native-community/datetimepicker';
 import { useDispatch, useSelector } from 'react-redux'
 import { addSchedule } from '../store/actions/automationSchedule'
 import { Picker } from '@react-native-picker/picker';
@@ -76,8 +77,8 @@ function AutomationSetting() {
             <Text>:</Text>
             <TextInput onChangeText={(value)=> setMinute(value)}></TextInput>
           </View>
-          {/* <Button onPress={showDatePicker}  appearance='ghost'> pick a time </Button>
-          <DateTimePickerModal
+          {/* <Button onPress={showDatePicker}  appearance='ghost'> pick a time </Button> */}
+          {/* <DateTimePickerModal
             isVisible={isDatePickerVisible}
             mode="time"
             locale="en_GB"
