@@ -21,16 +21,12 @@ const LogoutIcon = (props) => (
   <Icon {...props} name='log-out'/>
 );
 
-
 const CarIcon = (props) => (
   <Icon {...props} name='car'/>
 );
 
 const MenuIcon = (props) => (
   <Icon name='menu' {...props} />
-);
-const ClipboardIcon = (props) => (
-  <Icon name='clipboard' {...props} />
 );
 
 export const NavbarTop = () => {
@@ -53,7 +49,7 @@ export const NavbarTop = () => {
     //untuk hit ke actions
     dispatch(logout(navigation))
   }
-  const renderRightActions = () => (
+  const renderLeftActions = () => (
     <React.Fragment>
       <OverflowMenu
         anchor={renderMenuAction}
@@ -69,30 +65,16 @@ export const NavbarTop = () => {
           accessoryLeft={NavigationIcon}
           title="Map"
         />
-        {/* <MenuItem
-          onPress={() => navigation.navigate('FavoriteFood')}
-          accessoryLeft={InfoIcon}
-          title="Favorite Food"
-        /> */}
         <MenuItem
           onPress={() => navigation.navigate('OrderHistory')}
           accessoryLeft={CarIcon}
           title="Order History"
         />
-        {/* <MenuItem
-          onPress={() => navigation.navigate('AutomationSetting')}
-          accessoryLeft={ClipboardIcon}
-          title="Automation Setting"
-        /> */}
         <MenuItem 
           onPress={() => handleLogout()}
           accessoryLeft={LogoutIcon} title='Logout'/>
       </OverflowMenu>
     </React.Fragment>
-  );
-
-  const renderBackAction = () => (
-    <TopNavigationAction icon={BackIcon}/>
   );
 
   return (
@@ -101,7 +83,7 @@ export const NavbarTop = () => {
         alignment='center'
         title='HelloFood'
         // subtitle='schedule your food'
-        accessoryLeft={renderRightActions}
+        accessoryLeft={renderLeftActions}
         style={{backgroundColor: '#2ec4b6'}}
       />
     </Layout>

@@ -38,10 +38,7 @@ function RegisterPage() {
     if (validate.status) {
       dispatch(register(form, navigation))
     }
-    // console.log(form);
-    // navigation.navigate('RegisterPage');
-
-    // console.log('ke halaman register');
+    
   };
   return (
     <View style={styles.container}>

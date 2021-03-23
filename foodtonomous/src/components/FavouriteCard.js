@@ -3,8 +3,6 @@ import { StyleSheet, View, Image } from 'react-native';
 import {Card, Text, Icon} from '@ui-kitten/components';
 
 function FavouriteCard ({data}) {
-    // console.log('dari component ',data);
-
     const Header = (props, name) => (
       <View {...props}>
         <View style={{ flexDirection: 'row' }}>

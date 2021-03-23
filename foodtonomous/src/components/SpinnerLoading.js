@@ -19,11 +19,9 @@ function SpinnerLoading() {
 const styles = StyleSheet.create({
   containerSpinner: {
     flex: 1,
-    // flexDirection: 'row',
     backgroundColor: 'white',
     justifyContent: 'center',
     alignItems: 'center',
-    // flexWrap: 'wrap',
   },
 })
 export default SpinnerLoading

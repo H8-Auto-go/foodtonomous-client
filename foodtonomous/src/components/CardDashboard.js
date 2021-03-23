@@ -1,20 +1,12 @@
 import React, {useEffect} from 'react';
 import {StyleSheet, View, Image} from 'react-native';
 import {
-  // ApplicationProvider,
-  Button,
   Icon,
-  // IconRegistry,
   Layout,
   Text,
-  // TopNavigation,
   Toggle,
   Card,
 } from '@ui-kitten/components';
-// import {EvaIconsPack} from '@ui-kitten/eva-icons';
-// import * as eva from '@eva-design/eva';
-// import {NavbarTop} from './NavbarTop';
-
 const ClockIcon = (props) => (
   <Icon name='clock-outline' {...props} />
 );
@@ -35,7 +27,6 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrde
         <Icon name='clock-outline' fill='black' width={24} height={24} />
         <Text>{' '}{time}</Text>
       </View>
-      {/* <Text category="s1">jam ordernya</Text> */}
     </View>
   );
   
@@ -75,18 +66,9 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant, time}, setOrde
               </Text>
             </View>
           </View>
-
-          {/* {role === 'user'
-          ? <Text>untuk mesan(sementara)</Text>
-          : <Text>menyelesaikan orderan(sementara)</Text>} */}
-          
           <Layout style={styles.containerBtn} level='1'>
-            {/* <Button style={styles.button} size='tiny' appearance='ghost'>
-              X
-            </Button> */}
           </Layout>
-          <View  style={{display:'flex', justifyContent: 'center',marginLeft: 10}}
->
+          <View  style={{display:'flex', justifyContent: 'center',marginLeft: 10}}>
             <Toggle
             checked={checked} onChange={onCheckedChange} />
           </View>
@@ -113,7 +95,6 @@ const styles = StyleSheet.create({
     marginVertical: 5,
     marginHorizontal: 9,
     elevation: 2,
-    // width: 370,
     borderRadius: 15,
     backgroundColor: 'white'
   },

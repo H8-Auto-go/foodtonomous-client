@@ -106,16 +106,8 @@ function LoginPage() {
   };
   return (
     <View style={styles.container}>
-      {/* <Toggle
-        style={styles.toggle}
-        checked={activeChecked}
-        status='warning'
-        onChange={onActiveCheckedChange}>
-        {activeChecked ? 'driver' : "user"}
-      </Toggle> */}
 
       <View >
-        {/* <Text>logo here</Text> */}
         <Image
           source={require('../assets/logo2.png')}
           style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}

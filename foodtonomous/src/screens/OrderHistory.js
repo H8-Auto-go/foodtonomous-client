@@ -36,78 +36,12 @@ function OrderHistory() {
         <FavouriteCard></FavouriteCard>
 
       }
-      {/* <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-            <Text>
-              tanggal order
-            </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-            <Text>
-              tanggal order
-            </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-            <Text>
-              tanggal order
-            </Text>
-          </View>
-        </View>
-      </Card>
-      <Card>
-        <View style={styles.flexCont}>
-          <View>
-            <Text> IMG here </Text>
-          </View>
-          <Text> | </Text>
-          <View>
-            <Text>
-              deskripsi makanan dan nama restorannya
-            </Text>
-            <Text>
-              tanggal order
-            </Text>
-          </View>
-        </View>
-      </Card> */}
     </View>
   )
 }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    // justifyContent: 'center',
-    // alignItems: 'center',
     padding: 0,
   },
   flexCont: {

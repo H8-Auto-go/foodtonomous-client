@@ -21,7 +21,6 @@ function FavouriteCard ({data}) {
           <Text> | </Text>
           <View>
               <Text>
-                  {/* hello word */}
                   {data.food.price}
               </Text>
           </View>

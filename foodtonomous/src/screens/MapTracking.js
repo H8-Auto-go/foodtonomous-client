@@ -7,22 +7,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import Polyline from '@mapbox/polyline'
 import { getOrderData, setUserPosition } from '../store/actions/userPositionAction'
 import {GOOGLE_API} from "@env"
-import {
-  ApplicationProvider,
-  Button,
-  Icon,
-  IconRegistry,
-  Layout,
-  Text,
-  TopNavigation,
-  Card,
-  Drawer,
-} from '@ui-kitten/components';
-import { EvaIconsPack } from '@ui-kitten/eva-icons';
-import * as eva from '@eva-design/eva';
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import axios from 'axios'
+import { Text } from '@ui-kitten/components';
 import { NavbarTop } from '../components/NavbarTop';
 import socket from '../store/actions/apis/socket'
 import Spinner from '../components/SpinnerLoading'
@@ -190,7 +175,7 @@ function MapTracking({ navigation }) {
             key = {index}
             />
           })
-           : undefined 
+          : undefined 
           }
           {
             (coordination.length > 0) ? 
@@ -249,7 +234,7 @@ const styles = StyleSheet.create({
   container2: {
     width: Dimensions.get('window').width,
     paddingTop: 10,
-    // alignSelf: 'center',
+
     alignItems: 'flex-start',
     height: Dimensions.get('window').height * 0.25,
     backgroundColor: 'white',

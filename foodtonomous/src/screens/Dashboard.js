@@ -196,7 +196,6 @@ function Dashboard({navigation}) {
             title='HelloFood'
             subtitle='HelloFood Driver'
             accessoryLeft={renderRightActions}
-            // style={{backgroundColor: '#ff9f1c'}}
           />
         </Layout>
         {user && (
@@ -323,9 +322,6 @@ const styles = StyleSheet.create({
   },
   heading: {
     textAlign: 'center',
-    // backgroundColor: '#F4A460',
-    // borderRadius: 10,
-    // margin: 10,
   },
   CardDashboardContainer: {
     backgroundColor: 'red'
@@ -346,7 +342,6 @@ const styles = StyleSheet.create({
   cardDriver: {
     margin: 40,
     borderRadius: 10,
-    // justifyContent: 'center',
     alignItems: 'center',
   }
 });

@@ -109,20 +109,12 @@ function LoginDriverPage() {
   };
   return (
     <View style={styles.container}>
-      {/* <Toggle
-        style={styles.toggle}
-        checked={activeChecked}
-        status='warning'
-        onChange={onActiveCheckedChange}>
-        {activeChecked ? 'driver' : "user"}
-      </Toggle> */}
       <View>
       <Image
           source={require('../assets/logo2.png')}
           style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
         />
       </View>
-        
       <View style={styles.formContainer}>
         <Text>Login Driver</Text>
         <Input
@@ -150,9 +142,6 @@ function LoginDriverPage() {
           <Button style={{width: windowWidth / 2}} onPress={()=> navigation.navigate('LoginPage')}appearance='ghost'>
           I'm a user
         </Button>
-          {/* <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
-            Register
-          </Button> */}
         </View>
       </View>
     </View>
@@ -182,8 +171,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    // width: 50,
-    // height: 50,
     borderRadius: 15,
   },
 });
