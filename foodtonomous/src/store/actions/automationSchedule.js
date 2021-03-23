@@ -21,11 +21,10 @@ export function getAutoSchedule (form) {
   }
 }
 
-export function addSchedule (form) {
+export function addSchedule (form, navigate) {
   // console.log(form);
   return async (dispatch) => {
     try {
-      console.log(form, 'sljdkfnalksjdhflaksudhflaisuhflaksdhfalksd')
       const {data} = await serverAxios({
         method: "POST",
         url: '/automationSchedules/',
@@ -36,6 +35,7 @@ export function addSchedule (form) {
           foodId: form.foodId
         }
       })
+      navigation.navigate('Home')
       // dispatch(getAutoSchedule())
     } catch (error) {
       console.log(error)

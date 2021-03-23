@@ -57,7 +57,7 @@ function AutomationSetting() {
     };
     console.log(time);
     //hit ke action dan axios
-    dispatch(addSchedule(form))
+    dispatch(addSchedule(form, navigation))
   
   }
 

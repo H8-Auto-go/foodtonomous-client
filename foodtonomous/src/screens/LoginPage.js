@@ -2,7 +2,7 @@
 import { Button } from '@ui-kitten/components'
 import React, { useState, useEffect } from 'react'
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import { StyleSheet, View, Dimensions, Image } from 'react-native';
 import { useDispatch } from 'react-redux'
 import { Input,Text,Toggle, Icon } from '@ui-kitten/components';
 import { login } from '../store/actions/users'
@@ -114,8 +114,13 @@ function LoginPage() {
         {activeChecked ? 'driver' : "user"}
       </Toggle> */}
 
-      <View style={styles.logoContainer}>
-        <Text>logo here</Text>
+      <View >
+        {/* <Text>logo here</Text> */}
+        <Image
+            style={styles.logo}
+            source={require('../assets/logo.png')}
+            style={{width: windowWidth / 1.3, height: windowHeight / 2.6}}
+          />
       </View>
       <View style={styles.formContainer}>
         <Text>Login User</Text>
@@ -173,6 +178,11 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
+  },
+  logo: {
+    // width: 50,
+    // height: 50,
+    borderRadius: 15,
   },
 });
 

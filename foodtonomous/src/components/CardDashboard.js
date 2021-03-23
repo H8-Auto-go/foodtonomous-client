@@ -44,18 +44,26 @@ function CardDashboard({ setStatusOrder, data: {food, restaurant}, setOrder, use
   };
   return (
     <>
-      <Card style={styles.card} header={Header}>
+      <Card style={styles.card}>
         <View style={styles.container}>
-          <Image
-            style={styles.tinyLogo}
-            source={{uri: food.picture}}
-          />
-          {/*<Text>*/}
-          {/*    {food.name}*/}
-          {/*</Text>*/}
-          {/*<Text>*/}
-          {/*    RP.{food.price}*/}
-          {/*</Text>*/}
+          <View>
+            <Image
+              style={styles.tinyLogo}
+              source={{uri: food.picture}}
+            />
+          </View>
+          <View style={{marginLeft: 15}}>
+            <View>
+              <Text>
+                {food.name}
+              </Text>
+            </View>
+              <View>
+                <Text>
+                RP.{food.price}
+              </Text>
+              </View>
+          </View>
           {role === 'user'
           ? <Text>untuk mesan(sementara)</Text>
           : <Text>menyelesaikan orderan(sementara)</Text>}

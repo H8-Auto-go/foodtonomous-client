@@ -35,7 +35,6 @@ import {
   FavoriteFood,
   LoginPage,
   OrderHistory,
-  ChatRoom
 } from './src/screens'
 import RegisterPage from './src/screens/RegisterPage'
 import LoginDriverPage from './src/screens/LoginDriverPage'
@@ -78,7 +77,7 @@ export default () => (
                 <Stack.Screen name="MapTracking" component={MapTracking} />
                 <Stack.Screen name="FavoriteFood" component={FavoriteFood} />
                 <Stack.Screen name="OrderHistory" component={OrderHistory} />
-                <Stack.Screen name="ChatRoom" component={ChatRoom} />
+                {/* <Stack.Screen name="ChatRoom" component={ChatRoom} /> */}
                 <Stack.Screen name="RegisterPage" component={RegisterPage} />
                 <Stack.Screen name="LoginDriverPage" component={LoginDriverPage} />
                 <Stack.Screen

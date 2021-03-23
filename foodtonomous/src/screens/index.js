@@ -4,7 +4,6 @@ import FavoriteFood from "./FavoriteFood";
 import LoginPage from "./LoginPage";
 import MapTracking from "./MapTracking";
 import OrderHistory from "./OrderHistory";
-import ChatRoom from "./ChatRoom"
 export {
   AutomationSetting,
   Dashboard,
@@ -12,5 +11,4 @@ export {
   LoginPage,
   MapTracking,
   OrderHistory,
-  ChatRoom
 }
