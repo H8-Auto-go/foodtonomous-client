@@ -35,7 +35,7 @@ import store from '../store'
 import NavbarDriver from '../components/NavbarDriver'
 
 // import io from 'socket.io-client'
-
+const HeartIcon = (props) => <Icon {...props} name="heart" />;
 
 function MiniItemSwipe(params) {
   return (
@@ -395,6 +395,7 @@ function Dashboard({navigation}) {
                 {
                   user.saldo ? <Text>{formattedPrice(user.saldo)}</Text> : undefined
                 }
+                
               </View>
               <View>
                 <Button

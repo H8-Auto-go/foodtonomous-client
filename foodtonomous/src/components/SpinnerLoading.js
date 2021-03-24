@@ -10,7 +10,7 @@ function SpinnerLoading() {
   return (
     <View  style={styles.containerSpinner}>
       <Layout level='1'>
-        <Spinner status='warning'/>
+        <Spinner status='success'/>
       </Layout>
     </View>
   )

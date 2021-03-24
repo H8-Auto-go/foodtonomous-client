@@ -53,11 +53,6 @@ function NavbarDriver() {
             accessoryLeft={HomeIcon}
             title="Home"
           />
-        <MenuItem
-          onPress={() => navigation.navigate('MapTracking')}
-          accessoryLeft={NavigationIcon}
-          title="Map"
-        />
         <MenuItem 
           onPress={() => handleLogout()}
           accessoryLeft={LogoutIcon} title='Logout'/>

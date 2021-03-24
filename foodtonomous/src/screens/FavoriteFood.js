@@ -15,10 +15,10 @@ function FavoriteFood() {
 
   return (
     <View style={styles.container}>
+      <ScrollView>
       <Text 
       category='h4'
-      style={{textAlign: 'center'}}>{"\n"}Favorites Food{"\n"}</Text>
-      <ScrollView>
+      style={{textAlign: 'center'}}>{"\n"}Food List{"\n"}</Text>
         {
           favouriteFoods &&
           favouriteFoods ? 
@@ -35,7 +35,8 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     padding: 0,
-    elevation: 2
+    elevation: 2,
+    marginBottom: 100,
   },
   flexCont: {
     display: 'flex',

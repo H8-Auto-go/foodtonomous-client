@@ -137,7 +137,7 @@ function LoginPage() {
             status="success">
             Login
           </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
+          <Button  status='warning' style={{width: windowWidth / 3.5}} onPress={handleRegister}>
             Register
           </Button>
         </View>
@@ -164,6 +164,10 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    height: 270,
+    marginTop: -30
   },
   buttonContainer: {
     display: 'flex',

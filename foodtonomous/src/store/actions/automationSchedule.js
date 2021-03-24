@@ -59,6 +59,21 @@ export function updateScheduleStatus({id, isActive}) {
   }
 }
 
+export function updateQuantity(quantity, scheduleId) {
+  return async (dispatch) => {
+    try {
+      console.log('<<<< before axios quantity', quantity)
+      const { data } = await serverAxios({
+        method: 'PUT',
+        url: '/automationSchedules/' + scheduleId,
+        data: {quantity}
+      })
+    } catch(err) {
+      console.log(err)
+    }
+  }
+}
+
 
 export function deleteSchedule(id) {
   return async (dispatch) => {
