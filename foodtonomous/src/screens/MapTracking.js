@@ -11,12 +11,14 @@ import { Text } from '@ui-kitten/components';
 import { NavbarTop } from '../components/NavbarTop';
 import socket from '../store/actions/apis/socket'
 import Spinner from '../components/SpinnerLoading'
+import NavbarDriver from '../components/NavbarDriver'
+
 
 function MapTracking({ navigation }) {
   const dispatch = useDispatch()
-  const userPosition = useSelector(state => state.userPosition.userPosition)
-  const markerPosition = useSelector(state => state.userPosition.markerPosition)
-  const restaurantPosition = useSelector(state => state.userPosition.restaurantPosition)
+  // const userPosition = useSelector(state => state.userPosition.userPosition)
+  const markerPosition = useSelector(state => state.destination.cusCoords)
+  const restaurantPosition = useSelector(state => state.destination.resCoords)
   const [mapMargin, setMapMargin] = useState(1)
   const [userPosition1, setUSerPosition1] = useState({})
   const [marker, setMarker] = useState({})
@@ -25,10 +27,6 @@ function MapTracking({ navigation }) {
   const [distance, setDistance] = useState('')
   const [adress, setAdress] = useState('')
   const [ttime, setTtime] = useState(0)
-
-  useEffect (() => {
-    dispatch(getOrderData())
-  }, [])
   
   useEffect(() => {
     requstLocationPermission()
@@ -90,7 +88,7 @@ function MapTracking({ navigation }) {
               longitudeDelta: 0.0121,
             }
             console.log(coordinates);
-            dispatch(setUserPosition(coordinates))
+            // dispatch(setUserPosition(coordinates))
             setUSerPosition1(coordinates)
           }, error => {
           }, { enableHighAccuracy: true }
@@ -144,29 +142,23 @@ function MapTracking({ navigation }) {
     }
 
 
-    if (markerPosition.location){
-      let orderPosition = [
-        restaurantPosition, markerPosition
-      ]
-      if (marker.latitude !== markerPosition.location.latitude) {
-        setMarker(markerPosition.location)
-      } 
+    if (userPosition1){
       return (
         <SafeAreaView>
-          <NavbarTop />
+          <NavbarDriver />
         <View style={styles.container1}>
           {
-            userPosition.latitude ? <MapView
+            userPosition1.latitude ? <MapView
             provider={PROVIDER_GOOGLE} 
             style={{ ...styles.map, marginBottom: mapMargin }}
             showsUserLocation
             followsUserLocation
             onMapReady={setMargin}
-            region={ userPosition }
+            region={ userPosition1 }
             // onUserLocationChange={e => onUserChange(e.nativeEvent)}
             //  onPress={e => onPressHandler(e.nativeEvent)}
           >
-            {
+            {/* {
           (markerPosition.location.latitude) ? 
           orderPosition.map((data, index) => {
             return <Marker
@@ -176,7 +168,7 @@ function MapTracking({ navigation }) {
             />
           })
           : undefined 
-          }
+          } */}
           {
             (coordination.length > 0) ? 
             <MapView.Polyline 

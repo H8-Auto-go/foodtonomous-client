@@ -112,7 +112,7 @@ function LoginDriverPage() {
       <View>
       <Image
           source={require('../assets/logo2.png')}
-          style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
+          style={{width: windowWidth -130, height: windowHeight / 2.7, borderRadius: 11}}
         />
       </View>
       <View style={styles.formContainer}>

@@ -1,6 +1,6 @@
 import React from 'react';
-import { Icon, Layout, MenuItem, OverflowMenu, TopNavigation, TopNavigationAction } from '@ui-kitten/components';
-import { StyleSheet } from 'react-native';
+import { Icon, Layout, MenuItem, OverflowMenu, TopNavigation, TopNavigationAction, Avatar } from '@ui-kitten/components';
+import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { logout } from '../store/actions/users'
 import { useDispatch } from 'react-redux'
@@ -60,11 +60,11 @@ export const NavbarTop = () => {
           accessoryLeft={HomeIcon}
           title="Home"
         />
-        <MenuItem
+        {/* <MenuItem
           onPress={() => navigation.navigate('MapTracking')}
           accessoryLeft={NavigationIcon}
           title="Map"
-        />
+        /> */}
         <MenuItem
           onPress={() => navigation.navigate('OrderHistory')}
           accessoryLeft={CarIcon}
@@ -77,11 +77,20 @@ export const NavbarTop = () => {
     </React.Fragment>
   );
 
+  const renderTitle = (props) => (
+    <View style={styles.titleContainer}>
+      <Avatar
+        style={styles.logo}
+        source={require('../assets/logoNav.png')}
+      />
+    </View>
+  );
+
   return (
     <Layout style={styles.container} level='4'>
       <TopNavigation
         alignment='center'
-        title='HelloFood'
+        title={renderTitle}
         // subtitle='schedule your food'
         accessoryLeft={renderLeftActions}
         style={{backgroundColor: '#2ec4b6'}}
@@ -95,4 +104,15 @@ const styles = StyleSheet.create({
   //   minHeight: 65,
   //   backgroundColor: '#bc6c25'
   // },
+  titleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  logo: {
+    marginHorizontal: 16,
+    width: 150,
+    borderRadius: 0,
+    height: 100,
+    marginTop: -25
+  },
 });

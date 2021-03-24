@@ -12,3 +12,13 @@ export const setAddress = (payload) => ({
     type: 'SET_ADDRESS/ADDRESS',
     payload
 })
+
+export const setResCoords = (payload => ({
+    type: 'SET_RESCOORDS/RESCOORDS',
+    payload
+}))
+
+export const seTCusCoords = (payload => ({
+    type: 'SET_CUSCOORDS/CUSCOORDS',
+    payload
+}))

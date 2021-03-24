@@ -9,6 +9,7 @@ function FavouriteCard ({data}) {
           <Icon name='home-outline' fill='black' width={24} height={24} />
           <Text
           category='h6'
+          style={{fontWeight: 'bold'}}
           > {data.restaurant.name}
           </Text>
         </View>

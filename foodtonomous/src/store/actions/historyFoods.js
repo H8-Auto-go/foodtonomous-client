@@ -10,7 +10,7 @@ export function getHistoryFoods () {
     try {
       const {data} = await serverAxios({
         method: "GET",
-        url: '/users/history'
+        url: '/orders/history'
       })
       dispatch(setHistoryFoods(data))
     } catch (error) {

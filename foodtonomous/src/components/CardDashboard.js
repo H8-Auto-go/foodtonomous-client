@@ -8,14 +8,12 @@ import {
   Card,
   Icon,
 } from '@ui-kitten/components';
-import {updateScheduleStatus} from "../store/actions/automationSchedule";
+import {updateScheduleStatus ,deleteSchedule} from "../store/actions/automationSchedule";
 import {useDispatch} from 'react-redux'
 
-const ClockIcon = (props) => (
-  <Icon name='clock-outline' {...props} />
+const TrashIcon = (props) => (
+  <Icon name='trash-2-outline' {...props} />
 );
-
-
 
 function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, time}, user: {id: userId, role} }) {
   const dispatch = useDispatch()
@@ -25,17 +23,37 @@ function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, ti
     setAutomation({id, isActive: isChecked})
   }, [isChecked])
   
+  const onDelete = () => {
+    // console.log('ini id yang akan diapus', id)
+
+    dispatch(deleteSchedule(id))
+  }
+
   const Header = (props, name) => (
-    <View {...props}>
-      <View style={{ flexDirection: 'row' }}>
-        <Icon name='home-outline' fill='black' width={24} height={24} />
-        <Text
-        category='h6'
-        >{' '}{restaurant.name}</Text>
-      </View>
-      <View style={{ flexDirection: 'row' }}>
-        <Icon name='clock-outline' fill='black' width={24} height={24} />
-        <Text>{' '}{time}</Text>
+    <View {...props} >
+      <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+        <View>
+          <View style={{ flexDirection: 'row' }}>
+            <Icon name='home-outline' fill='black' width={24} height={24} />
+            <Text
+            category='h6'
+            style={{fontWeight: 'bold'}}
+            >{' '}{restaurant.name}</Text>
+          </View>
+          <View style={{ flexDirection: 'row' }}>
+            <Icon name='clock-outline' fill='black' width={24} height={24} />
+            <Text>{' '}{time}</Text>
+          </View>
+        </View>
+        <View
+          style={{width: 40}}
+          >
+        <Button appearance='ghost' status='danger'
+          accessoryLeft={TrashIcon}
+          onPress={onDelete}
+          >
+          </Button>
+        </View>
       </View>
     </View>
   );
@@ -52,6 +70,7 @@ function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, ti
             <View style={{marginLeft: 15}}>
               <Text
               category='h6'
+              style={{fontWeight:'bold'}}
               >
                 {food.name}
               </Text>

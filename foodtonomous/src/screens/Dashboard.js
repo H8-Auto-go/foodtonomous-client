@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Alert, Image, Dimensions, yellowBox } from 'react-native';
 import { useSelector } from 'react-redux'
-// import { Log } from "react-native"
 import {GOOGLE_API} from "@env"
 import {
   Button,
@@ -12,7 +11,8 @@ import {
   TopNavigation,
   TopNavigationAction,
   OverflowMenu,
-  MenuItem
+  MenuItem,
+  Avatar
 } from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
@@ -30,14 +30,18 @@ import SpinnerLoading from '../components/SpinnerLoading';
 import { logout } from '../store/actions/users'
 import {setTime, setDistance, setAddress } from '../store/actions/destination'
 import store from '../store'
+import NavbarDriver from '../components/NavbarDriver'
 
 // import io from 'socket.io-client'
 const HeartIcon = (props) => <Icon {...props} name="heart" />;
 
 function MiniItemSwipe(params) {
   return (
-    <View style={{justifyContent:'center', alignItems: 'center', marginTop:-8}}>
-      <Text>Swipe Up to See Favorite</Text>
+    <View style={{justifyContent:'center', alignItems: 'center', marginTop:-20}}>
+      <Text
+      category='h6'
+      style={{fontWeight: 'bold'}}
+      >Swipe Up to See Food list</Text>
     </View>
   )
 }
@@ -73,7 +77,7 @@ function Dashboard({navigation}) {
     socket.on('on going order', order => {
       let user = store.getState().users.user
       let destination = store.getState().destination
-      console.log(destination, 'dari on going orider');
+      // console.log(destination, 'dari on going orider');
       setOrderDetail(order) 
       if(user.role === 'user') {
         if(!isReceived) {
@@ -82,7 +86,7 @@ function Dashboard({navigation}) {
           `Estimated total time: ${destination.time + 5} mins, Estimated total distance: ${destination.distance} km
           your address is : ${destination.address}`)
         } else {
-          console.log('harusnya sekali coy')
+          console.log('harusnya sekali coy dari ongoing order')
         }
       }
     })
@@ -120,13 +124,13 @@ function Dashboard({navigation}) {
           time +=Number(inputTime)
           distance += Number(inputDistance)
           locations.push(restaurantLocation)
-          console.log(time, 'ini time dari try 1');
-          console.log(distance, 'ini distance dari try 1');
+          // console.log(time, 'ini time dari try 1');
+          // console.log(distance, 'ini distance dari try 1');
 
           // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
           const resp1 = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${desLoc}&destination=${addLoc}&key=${GOOGLE_API}`)
           const respJson1 = await resp1.json()
-          console.log('dari respJson satu',respJson1)
+          // console.log('dari respJson satu',respJson1)
           let timeCount1 = respJson1.routes[0].legs[0].duration.text
           let distanceCount1 = respJson1.routes[0].legs[0].distance.text
           let customerAddress = respJson1.routes[0].legs[0].end_address
@@ -150,9 +154,9 @@ function Dashboard({navigation}) {
           time +=Number(inputTime2)
           distance += Number(inputDistance2)
           locations.push(customerAddress)
-          console.log(time, 'ini time dari try 2');
-          console.log(distance, 'ini distance dari try 2');
-          console.log(locations)
+          // console.log(time, 'ini time dari try 2');
+          // console.log(distance, 'ini distance dari try 2');
+          // console.log(locations)
           dispatch(setTime(time))
           dispatch(setDistance(distance))
           dispatch(setAddress(locations))
@@ -169,30 +173,18 @@ function Dashboard({navigation}) {
         }
         payload3 = JSON.parse(payload3)
         const concatStart = `${payload1.latitude},${payload1.longitude}`
-      console.log(payload3.latitude, 'payload 3 calon concat add');
-      console.log(payload3.longitude, 'paylad 3 calon longitude');
+      // console.log(payload3.latitude, 'payload 3 calon concat add');
+      // console.log(payload3.longitude, 'paylad 3 calon longitude');
       const concatAdditional = `${payload3.latitude}, ${payload3.longitude}`
       const concatEnd = `${payload2.latitude},${payload2.longitude}`
-      console.log('dari mergeCoords');
-      console.log('concatstart mergecoord 1', concatStart );
-      console.log('concatEnd mergecoord 1',concatEnd);
-      console.log('concatAdditional mergecoord 1',concatAdditional);
+      // console.log('dari mergeCoords');
+      // console.log('concatstart mergecoord 1', concatStart );
+      // console.log('concatEnd mergecoord 1',concatEnd);
+      // console.log('concatAdditional mergecoord 1',concatAdditional);
       getDirection(concatStart, concatEnd, concatAdditional)
     }
 
-    socket.on('give a rating', () => {
-      let user = store.getState().users.user
-      console.log('tolong give rating');
-      setIsReceived(false)
-      if(user.role === 'user') {
-        console.log(user.role);
-        if(!isReceived) {
-          handleNotification('Your food has arrived!!', 'Happy meal :))')
-        } else {
-          console.log('harusnya cuma sekali, ini food arrived')
-        }
-      }
-    })
+
     // socket.on('on going order', ({user, restaurant, driver, food}) => {
     //   if(user.role === 'user') {
     //     handleNotification('Food is Comming!!', 
@@ -204,17 +196,17 @@ function Dashboard({navigation}) {
     // })
 
     socket.on('incoming order', order => {
-      console.log('ini dari incoming order')
       let user = store.getState().users.user
+      console.log('dari incoming order',order);
+      console.log('ini dari incoming order')
+      console.log('ini dari incoming order user ',user);
       let restaurantPosition = JSON.parse(order.Restaurant.location)
       let customerPosition = order.User.location
-      // console.log('dari incoming order', typeof user);
-      // console.log('dari incoming order', typeof customerPosition);
       console.log(user.location, 'user dari incoming order');
       console.log(customerPosition, 'customerPosition dari incoming order');
       mergeCoords(user.location, restaurantPosition, customerPosition)
-      // console.log('ini pesanan diterima di driver', order, new Date().toISOString())
       if(user.role === 'driver') {
+        console.log('ini user driver', user);
         Alert.alert(
           "Incoming Order",
           `from ${order.User.name} to buy ${order.Food.name}`,
@@ -246,10 +238,28 @@ function Dashboard({navigation}) {
           ]
         );
       }
-    }, [socket])
-  }, [])
+    })
+  }, [socket])
 
 
+  useEffect(() => {
+    socket.on('giveARating', () => {
+      let user = store.getState().users.user
+      console.log(user);
+      console.log('tolong give rating');
+      setIsReceived(false)
+      console.log('ini refetch saldo anjay asek uhuy')
+      dispatch(getUserData())
+      if(user.role === 'user') {
+        // console.log(user.role);
+        if(!isReceived) {
+          handleNotification('Your food has arrived!', `Happy meal :)`)
+        } else {
+          console.log('harusnya cuma sekali, ini food arrived')
+        }
+      }
+    })
+  }, [socket])
 
   useEffect(() => {
     if(order) {
@@ -260,18 +270,18 @@ function Dashboard({navigation}) {
   }, [order])
 
   useEffect(() => {
+    let destination = store.getState().destination
     if(statusOrder === true) {
-      socket.emit('order done', {status:'done', id:orderId})
+      console.log('masuk sini setelah end order');
+      console.log('order selesai', orderId, destination.distance)
+      socket.emit('order done', {status:'done', id:orderId, distance: destination.distance})
     }
   }, [statusOrder])
 
   useFocusEffect (
-    React.useCallback(() => {
-      // const unsubscribe = API.subscribe(dispatch);
+    React.useCallback(() => {;
         dispatch(getAutoSchedule())
         // dispatch(getUserData())
-
-      // return () => unsubscribe();
     }, [dispatch])
   );
 
@@ -290,52 +300,20 @@ function Dashboard({navigation}) {
   //   num++
   // }
 
+  // useEffect(() => {
+  //   socket.on('refetch saldo', () => {
+  //     console.log('ini refetch saldo anjay asek uhuy')
+  //     dispatch(getUserData())
+  //   })
+  // }, [socket])
   const PlusIcon = (props) => (
     <Icon name='plus-outline' {...props} />
   );
   
 
-  //navbar untuk driver
-  // const navigation = useNavigation(); 
-  const renderMenuAction = () => (
-    <TopNavigationAction icon={MenuIcon} onPress={toggleMenu}/>
-  );
-  const [menuVisible, setMenuVisible] = React.useState(false);
-
-  const toggleMenu = () => {
-    setMenuVisible(!menuVisible);
-  };
-
-  const handleLogout = () => {
-    // navigation.navigate('LoginPage')
-    //untuk hit ke actions
-    dispatch(logout(navigation))
-  }
-
-  const renderRightActions = () => (
-    <React.Fragment>
-      <OverflowMenu
-        style={{backgroundColor: '#ffbf69'}}
-        anchor={renderMenuAction}
-        visible={menuVisible}
-        onBackdropPress={toggleMenu}>
-        <MenuItem 
-          onPress={() => handleLogout()}
-          accessoryLeft={LogoutIcon} title='Logout'/>
-      </OverflowMenu>
-    </React.Fragment>
-  );
-
-  const LogoutIcon = (props) => (
-    <Icon {...props} name='log-out'/>
-  );
-  const MenuIcon = (props) => (
-  <Icon name='menu' {...props} />
-  );
-
   const handleNotification = (title, message) => {
-    console.log(title, 'title dari handle');
-    console.log(message, 'message dari handle');
+    // console.log(title, 'title dari handle');
+    // console.log(message, 'message dari handle');
     notification.configure()
     notification.createChannel(num.toString())
     notification.sendNotification(num.toString(), title, message)
@@ -343,37 +321,35 @@ function Dashboard({navigation}) {
   }
 
   const endOrder = () => {
-    let destination = store.getState().destination
-    console.log(destination.address)
-    console.log(destination.address)
+    // let destination = store.getState().destination
+    // console.log(destination.address)
+    // console.log(destination.address)
     setStatusOrder(!statusOrder)
+    setHandlingFood(false)
   }
+
 
   if (user && user.role === 'driver') {
     return (
       <>
-        {/* <NavbarTop /> */}
-        <Layout  level='4'>
-          <TopNavigation
-            alignment='center'
-            title='HelloFood'
-            subtitle='HelloFood Driver'
-            accessoryLeft={renderRightActions}
-          />
-        </Layout>
+      <NavbarDriver />
         {user && (
           <Card>
             <View style={styles.flexContainer}>
               <View>
-                <Text>gopay status</Text>
-                <Text>RP.{user.saldo}</Text>
+                <Text
+                category='h6'
+                style={{fontWeight: 'bold'}}
+                >Balance:</Text>
+                <Text>Rp. {user.saldo}</Text>
               </View>
               <View>
-                <Text style={styles.center}>top up</Text>
+                <Button
+                status='success'
+                appearance='ghost'>
+                  Top UP
+                </Button>
               </View>
-              {/*<View>*/}
-              {/*  <Text style={styles.center}>top up</Text>*/}
-              {/*</View>*/}
             </View>
           </Card>
         )}
@@ -390,27 +366,35 @@ function Dashboard({navigation}) {
                   source={require('../assets/logo2.png')}
                   style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
                 />
-              <Text>keterangan orderannya</Text>
-              <Text> Alamat: {address} </Text>
+              <Text
+              category='h6'
+              style={{fontWeight: 'bold'}}
+              >Order Details:</Text>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <Text style={{fontWeight: 'bold'}}> Restaurant's Address: </Text>
+                <Text style={{color:'#1B3D6C', marginBottom: 10}}>{address[0]} </Text>
+              </View>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <Text style={{fontWeight: 'bold'}}> Customer's Address: </Text>
+                <Text style={{color:'#1B3D6C'}}> {address[1]} </Text>
+              </View>
               <Button
                 onPress={endOrder}
-                starus='warning'
+                status='warning'
                 color="#841584"
                 accessibilityLabel="Learn more about this purple button">
-                End Order
+                Finish Delivery
               </Button>
             </Card> : 
               //kalau ga ada order render yang ini
-              <Card style={styles.cardDriver} status='info'>
+              <Card style={{alignItems: 'center'}} status='info'>
                 <Text
                 category='h6'
                 >you have no ongoing order</Text>
               </Card>
             }
-            
           </ScrollView>
         </View>
-        
       </>
     )
   } else {
@@ -421,11 +405,18 @@ function Dashboard({navigation}) {
           <Card style={{elevation: 1}}>
             <View style={styles.flexContainer}>
               <View>
-                <Text>gopay status</Text>
-                <Text>RP.{user.saldo}</Text>
+                <Text
+                category='h6'
+                style={{fontWeight: 'bold'}}
+                >Balance: </Text>
+                <Text>Rp. {user.saldo}</Text>
               </View>
               <View>
-                <Text style={styles.center}>top up</Text>
+                <Button
+                  status='success'
+                  appearance='ghost'>
+                  Top UP
+                </Button>
               </View>
             </View>
           </Card>
@@ -460,10 +451,10 @@ function Dashboard({navigation}) {
             onShowFull={() => console.log('full')}
             onMoveDown={() => console.log('down')}
             onMoveUp={() => console.log('up')}
-            disablePressToShow={false} // Press item mini to show full
+            disablePressToShow={true} // Press item mini to show full
             style={{ backgroundColor: '#cbf3f0',elevation: 2 }} // style for swipe
             animation="easeInEaseOut" 
-            swipeHeight={50}
+            swipeHeight={65}
           />
       </>
     );
@@ -510,10 +501,21 @@ const styles = StyleSheet.create({
 
   },
   cardDriver: {
-    margin: 40,
-    borderRadius: 10,
+    // margin: 40,
+    // borderRadius: 10,
+    // alignItems: 'center',
+  },
+  titleContainer: {
+    flexDirection: 'row',
     alignItems: 'center',
-  }
+  },
+  logo: {
+    marginHorizontal: 16,
+    width: 150,
+    borderRadius: 0,
+    height: 100,
+    marginTop: -25
+  },
 });
 
 export default Dashboard;

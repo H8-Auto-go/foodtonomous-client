@@ -57,3 +57,20 @@ export function updateScheduleStatus({id, isActive}) {
     }
   }
 }
+
+
+export function deleteSchedule(id) {
+  return async (dispatch) => {
+    try {
+      console.log(id, '<<<< id delete')
+      const { data } = await serverAxios({
+        method: 'DELETE',
+        url: '/automationSchedules/' + id,
+      })
+      console.log('berhasil hapus =========================')
+      dispatch(getAutoSchedule())
+    } catch(err) {
+      console.log(err)
+    }
+  }
+}

@@ -1,7 +1,11 @@
+import { State } from "react-native-gesture-handler"
+
 const initialState = {
     time: 0,
     distance: 0,
-    address: []
+    address: [],
+    resCoords: {},
+    cusCoords: {}
 }
 
 function reducer (state = initialState, {type, payload}){
@@ -20,6 +24,16 @@ function reducer (state = initialState, {type, payload}){
             return {
                 ...state,
                 address: payload
+            }
+        case 'SET_RESCOORDS/RESCOORDS':
+            return {
+                ...state,
+                resCoords: payload
+            }
+        case 'SET_CUSCOORDS/CUSCOORDS':
+            return {
+                ...state,
+                cusCoords: payload
             }
         default :
         return state
