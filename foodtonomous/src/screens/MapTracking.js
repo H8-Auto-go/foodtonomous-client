@@ -17,7 +17,7 @@ import NavbarDriver from '../components/NavbarDriver'
 function MapTracking({ navigation }) {
   const dispatch = useDispatch()
   // const userPosition = useSelector(state => state.userPosition.userPosition)
-  const markerPosition = useSelector(state => state.destination.cusCoords)
+  const markerPosition = useSelector(state => state.destination.resCoords)
   const restaurantPosition = useSelector(state => state.destination.resCoords)
   const [mapMargin, setMapMargin] = useState(1)
   const [userPosition1, setUSerPosition1] = useState({})
@@ -27,14 +27,14 @@ function MapTracking({ navigation }) {
   const [distance, setDistance] = useState('')
   const [adress, setAdress] = useState('')
   const [ttime, setTtime] = useState(0)
-  
+  console.log(markerPosition, 'dari mapTracking');
   useEffect(() => {
     requstLocationPermission()
   }, [])
 
-  useEffect(() => {
-    mergeCoords()
-  }, [marker, userPosition1])
+  // useEffect(() => {
+  //   mergeCoords()
+  // }, [marker, userPosition1])
 
     
   // useEffect(() => {
@@ -158,6 +158,12 @@ function MapTracking({ navigation }) {
             // onUserLocationChange={e => onUserChange(e.nativeEvent)}
             //  onPress={e => onPressHandler(e.nativeEvent)}
           >
+            {
+              markerPosition.length !== 0 ? 
+              markerPosition.map((data, index) => {
+                return <Marker coordinate={data.locations} title={data.title} />
+              }) : undefined
+            }
             {/* {
           (markerPosition.location.latitude) ? 
           orderPosition.map((data, index) => {

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {StyleSheet, View, Alert, Image, Dimensions, yellowBox } from 'react-native';
+import MapView, { Marker, PROVIDER_GOOGLE, Callout } from 'react-native-maps'
 import { useSelector } from 'react-redux'
 import {GOOGLE_API} from "@env"
 import {
@@ -28,7 +29,7 @@ import FavoriteFood from './FavoriteFood';
 import { useFocusEffect, useNavigation } from '@react-navigation/native';
 import SpinnerLoading from '../components/SpinnerLoading';
 import { logout } from '../store/actions/users'
-import {setTime, setDistance, setAddress } from '../store/actions/destination'
+import {setTime, setDistance, setAddress, setResCoords } from '../store/actions/destination'
 import store from '../store'
 import NavbarDriver from '../components/NavbarDriver'
 
@@ -48,12 +49,13 @@ function MiniItemSwipe(params) {
 
 let num = 1;
 function Dashboard({navigation}) {
+
   console.disableYellowBox = true;
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
   const dispatch = useDispatch()
   const { schedule } = useSelector(state => state.schedule)
-  const {user} = useSelector(state => state.users)
+  // const {user} = useSelector(state => state.users)
   const [order, setOrder] = useState({
     userId: '',
     foodId: '',
@@ -66,13 +68,21 @@ function Dashboard({navigation}) {
   const [isHandlingFood, setHandlingFood] = useState(false)
   const [isReceived, setIsReceived] = useState(false)
   const address = useSelector(state => state.destination.address)
-
+  const time = useSelector(state => state.destination.time)
+  const distance = useSelector(state => state.destination.time)
+  const resCoords = useSelector(state => state.destination.resCoords)
+  const [mapMargin, setMapMargin] = useState(1)
+  const user = useSelector(state => state.users.user)
+  const markerPosition = useSelector(state => state.destination.resCoords)
   // useEffect(() => {
   //   if(Object.keys(automation).length > 0) {
   //     socket.emit('set automation', automation)
   //   }
   // }, [automation])
 
+  useEffect(() => {
+    dispatch(getUserData())
+  }, [])
   useEffect(() => {
     socket.on('on going order', order => {
       let user = store.getState().users.user
@@ -151,15 +161,46 @@ function Dashboard({navigation}) {
               break;
             }
           }
+          let latitude = ''
+      let longitude =''
+      let flag = false
+      for (let i = 0; i < desLoc.length; i++){
+        if (desLoc[i] !== ',' && flag === false){
+          latitude += desLoc[i]
+        }
+        if (desLoc[i] === ','){
+          flag = true
+        }
+        if(desLoc[i] !== ',' && flag === true) {
+          longitude +=desLoc[i]
+        }
+      }
+      let latitude1 = ''
+      let longitude1 =''
+      let flag1 = false
+      for (let j = 0; j < addLoc.length; j++){
+        if (addLoc[j] !== ',' && flag1 === false){
+          latitude1 += addLoc[j]
+        }
+        if (addLoc[j] === ','){
+          flag1 = true
+        }
+        if(addLoc[j] !== ',' && flag1 === true) {
+          longitude1 +=addLoc[j]
+        }
+      }
+      let resLoc =[{title: 'Restaurant',
+                    locations: {latitude, longitude}}, 
+                    {title: 'Customer',
+                    locations: {latitude: latitude1, longitude: longitude1}}]
+      console.log('dari itung jarak dashboard', resLoc);
           time +=Number(inputTime2)
           distance += Number(inputDistance2)
           locations.push(customerAddress)
-          // console.log(time, 'ini time dari try 2');
-          // console.log(distance, 'ini distance dari try 2');
-          // console.log(locations)
           dispatch(setTime(time))
           dispatch(setDistance(distance))
           dispatch(setAddress(locations))
+          dispatch(setResCoords(resLoc))
         } catch (error) {
           console.log('error cuy');
           console.log(error.message);
@@ -327,8 +368,17 @@ function Dashboard({navigation}) {
     setStatusOrder(!statusOrder)
     setHandlingFood(false)
   }
-
-
+  function formattedPrice(price) {
+    return 'Rp. ' + price.toString()
+      .split('')
+      .reverse()
+      .map((number, i) => i % 3 === 0 && i !== 0 ? number + '.' : number)
+      .reverse()
+      .join('')
+  }
+  const setMargin = () => {
+    setMapMargin(0)
+  }
   if (user && user.role === 'driver') {
     return (
       <>
@@ -341,7 +391,10 @@ function Dashboard({navigation}) {
                 category='h6'
                 style={{fontWeight: 'bold'}}
                 >Balance:</Text>
-                <Text>Rp. {user.saldo}</Text>
+                {
+                  user.saldo ? <Text>{formattedPrice(user.saldo)}</Text> : undefined
+                }
+                
               </View>
               <View>
                 <Button
@@ -353,8 +406,119 @@ function Dashboard({navigation}) {
             </View>
           </Card>
         )}
-          <View style={styles.driverWrapper}> 
-            <ScrollView>
+        {/* { address.length !== 0 && isHandlingFood ? 
+        
+      } */}
+      {
+        address.length !== 0 && isHandlingFood ? 
+        <ScrollView>
+      <View>
+      <View style={styles.container1}>
+        <MapView
+        provider={PROVIDER_GOOGLE}
+        style={{ ...styles.map, marginBottom: mapMargin }}
+        showsUserLocation
+        followsUserLocation
+        onMapReady={setMargin}
+        region={
+        {latitude: user.location.latitude ? user.location.latitude : -6.2688,
+        longitude: user.location.longitude ? user.location.longitude : 106.8438,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,}
+        }>
+           {
+             
+              markerPosition.length !== 0 ? 
+              markerPosition.map((data, index) => {
+                console.log(typeof data.locatidons, '<<<< menurut gue ini objek')
+                console.log('MULAI SERIUS DISINI WOI AHAHAHAH======================================================')
+                console.log('dari menurut gua',data.locations);
+                console.log('dari menurut gua',data.locations.latitude);
+                console.log('dari menurut gua',data.locations.longitude);
+                console.log("HUHUHUHUHUHUHUHHHUHUHUHUHUHUUHUHUHUHUHUHUUH")
+                // const {latitude, longitude} = data.locations
+                // const parsedLocation = JSON.parse(data.locations)
+                const [latitude, longitude] = [Number(data.locations.latitude), Number(data.locations.longitude)];
+                // console.log(latitude, longitude, '===========')
+                // console.log(typeof latitude, typeof longitude, '>>>>>>>> typeof')
+              return <Marker 
+                coordinate={{
+                  latitude, 
+                  longitude}} 
+                  title={data.title} />
+              }) : undefined
+            }
+        </MapView>
+      </View>
+        <Card style={styles.cardDriver} status='info'>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={{fontWeight: 'bold'}}> Restaurant's Address: </Text>
+            <Text style={{color:'#1B3D6C', marginBottom: 10}}>{address[0]} </Text>
+          </View>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={{fontWeight: 'bold'}}> Customer's Address: </Text>
+            <Text style={{color:'#1B3D6C'}}> {address[1]} </Text>
+          </View>
+          <Button
+            onPress={endOrder}
+            status='warning'
+            color="#841584"
+            accessibilityLabel="Learn more about this purple button">
+            Finish Delivery
+          </Button>
+        </Card>
+      </View>
+      </ScrollView> : 
+      <Card style={{alignItems: 'center'}} status='info'>
+        <Text
+        category='h6'
+        >you have no ongoing order</Text>
+      </Card>
+      }
+      {/* <ScrollView>
+      <View>
+      <View style={styles.container1}>
+        <MapView
+        provider={PROVIDER_GOOGLE}
+        style={{ ...styles.map, marginBottom: mapMargin }}
+        showsUserLocation
+        followsUserLocation
+        onMapReady={setMargin}
+        region={
+        {latitude: user.location.latitude ? user.location.latitude : -6.2688,
+        longitude: user.location.longitude ? user.location.longitude : 106.8438,
+        latitudeDelta: 0.015,
+        longitudeDelta: 0.0121,}
+        }>
+           {
+              markerPosition.length !== 0 ? 
+              markerPosition.map((data, index) => {
+              return <Marker coordinate={{latitude: Number(JSON.parse(data.locations.latitude)), longitude: Number(JSON.parse(data.locations.latitude))}} title={data.title} />
+              }) : undefined
+            }
+        </MapView>
+      </View>
+        <Card style={styles.cardDriver} status='info'>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={{fontWeight: 'bold'}}> Restaurant's Address: </Text>
+            <Text style={{color:'#1B3D6C', marginBottom: 10}}>{address[0]} </Text>
+          </View>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={{fontWeight: 'bold'}}> Customer's Address: </Text>
+            <Text style={{color:'#1B3D6C'}}> {address[1]} </Text>
+          </View>
+          <Button
+            onPress={endOrder}
+            status='warning'
+            color="#841584"
+            accessibilityLabel="Learn more about this purple button">
+            Finish Delivery
+          </Button>
+        </Card>
+      </View>
+      </ScrollView> */}
+          {/* <View style={styles.driverWrapper}>  */}
+            {/* <ScrollView>
               <View style={{alignItems: 'center'}}>
                 <Text
                 category='h4'
@@ -362,10 +526,7 @@ function Dashboard({navigation}) {
               </View>
             { address.length !== 0 && isHandlingFood ? 
             <Card style={styles.cardDriver} status='info'>
-                <Image
-                  source={require('../assets/logo2.png')}
-                  style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
-                />
+                
               <Text
               category='h6'
               style={{fontWeight: 'bold'}}
@@ -393,8 +554,8 @@ function Dashboard({navigation}) {
                 >you have no ongoing order</Text>
               </Card>
             }
-          </ScrollView>
-        </View>
+          </ScrollView> */}
+        {/* </View> */}
       </>
     )
   } else {
@@ -409,7 +570,9 @@ function Dashboard({navigation}) {
                 category='h6'
                 style={{fontWeight: 'bold'}}
                 >Balance: </Text>
-                <Text>Rp. {user.saldo}</Text>
+                {
+                  user.saldo ? <Text>{formattedPrice(user.saldo)}</Text> : undefined
+                }
               </View>
               <View>
                 <Button
@@ -516,6 +679,17 @@ const styles = StyleSheet.create({
     height: 100,
     marginTop: -25
   },
+  map: {
+    flex: 1
+  },
+  container1: {
+    height: Dimensions.get('window').height * 0.42,
+    width: Dimensions.get('window').width,
+    justifyContent: 'center',
+    // alignItems: 'center',
+    // margin: 10,
+    // borderRadius: 10,
+  }
 });
 
 export default Dashboard;

@@ -4,8 +4,7 @@ const initialState = {
     time: 0,
     distance: 0,
     address: [],
-    resCoords: {},
-    cusCoords: {}
+    resCoords: [],
 }
 
 function reducer (state = initialState, {type, payload}){
@@ -29,11 +28,6 @@ function reducer (state = initialState, {type, payload}){
             return {
                 ...state,
                 resCoords: payload
-            }
-        case 'SET_CUSCOORDS/CUSCOORDS':
-            return {
-                ...state,
-                cusCoords: payload
             }
         default :
         return state

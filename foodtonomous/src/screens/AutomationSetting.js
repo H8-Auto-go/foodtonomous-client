@@ -12,6 +12,7 @@ export default function AutomationSetting() {
   const [foodId, setFoodId] = useState('')
   const [restaurantId, setRestaurantId] = useState('')
   const [selectedIndex, setSelectedIndex] = React.useState(new IndexPath(0));
+  const [quantity, setQuantity] = useState('')
   const navigation = useNavigation(); 
   const [hour, setHour] = useState("")
   const [minute, setMinute] = useState("")
@@ -51,6 +52,7 @@ export default function AutomationSetting() {
       isActive: false,
       restaurantId,
       foodId,
+
     };
     // console.log(form, '<<<<< this is form');
     //hit ke action dan axios

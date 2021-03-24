@@ -17,8 +17,3 @@ export const setResCoords = (payload => ({
     type: 'SET_RESCOORDS/RESCOORDS',
     payload
 }))
-
-export const seTCusCoords = (payload => ({
-    type: 'SET_CUSCOORDS/CUSCOORDS',
-    payload
-}))

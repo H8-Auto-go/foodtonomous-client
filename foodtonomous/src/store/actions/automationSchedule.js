@@ -32,7 +32,8 @@ export function addSchedule (form, navigation) {
           time: form.time,
           isActive: form.isActive,
           restaurantId: form.restaurantId,
-          foodId: form.foodId
+          foodId: form.foodId,
+          quantity:form?.quantity
         }
       })
       navigation.navigate('Home')
