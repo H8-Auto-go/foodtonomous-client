@@ -114,7 +114,8 @@ function LoginPage() {
         />
       </View>
       <View style={styles.formContainer}>
-        <Text>Login User</Text>
+        <Text
+        >User Login</Text>
         <Input
           placeholder="your email"
           value={email}
@@ -137,7 +138,7 @@ function LoginPage() {
             status="success">
             Login
           </Button>
-          <Button style={{width: windowWidth / 3.5}} onPress={handleRegister}>
+          <Button status='warning' style={{width: windowWidth / 3.5}} onPress={handleRegister}>
             Register
           </Button>
         </View>
@@ -164,6 +165,10 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    height: 270,
+    marginTop: -50
   },
   buttonContainer: {
     display: 'flex',

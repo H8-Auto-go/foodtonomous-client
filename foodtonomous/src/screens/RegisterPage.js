@@ -77,7 +77,7 @@ function RegisterPage() {
           <Picker.Item label="I am a driver" value="driver" />
         </Picker>
         <View style={styles.buttonContainer}>
-          <Button style={{width: windowWidth / 1.6}} onPress={handleRegister}>
+          <Button status='warning' style={{width: windowWidth / 1.6}} onPress={handleRegister}>
             Register
           </Button>
         </View>

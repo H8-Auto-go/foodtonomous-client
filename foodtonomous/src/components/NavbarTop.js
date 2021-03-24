@@ -28,7 +28,9 @@ const CarIcon = (props) => (
 const MenuIcon = (props) => (
   <Icon name='menu' {...props} />
 );
-
+const PlusIcon = (props) => (
+  <Icon name='plus-square' {...props} />
+);
 export const NavbarTop = () => {
   const dispatch = useDispatch()
 
@@ -60,11 +62,11 @@ export const NavbarTop = () => {
           accessoryLeft={HomeIcon}
           title="Home"
         />
-        {/* <MenuItem
-          onPress={() => navigation.navigate('MapTracking')}
-          accessoryLeft={NavigationIcon}
-          title="Map"
-        /> */}
+        <MenuItem
+          onPress={() => navigation.navigate('AutomationSetting')}
+          accessoryLeft={PlusIcon}
+          title="Add Schedule"
+        />
         <MenuItem
           onPress={() => navigation.navigate('OrderHistory')}
           accessoryLeft={CarIcon}
@@ -93,7 +95,7 @@ export const NavbarTop = () => {
         title={renderTitle}
         // subtitle='schedule your food'
         accessoryLeft={renderLeftActions}
-        style={{backgroundColor: '#2ec4b6'}}
+        style={{backgroundColor: '#51F0B0'}}
       />
     </Layout>
   );

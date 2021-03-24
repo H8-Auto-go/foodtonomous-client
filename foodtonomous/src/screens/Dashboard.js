@@ -12,7 +12,8 @@ import {
   TopNavigationAction,
   OverflowMenu,
   MenuItem,
-  Avatar
+  Avatar,
+  ViewPager 
 } from '@ui-kitten/components';
 import {NavbarTop} from '../components/NavbarTop';
 import CardDashboard from '../components/CardDashboard';
@@ -33,7 +34,6 @@ import store from '../store'
 import NavbarDriver from '../components/NavbarDriver'
 
 // import io from 'socket.io-client'
-const HeartIcon = (props) => <Icon {...props} name="heart" />;
 
 function MiniItemSwipe(params) {
   return (
@@ -48,6 +48,7 @@ function MiniItemSwipe(params) {
 
 let num = 1;
 function Dashboard({navigation}) {
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
   console.disableYellowBox = true;
   const windowWidth = Dimensions.get('window').width;
   const windowHeight = Dimensions.get('window').height;
@@ -67,17 +68,10 @@ function Dashboard({navigation}) {
   const [isReceived, setIsReceived] = useState(false)
   const address = useSelector(state => state.destination.address)
 
-  // useEffect(() => {
-  //   if(Object.keys(automation).length > 0) {
-  //     socket.emit('set automation', automation)
-  //   }
-  // }, [automation])
-
   useEffect(() => {
     socket.on('on going order', order => {
       let user = store.getState().users.user
       let destination = store.getState().destination
-      // console.log(destination, 'dari on going orider');
       setOrderDetail(order) 
       if(user.role === 'user') {
         if(!isReceived) {
@@ -101,7 +95,6 @@ function Dashboard({navigation}) {
         try {
           const resp = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=${GOOGLE_API}`)
           const respJson = await resp.json()
-          // console.log('dari respJson satu',respJson)
           let timeCount = respJson.routes[0].legs[0].duration.text
           let distanceCount = respJson.routes[0].legs[0].distance.text
           let restaurantLocation = respJson.routes[0].legs[0].end_address
@@ -124,13 +117,8 @@ function Dashboard({navigation}) {
           time +=Number(inputTime)
           distance += Number(inputDistance)
           locations.push(restaurantLocation)
-          // console.log(time, 'ini time dari try 1');
-          // console.log(distance, 'ini distance dari try 1');
-
-          // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
           const resp1 = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${desLoc}&destination=${addLoc}&key=${GOOGLE_API}`)
           const respJson1 = await resp1.json()
-          // console.log('dari respJson satu',respJson1)
           let timeCount1 = respJson1.routes[0].legs[0].duration.text
           let distanceCount1 = respJson1.routes[0].legs[0].distance.text
           let customerAddress = respJson1.routes[0].legs[0].end_address
@@ -154,9 +142,6 @@ function Dashboard({navigation}) {
           time +=Number(inputTime2)
           distance += Number(inputDistance2)
           locations.push(customerAddress)
-          // console.log(time, 'ini time dari try 2');
-          // console.log(distance, 'ini distance dari try 2');
-          // console.log(locations)
           dispatch(setTime(time))
           dispatch(setDistance(distance))
           dispatch(setAddress(locations))
@@ -173,37 +158,15 @@ function Dashboard({navigation}) {
         }
         payload3 = JSON.parse(payload3)
         const concatStart = `${payload1.latitude},${payload1.longitude}`
-      // console.log(payload3.latitude, 'payload 3 calon concat add');
-      // console.log(payload3.longitude, 'paylad 3 calon longitude');
       const concatAdditional = `${payload3.latitude}, ${payload3.longitude}`
       const concatEnd = `${payload2.latitude},${payload2.longitude}`
-      // console.log('dari mergeCoords');
-      // console.log('concatstart mergecoord 1', concatStart );
-      // console.log('concatEnd mergecoord 1',concatEnd);
-      // console.log('concatAdditional mergecoord 1',concatAdditional);
       getDirection(concatStart, concatEnd, concatAdditional)
     }
 
-
-    // socket.on('on going order', ({user, restaurant, driver, food}) => {
-    //   if(user.role === 'user') {
-    //     handleNotification('Food is Comming!!', 
-    //   `Estimated total time: mins, Estimated total distance:  km`)
-    //     // alert('Food is Comming!!')
-    //     // alert('pesanan sedang di proses')
-    //     // socket.emit('update location driver')
-    //   }
-    // })
-
     socket.on('incoming order', order => {
       let user = store.getState().users.user
-      console.log('dari incoming order',order);
-      console.log('ini dari incoming order')
-      console.log('ini dari incoming order user ',user);
       let restaurantPosition = JSON.parse(order.Restaurant.location)
       let customerPosition = order.User.location
-      console.log(user.location, 'user dari incoming order');
-      console.log(customerPosition, 'customerPosition dari incoming order');
       mergeCoords(user.location, restaurantPosition, customerPosition)
       if(user.role === 'driver') {
         console.log('ini user driver', user);
@@ -217,11 +180,6 @@ function Dashboard({navigation}) {
               style: "cancel"
             },
             { text: "OK", onPress: () => {
-              // let user = store.getState().users.user
-              // let restaurantPosition = JSON.parse(order.Restaurant.location)
-              // let customerPosition = JSON.parse(order.User.location)
-              // console.log(user.role, 'dari incoming order');
-              // mergeCoords(user.location, restaurantPosition, customerPosition)
               setHandlingFood(true)
               setOrderId(order.id)
                 const updatedOrderForm = {
@@ -245,17 +203,11 @@ function Dashboard({navigation}) {
   useEffect(() => {
     socket.on('giveARating', () => {
       let user = store.getState().users.user
-      console.log(user);
-      console.log('tolong give rating');
       setIsReceived(false)
-      console.log('ini refetch saldo anjay asek uhuy')
       dispatch(getUserData())
       if(user.role === 'user') {
-        // console.log(user.role);
         if(!isReceived) {
-          handleNotification('Your food has arrived!', `Happy meal :)`)
-        } else {
-          console.log('harusnya cuma sekali, ini food arrived')
+          handleNotification('Your food has arrived!', `Enjoy your meal :)`)
         }
       }
     })
@@ -271,49 +223,18 @@ function Dashboard({navigation}) {
 
   useEffect(() => {
     let destination = store.getState().destination
-    if(statusOrder === true) {
-      console.log('masuk sini setelah end order');
-      console.log('order selesai', orderId, destination.distance)
+    if(statusOrder) {
       socket.emit('order done', {status:'done', id:orderId, distance: destination.distance})
     }
   }, [statusOrder])
 
   useFocusEffect (
-    React.useCallback(() => {;
+    React.useCallback(() => {
         dispatch(getAutoSchedule())
-        // dispatch(getUserData())
     }, [dispatch])
   );
 
-  // useEffect (() => {
-  //   if(user) {
-  //     if(user.role === 'driver') {
-  //       socket.emit('driver login', user)
-  //     }
-  //   }
-  // }, [user])
-
-  // const handleNotification = () => {
-  //   notification.configure()
-  //   notification.createChannel(num.toString())
-  //   notification.sendNotification(num.toString(), "Testing bos" + num, "moga aja jalan yak")
-  //   num++
-  // }
-
-  // useEffect(() => {
-  //   socket.on('refetch saldo', () => {
-  //     console.log('ini refetch saldo anjay asek uhuy')
-  //     dispatch(getUserData())
-  //   })
-  // }, [socket])
-  const PlusIcon = (props) => (
-    <Icon name='plus-outline' {...props} />
-  );
-  
-
   const handleNotification = (title, message) => {
-    // console.log(title, 'title dari handle');
-    // console.log(message, 'message dari handle');
     notification.configure()
     notification.createChannel(num.toString())
     notification.sendNotification(num.toString(), title, message)
@@ -321,9 +242,6 @@ function Dashboard({navigation}) {
   }
 
   const endOrder = () => {
-    // let destination = store.getState().destination
-    // console.log(destination.address)
-    // console.log(destination.address)
     setStatusOrder(!statusOrder)
     setHandlingFood(false)
   }
@@ -346,8 +264,8 @@ function Dashboard({navigation}) {
               <View>
                 <Button
                 status='success'
-                appearance='ghost'>
-                  Top UP
+                appearance='outline'>
+                  Withdraw
                 </Button>
               </View>
             </View>
@@ -360,12 +278,15 @@ function Dashboard({navigation}) {
                 category='h4'
                 >Ongoing Order</Text>
               </View>
-            { address.length !== 0 && isHandlingFood ? 
-            <Card style={styles.cardDriver} status='info'>
+            {/* { address.length !== 0 && isHandlingFood ?  */}
+            <Card style={styles.cardDriver} status='success'>
+              <View style={{marginLeft: 30,textAlign: 'center', justifyContent: 'center'}}>
                 <Image
                   source={require('../assets/logo2.png')}
-                  style={{width: windowWidth -130, height: windowHeight / 3.1, borderRadius: 11}}
+                  style={{width: windowWidth -130, height: windowHeight / 2.7, borderRadius: 11, }}
                 />
+              </View>
+                
               <Text
               category='h6'
               style={{fontWeight: 'bold'}}
@@ -385,14 +306,15 @@ function Dashboard({navigation}) {
                 accessibilityLabel="Learn more about this purple button">
                 Finish Delivery
               </Button>
-            </Card> : 
-              //kalau ga ada order render yang ini
+            </Card> 
+            {/* jangan diapus!! */}
+            {/* : 
               <Card style={{alignItems: 'center'}} status='info'>
                 <Text
                 category='h6'
                 >you have no ongoing order</Text>
               </Card>
-            }
+            } */}
           </ScrollView>
         </View>
       </>
@@ -401,50 +323,60 @@ function Dashboard({navigation}) {
     return (
       <>
         <NavbarTop />
-        {user && (
-          <Card style={{elevation: 1}}>
-            <View style={styles.flexContainer}>
-              <View>
-                <Text
-                category='h6'
-                style={{fontWeight: 'bold'}}
-                >Balance: </Text>
-                <Text>Rp. {user.saldo}</Text>
-              </View>
-              <View>
-                <Button
-                  status='success'
-                  appearance='ghost'>
-                  Top UP
-                </Button>
-              </View>
-            </View>
-          </Card>
-        )}
-          <ScrollView style={{marginBottom: 50}}>
-            {/* <Button style={styles.button} onPress={handleNotification} appearance='outline' status='primary'>
-              PRIMARY
-            </Button> */}
-            <Text style={styles.heading} category="h5">{"\n"}Food Order Schedule{"\n"}</Text>
-            {/* <Text>{schedule}</Text> */}
-            <Layout style={styles.layoutContainer} level='1'>
-              <Button appearance='outline' status='warning'
-              accessoryLeft={PlusIcon}
-              onPress={()=> navigation.navigate('AutomationSetting')}
-              > Add New
-              </Button>
-            </Layout>
-            {
-              schedule ? 
-              schedule.map(data => {
-                return <CardDashboard setAutomation={setAutomation} user={user} data={data} key={data.id} />
-              })
-              :
-              <SpinnerLoading/>
-            }
-            
-          </ScrollView>
-          <SwipeUpDown		
+
+      <ViewPager
+          selectedIndex={selectedIndex}
+          onSelect={index => setSelectedIndex(index)}>
+          <Layout
+            style={styles.tab}
+            level='2'>
+            {user && (
+              <Card style={{elevation: 1}}>
+                <View style={styles.flexContainer}>
+                  <View>
+                    <Text
+                    category='h6'
+                    style={{fontWeight: 'bold'}}
+                    >Balance: </Text>
+                    <Text>Rp. {user.saldo}</Text>
+                  </View>
+                  <View>
+                    <Button
+                      status='success'
+                      appearance='outline'>
+                      Top Up
+                    </Button>
+                  </View>
+                </View>
+              </Card>
+            )}
+              <ScrollView style={{marginBottom: 50}}>
+                <Text style={styles.heading} category="h5">{"\n"}Food Order Schedule{"\n"}</Text>
+                {
+                  schedule ? 
+                  schedule.map(data => {
+                    return <CardDashboard setAutomation={setAutomation} user={user} data={data} key={data.id} />
+                  })
+                  :
+                  <SpinnerLoading/>
+                }
+                
+              </ScrollView>
+          </Layout>
+          <Layout
+            style={styles.tab}
+            level='2'>
+            <FavoriteFood />
+          </Layout>
+          {/* jaga2 kalo dipake ehehhehehe */}
+          {/* <Layout
+            style={styles.tab}
+            level='2'>
+            <Text category='h5'>TRANSACTIONS</Text>
+          </Layout> */}
+        </ViewPager>
+        
+          {/* <SwipeUpDown		
             itemMini={<MiniItemSwipe />} // Pass props component when collapsed
             itemFull={<FavoriteFood />} // Pass props component when show full
             onShowMini={() => console.log('mini')}
@@ -455,7 +387,7 @@ function Dashboard({navigation}) {
             style={{ backgroundColor: '#cbf3f0',elevation: 2 }} // style for swipe
             animation="easeInEaseOut" 
             swipeHeight={65}
-          />
+          /> */}
       </>
     );
   }
@@ -463,6 +395,11 @@ function Dashboard({navigation}) {
 }
 
 const styles = StyleSheet.create({
+  tab: {
+    height: '100%',
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
   container: {
     flex: 1,
     justifyContent: 'center',

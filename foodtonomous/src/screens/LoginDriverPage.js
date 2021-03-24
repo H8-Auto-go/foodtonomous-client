@@ -163,6 +163,10 @@ const styles = StyleSheet.create({
   },
   formContainer: {
     display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-evenly',
+    height: 270,
+    marginTop: -50
   },
   buttonContainer: {
     display: 'flex',
