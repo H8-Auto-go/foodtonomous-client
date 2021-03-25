@@ -69,7 +69,7 @@ class Notification {
   }
   sendNotification(channelId, title, message) {
     PushNotification.localNotification({
-      largeIconUrl: 'https://www.pngrepo.com/download/43115/burger.png',
+      largeIconUrl: 'https://cdn.discordapp.com/attachments/822112489134751764/824309732511973476/logo3.png',
       channelId,
       title,
       message

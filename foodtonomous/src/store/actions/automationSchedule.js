@@ -47,7 +47,7 @@ export function addSchedule (form, navigation) {
 export function updateScheduleStatus({id, isActive}) {
   return async (dispatch) => {
     try {
-      console.log('testing')
+      // console.log('testing')
       const { data } = await serverAxios({
         method: 'PATCH',
         url: '/automationSchedules/' + id,
@@ -63,6 +63,7 @@ export function updateQuantity(quantity, scheduleId) {
   return async (dispatch) => {
     try {
       console.log('<<<< before axios quantity', quantity)
+
       const { data } = await serverAxios({
         method: 'PUT',
         url: '/automationSchedules/' + scheduleId,
@@ -78,12 +79,12 @@ export function updateQuantity(quantity, scheduleId) {
 export function deleteSchedule(id) {
   return async (dispatch) => {
     try {
-      console.log(id, '<<<< id delete')
+      // console.log(id, '<<<< id delete')
       const { data } = await serverAxios({
         method: 'DELETE',
         url: '/automationSchedules/' + id,
       })
-      console.log('berhasil hapus =========================')
+      // console.log('berhasil hapus =========================')
       dispatch(getAutoSchedule())
     } catch(err) {
       console.log(err)

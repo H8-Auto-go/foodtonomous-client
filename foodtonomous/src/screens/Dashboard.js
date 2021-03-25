@@ -75,6 +75,7 @@ function Dashboard({navigation}) {
   const [mapMargin, setMapMargin] = useState(1)
   const user = useSelector(state => state.users.user)
   const markerPosition = useSelector(state => state.destination.resCoords)
+  const [foodPriceInDriver, setFoodPriceInDriver] = useState(0)
   // useEffect(() => {
   //   if(Object.keys(automation).length > 0) {
   //     socket.emit('set automation', automation)
@@ -94,8 +95,7 @@ function Dashboard({navigation}) {
         if(!isReceived) {
           setIsReceived(true)
           handleNotification('Food is Comming!', 
-          `Estimated total time: ${destination.time + 5} mins, Estimated total distance: ${destination.distance} km
-          your address is : ${destination.address}`)
+          `Estimated total time: ${destination.time + 5} mins, Estimated total distance: ${destination.distance} km`)
         } else {
           console.log('harusnya sekali coy dari ongoing order')
         }
@@ -135,13 +135,9 @@ function Dashboard({navigation}) {
           time +=Number(inputTime)
           distance += Number(inputDistance)
           locations.push(restaurantLocation)
-          // console.log(time, 'ini time dari try 1');
-          // console.log(distance, 'ini distance dari try 1');
-
           // AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
           const resp1 = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${desLoc}&destination=${addLoc}&key=${GOOGLE_API}`)
           const respJson1 = await resp1.json()
-          // console.log('dari respJson satu',respJson1)
           let timeCount1 = respJson1.routes[0].legs[0].duration.text
           let distanceCount1 = respJson1.routes[0].legs[0].distance.text
           let customerAddress = respJson1.routes[0].legs[0].end_address
@@ -210,9 +206,9 @@ function Dashboard({navigation}) {
     }
     
     const mergeCoords = (payload1, payload2, payload3) => {
-        if (payload1.latitude === 'undefined') {
-          const concatStart = `-6.94103414525,107.655786634`
-        }
+        // if (payload1.latitude === 'undefined') {
+        //   const concatStart = `-6.94103414525,107.655786634`
+        // }
         payload3 = JSON.parse(payload3)
         const concatStart = `${payload1.latitude},${payload1.longitude}`
       // console.log(payload3.latitude, 'payload 3 calon concat add');
@@ -239,19 +235,19 @@ function Dashboard({navigation}) {
 
     socket.on('incoming order', order => {
       let user = store.getState().users.user
-      console.log('dari incoming order',order);
-      console.log('ini dari incoming order')
-      console.log('ini dari incoming order user ',user);
+      console.log('dari incoming order', order);
+      // console.log('ini dari incoming order')
+      // console.log('ini dari incoming order user ',user);
       let restaurantPosition = JSON.parse(order.Restaurant.location)
       let customerPosition = order.User.location
-      console.log(user.location, 'user dari incoming order');
-      console.log(customerPosition, 'customerPosition dari incoming order');
+      // console.log(user.location, 'user dari incoming order');
+      // console.log(customerPosition, 'customerPosition dari incoming order');
       mergeCoords(user.location, restaurantPosition, customerPosition)
-      if(user.role === 'driver') {
+      if(!user || user.role === 'driver' || user.role !== 'user') {
         console.log('ini user driver', user);
         Alert.alert(
           "Incoming Order",
-          `from ${order.User.name} to buy ${order.Food.name}`,
+          `from ${order.User.name} to buy ${order.Food.name}, Total price(delivery fee excluded):  ${formattedPrice(order.Food.price*order.quantity)}`,
           [
             {
               text: "Cancel",
@@ -259,6 +255,7 @@ function Dashboard({navigation}) {
               style: "cancel"
             },
             { text: "OK", onPress: () => {
+              setFoodPriceInDriver(order.Food.price*order.quantity)
               // let user = store.getState().users.user
               // let restaurantPosition = JSON.parse(order.Restaurant.location)
               // let customerPosition = JSON.parse(order.User.location)
@@ -283,25 +280,31 @@ function Dashboard({navigation}) {
     })
   }, [socket])
 
+  // console.log('INI ADALAH USER DETAIL, MAU NGECEK DRIVER ADA ATAU ENGGA')
+  // console.log(user)
 
   useEffect(() => {
-    socket.on('giveARating', () => {
+    socket.once('giveARating', () => {
       let user = store.getState().users.user
-      console.log(user);
-      console.log('tolong give rating');
-      setIsReceived(false)
-      console.log('ini refetch saldo anjay asek uhuy')
+      // console.log(user);
+      // console.log('tolong give rating');
+      // console.log('ini refetch saldo anjay asek uhuy')
       dispatch(getUserData())
+      // console.log('DISINI DI GIVE RATING, TAPI MASIH GENERAL', user)
+      // console.log('user dari giveRating', user);
       if(user.role === 'user') {
         // console.log(user.role);
         if(!isReceived) {
+          num++
+          console.log(num, 'counterrr')
           handleNotification('Your food has arrived!', `Happy meal :)`)
+          setIsReceived(true)
         } else {
-          console.log('harusnya cuma sekali, ini food arrived')
+          console.log('harusnya terus terusan, ini food arrived')
         }
       }
     })
-  }, [socket])
+  }, [])
 
   useEffect(() => {
     if(order) {
@@ -314,8 +317,10 @@ function Dashboard({navigation}) {
   useEffect(() => {
     let destination = store.getState().destination
     if(statusOrder === true) {
-      console.log('masuk sini setelah end order');
-      console.log('order selesai', orderId, destination.distance)
+      // console.log('masuk sini setelah end order');
+      // console.log('order selesai', orderId, destination.distance)
+      console.log('INI ORDER DONE DI KLIK USER')
+      console.log({status:'done', id:orderId, distance: destination.distance})
       socket.emit('order done', {status:'done', id:orderId, distance: destination.distance})
     }
   }, [statusOrder])
@@ -430,11 +435,11 @@ function Dashboard({navigation}) {
               markerPosition.length !== 0 ? 
               markerPosition.map((data, index) => {
                 console.log(typeof data.locatidons, '<<<< menurut gue ini objek')
-                console.log('MULAI SERIUS DISINI WOI AHAHAHAH======================================================')
-                console.log('dari menurut gua',data.locations);
-                console.log('dari menurut gua',data.locations.latitude);
-                console.log('dari menurut gua',data.locations.longitude);
-                console.log("HUHUHUHUHUHUHUHHHUHUHUHUHUHUUHUHUHUHUHUHUUH")
+                // console.log('MULAI SERIUS DISINI WOI AHAHAHAH======================================================')
+                // console.log('dari menurut gua',data.locations);
+                // console.log('dari menurut gua',data.locations.latitude);
+                // console.log('dari menurut gua',data.locations.longitude);
+                // console.log("HUHUHUHUHUHUHUHHHUHUHUHUHUHUUHUHUHUHUHUHUUH")
                 // const {latitude, longitude} = data.locations
                 // const parsedLocation = JSON.parse(data.locations)
                 const [latitude, longitude] = [Number(data.locations.latitude), Number(data.locations.longitude)];
@@ -449,7 +454,11 @@ function Dashboard({navigation}) {
             }
         </MapView>
       </View>
-        <Card style={styles.cardDriver} status='info'>
+        <Card style={styles.cardDriver} status='success'>
+          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+            <Text style={{fontWeight: 'bold'}}> Total Food Price: </Text>
+            <Text style={{color:'#1B3D6C', marginBottom: 10}}>{formattedPrice(foodPriceInDriver)}</Text>
+          </View>
           <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
             <Text style={{fontWeight: 'bold'}}> Restaurant's Address: </Text>
             <Text style={{color:'#1B3D6C', marginBottom: 10}}>{address[0]} </Text>

@@ -31,7 +31,7 @@ function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, qu
   const [visible, setVisible] = useState(false);
 
   const [quantity, setQuantity] = useState(quantityy)
-  console.log(quantity, '<<<<<')
+  // console.log(quantity, '<<<<<')
   const [isChecked, setIsChecked] = useState(isActive)
   useEffect(() => {
     dispatch(updateScheduleStatus({id, isActive: isChecked}))
@@ -39,7 +39,7 @@ function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, qu
   }, [isChecked])
 
   useEffect(() => {
-    console.log(Number(quantity))
+    console.log(Number(quantity), '<<<<<<<<< di useeffect')
     dispatch(updateQuantity(Number(quantity), id))
   }, [quantity])
   

@@ -43,13 +43,13 @@ function HistoryCard ({data}) {
                       {' '}Rp.
                     </Text>
                     <Text>
-                      {formattedPrice(data.Food.price)}
+                      {formattedPrice(data.totalPrice)} (Delivery fee included)
                     </Text>
                   </View>
                   
                   <Divider/>
                     <View >
-                      <Text>{' '}{data.quantity} items || Rp.{formattedPrice(data.totalPrice)}</Text>
+                      <Text>{' '}{data.quantity} items</Text>
                     </View>
                 </View>
               </View>
