@@ -10,8 +10,8 @@ import {
 import {useDispatch} from 'react-redux'
 import {deleteSchedule} from "../store/actions/automationSchedule";
 
-function ModalComponent({visible, setVisible, foodName, id}) {
-//   const [visible, setVisible] = useState(false);
+function ModalComponent({isModalVisible, setIsModalVisible, modalTitle, modalDescription, setIsConfirmed}) {
+
 
 const dispatch = useDispatch()
 
@@ -19,9 +19,9 @@ const dispatch = useDispatch()
   return (
     <>
       <Modal
-        visible={visible}
+        visible={isModalVisible}
         backdropStyle={styles.backdrop}
-        onBackdropPress={() => setVisible(false)}>
+        onBackdropPress={() => setIsModalVisible(false)}>
         <Card disabled={true} style={{width: '95%', right: '-2%'}}>
           <View style={{height: 200, flexDirection: 'column', justifyContent: 'space-around'}}>
 
@@ -29,15 +29,15 @@ const dispatch = useDispatch()
              <Text 
             category='h5'
             style={{fontWeight: 'bold'}}
-            >WARNING!!</Text>
+            >{modalTitle}</Text>
           </View>
           <Divider/>
-            <View><Text category='h6'>Are you sure want to delete {foodName} from your automation schedule?</Text></View>
+            <View><Text category='h6'>{modalDescription}</Text></View>
             <View style={{flexDirection: 'row', justifyContent: 'space-around'}}>
               <Button 
-              onPress={()=> dispatch(deleteSchedule(id))}
-              status='danger' style={{width: 90}}>OK</Button>
-              <Button onPress={() => setVisible(false)} status='success' appearance='outline' style={{width: 90}}>Cancel</Button>
+              onPress={()=> setIsConfirmed(true)}
+              status='success' appearance='outline' style={{width: 90}}>OK</Button>
+              <Button onPress={() => setIsModalVisible(false)} status='danger' style={{width: 90}}>Cancel</Button>
             </View>
           </View>
         </Card>

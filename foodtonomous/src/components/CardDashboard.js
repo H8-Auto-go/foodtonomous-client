@@ -88,7 +88,7 @@ function CardDashboard({setAutomation, data: {food, id, restaurant, isActive, qu
                   style={
                     {fontWeight:'bold'}
                   }
-                  >{' '}Rp.
+                  >{' '}Rp.{' '}
                   </Text>
                   <Text>
                     {formattedPrice(food.price)}

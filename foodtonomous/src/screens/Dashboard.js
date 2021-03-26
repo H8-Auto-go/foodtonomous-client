@@ -3,6 +3,7 @@ import {StyleSheet, View, Alert, Image, Dimensions, yellowBox } from 'react-nati
 import MapView, { Marker, PROVIDER_GOOGLE, Callout } from 'react-native-maps'
 import { useSelector } from 'react-redux'
 import {GOOGLE_API} from "@env"
+import ModalOrder from '../components/ModalOrder'
 import {
   Button,
   Icon,
@@ -103,11 +104,15 @@ function Dashboard({navigation}) {
     })
   }, [])
 
+  const [modalTitle, setModalTitle] = useState('')
+  const [modalDescription, setModalDescription] = useState('')
+  const [isModalVisible, setIsModalVisible] = useState(false)
+  const [isConfirmed, setIsConfirmed] = useState(false)
   useEffect(() => {
     const getDirection = async (startLoc, desLoc, addLoc) => {
       let time = 0
       let distance = 0
-      let locations = []
+      let locations = []    
       if (desLoc) {
         try {
           const resp = await fetch (`https://maps.googleapis.com/maps/api/directions/json?origin=${startLoc}&destination=${desLoc}&key=${GOOGLE_API}`)
@@ -232,10 +237,10 @@ function Dashboard({navigation}) {
     //     // socket.emit('update location driver')
     //   }
     // })
-
     socket.on('incoming order', order => {
       let user = store.getState().users.user
       console.log('dari incoming order', order);
+      setOrderDetail(order)
       // console.log('ini dari incoming order')
       // console.log('ini dari incoming order user ',user);
       let restaurantPosition = JSON.parse(order.Restaurant.location)
@@ -245,44 +250,34 @@ function Dashboard({navigation}) {
       mergeCoords(user.location, restaurantPosition, customerPosition)
       if(!user || user.role === 'driver' || user.role !== 'user') {
         console.log('ini user driver', user);
-        Alert.alert(
-          "Incoming Order",
-          `from ${order.User.name} to buy ${order.Food.name}, Total price(delivery fee excluded):  ${formattedPrice(order.Food.price*order.quantity)}`,
-          [
-            {
-              text: "Cancel",
-              onPress: () => console.log("Cancel Pressed"),
-              style: "cancel"
-            },
-            { text: "OK", onPress: () => {
-              setFoodPriceInDriver(order.Food.price*order.quantity)
-              // let user = store.getState().users.user
-              // let restaurantPosition = JSON.parse(order.Restaurant.location)
-              // let customerPosition = JSON.parse(order.User.location)
-              // console.log(user.role, 'dari incoming order');
-              // mergeCoords(user.location, restaurantPosition, customerPosition)
-              setHandlingFood(true)
-              setOrderId(order.id)
-                const updatedOrderForm = {
-                  status: 'on going restaurant',
-                  id: order.id,
-                  userId: order.User.id,
-                  foodId: order.Food.id,
-                  restaurantId: order.Restaurant.id,
-                  driverId: user.id
-                }
-                socket.emit('order confirmation', updatedOrderForm)
-                dispatch(getOrder(order.id))
-            } }
-          ]
-        );
+        setIsModalVisible(true)
+        setModalTitle("Incoming Order")
+        setModalDescription(`From ${order.User.name} wants to buy ${order.Food.name}. Total price (excl. delivery fee):  ${formattedPrice(order.Food.price*order.quantity)}`)
       }
     })
-  }, [socket])
-
+  }, [])
   // console.log('INI ADALAH USER DETAIL, MAU NGECEK DRIVER ADA ATAU ENGGA')
   // console.log(user)
 
+  useEffect(() => {
+    if(isConfirmed) {
+      setFoodPriceInDriver(orderDetail.Food.price*orderDetail.quantity)
+      setHandlingFood(true)
+      setOrderId(orderDetail.id)
+        const updatedOrderForm = {
+          status: 'on going restaurant',
+          id: orderDetail.id,
+          userId: orderDetail.User.id,
+          foodId: orderDetail.Food.id,
+          restaurantId: orderDetail.Restaurant.id,
+          driverId: user.id
+        }
+        socket.emit('order confirmation', updatedOrderForm)
+        dispatch(getOrder(orderDetail.id))
+        setIsModalVisible(false)
+        setIsConfirmed(false)
+    }
+  }, [isConfirmed])
   useEffect(() => {
     socket.once('giveARating', () => {
       let user = store.getState().users.user
@@ -356,7 +351,9 @@ function Dashboard({navigation}) {
   const PlusIcon = (props) => (
     <Icon name='plus-outline' {...props} />
   );
-  
+  console.log('========================================')
+  console.log(orderDetail)
+  console.log('========================================')
 
   const handleNotification = (title, message) => {
     // console.log(title, 'title dari handle');
@@ -389,95 +386,103 @@ function Dashboard({navigation}) {
     return (
       <>
       <NavbarDriver />
-        {user && (
-          <Card>
-            <View style={styles.flexContainer}>
-              <View>
-                <Text
-                category='h6'
-                style={{fontWeight: 'bold'}}
-                >Balance:</Text>
-                {
-                  user.saldo ? <Text>{formattedPrice(user.saldo)}</Text> : undefined
-                }
+      {user && (
+            <Card>
+              <View style={styles.flexContainer}>
+                <View>
+                  <Text category='h6' style={{fontWeight: 'bold'}}>Balance:</Text>
+                  { user.saldo ? <Text>{formattedPrice(user.saldo)}</Text> : undefined }
+                </View>
+                <View>
+                  <Button
+                  status='success'
+                  appearance='outline'>
+                    Withdraw
+                  </Button>
+                </View>
               </View>
-              <View>
-                <Button
-                status='success'
-                appearance='outline'>
-                 Withdraw
-                </Button>
-              </View>
-            </View>
-          </Card>
-        )}
+            </Card>
+          )}
+      <ModalOrder isModalVisible={isModalVisible}
+      setIsConfirmed={setIsConfirmed}
+      modalTitle={modalTitle}
+      modalDescription={modalDescription}
+      setIsModalVisible={setIsModalVisible} />
         {/* { address.length !== 0 && isHandlingFood ? 
         
       } */}
       {
-        address.length !== 0 && isHandlingFood ? 
+        address.length !== 0 && isHandlingFood ?
         <ScrollView>
-      <View>
-      <View style={styles.container1}>
-        <MapView
-        provider={PROVIDER_GOOGLE}
-        style={{ ...styles.map, marginBottom: mapMargin }}
-        showsUserLocation
-        followsUserLocation
-        onMapReady={setMargin}
-        region={
-        {latitude: user.location.latitude,
-        longitude: user.location.longitude,
-        latitudeDelta: 0.015,
-        longitudeDelta: 0.0121,}
-        }>
-           {
-              markerPosition.length !== 0 ? 
-              markerPosition.map((data, index) => {
-                console.log(typeof data.locatidons, '<<<< menurut gue ini objek')
-                // console.log('MULAI SERIUS DISINI WOI AHAHAHAH======================================================')
-                // console.log('dari menurut gua',data.locations);
-                // console.log('dari menurut gua',data.locations.latitude);
-                // console.log('dari menurut gua',data.locations.longitude);
-                // console.log("HUHUHUHUHUHUHUHHHUHUHUHUHUHUUHUHUHUHUHUHUUH")
-                // const {latitude, longitude} = data.locations
-                // const parsedLocation = JSON.parse(data.locations)
-                const [latitude, longitude] = [Number(data.locations.latitude), Number(data.locations.longitude)];
-                // console.log(latitude, longitude, '===========')
-                // console.log(typeof latitude, typeof longitude, '>>>>>>>> typeof')
-              return <Marker 
-                coordinate={{
-                  latitude, 
-                  longitude}} 
-                  title={data.title} />
-              }) : undefined
-            }
-        </MapView>
-      </View>
-        <Card style={styles.cardDriver} status='success'>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            <Text style={{fontWeight: 'bold'}}> Total Food Price: </Text>
-            <Text style={{color:'#1B3D6C', marginBottom: 10}}>{formattedPrice(foodPriceInDriver)}</Text>
+          <View>
+          <View style={styles.container1}>
+            <MapView
+            provider={PROVIDER_GOOGLE}
+            style={{ ...styles.map, marginBottom: mapMargin }}
+            showsUserLocation
+            followsUserLocation
+            onMapReady={setMargin}
+            region={
+            {latitude: user.location.latitude,
+            longitude: user.location.longitude,
+            latitudeDelta: 0.015,
+            longitudeDelta: 0.0121,}
+            }>
+              {
+                  markerPosition.length !== 0 ? 
+                  markerPosition.map((data, index) => {
+                    console.log(typeof data.locatidons, '<<<< menurut gue ini objek')
+                    // console.log('MULAI SERIUS DISINI WOI AHAHAHAH======================================================')
+                    // console.log('dari menurut gua',data.locations);
+                    // console.log('dari menurut gua',data.locations.latitude);
+                    // console.log('dari menurut gua',data.locations.longitude);
+                    // console.log("HUHUHUHUHUHUHUHHHUHUHUHUHUHUUHUHUHUHUHUHUUH")
+                    // const {latitude, longitude} = data.locations
+                    // const parsedLocation = JSON.parse(data.locations)
+                    const [latitude, longitude] = [Number(data.locations.latitude), Number(data.locations.longitude)];
+                    // console.log(latitude, longitude, '===========')
+                    // console.log(typeof latitude, typeof longitude, '>>>>>>>> typeof')
+                  return <Marker 
+                    coordinate={{
+                      latitude, 
+                      longitude}} 
+                      title={data.title} />
+                  }) : undefined
+                }
+            </MapView>
           </View>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            <Text style={{fontWeight: 'bold'}}> Restaurant's Address: </Text>
-            <Text style={{color:'#1B3D6C', marginBottom: 10}}>{address[0]} </Text>
+          <Card style={styles.cardDriver} status='success'>
+            <View style={{flexDirection: 'row'}}>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <Text style={{fontWeight: 'bold'}}> Food Name: </Text>
+                <Text style={{color:'#1B3D6C'}}>
+                  Ayam goreng
+                  </Text>
+              </View>
+              <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+                <Text style={{fontWeight: 'bold'}}> Qty: </Text>
+                <Text style={{color:'#1B3D6C'}}>3</Text>
+              </View>
+            </View>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <Text style={{fontWeight: 'bold'}}> Restaurant's Address: </Text>
+              <Text style={{color:'#1B3D6C', marginBottom: 10}}>{address[0]} </Text>
+            </View>
+            <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
+              <Text style={{fontWeight: 'bold'}}> Customer's Address: </Text>
+              <Text style={{color:'#1B3D6C'}}> {address[1]} </Text>
+            </View>
+            <Button
+              onPress={endOrder}
+              status='warning'
+              color="#841584"
+              accessibilityLabel="Learn more about this purple button">
+              Finish Delivery
+            </Button>
+          </Card>
           </View>
-          <View style={{flexDirection: 'row', flexWrap: 'wrap'}}>
-            <Text style={{fontWeight: 'bold'}}> Customer's Address: </Text>
-            <Text style={{color:'#1B3D6C'}}> {address[1]} </Text>
-          </View>
-          <Button
-            onPress={endOrder}
-            status='warning'
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button">
-            Finish Delivery
-          </Button>
-        </Card>
-      </View>
-      </ScrollView> : 
-      <Card style={{alignItems: 'center'}} status='info'>
+        </ScrollView> : 
+      <Card style={{alignItems: 'center'}} status='warning'>
         <Text
         category='h6'
         >you have no ongoing order</Text>
